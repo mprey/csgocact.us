@@ -1,22 +1,7 @@
 var mongoose = require('mongoose');
-var Schema = mongoose.Schema;
 
-var gameSchema = new Schema({
+var host = process.env.DB_HOST;
+var port = process.env.DB_PORT;
+var coll = process.env.DB_COLL;
 
-});
-
-mongoose.model('Game', gameSchema);
-
-var userSchema = new Schema({
-
-});
-
-mongoose.model('User', userSchema);
-
-var transferSchema = new Schema({
-
-});
-
-mongoose.model('Transfer', transferSchema);
-
-mongoose.connect("mongodb://localhost:27017/test");
+mongoose.connect("mongodb://" + host + ":" + port + "/" + coll);
