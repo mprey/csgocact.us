@@ -25,9 +25,9 @@ passport.deserializeUser(function(obj, done) {
 //   credentials (in this case, an OpenID identifier and profile), and invoke a
 //   callback with a user object.
 passport.use(new SteamStrategy({
-    returnURL: 'localhost:3000/auth/steam/return',
-    realm: 'localhost:3000',
-    apiKey: '484944C1F5678664C99734283BCE596B'
+    returnURL: 'https://csgo-site.herokuapp.com/auth/steam/return',
+    realm: 'https://csgo-site.herokuapp.com/',
+    apiKey: 'B1F50BFE3DEE43EEB024701EF4BA5AC5'
   },
   function(identifier, profile, done) {
     // asynchronous verification, for effect...
