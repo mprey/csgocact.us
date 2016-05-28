@@ -1,5 +1,5 @@
 require('dotenv').config();
-require('./db');
+require('./lib/db');
 
 var express = require('express');
 var path = require('path');
@@ -25,9 +25,9 @@ passport.deserializeUser(function(obj, done) {
 //   credentials (in this case, an OpenID identifier and profile), and invoke a
 //   callback with a user object.
 passport.use(new SteamStrategy({
-    returnURL: 'http://csgo-site.herokuapp.com/auth/steam/return',
-    realm: 'http://csgo-site.herokuapp.com',
-    apiKey: '2CA5679681003773511EEF39B54C748C'
+    returnURL: 'localhost:3000/auth/steam/return',
+    realm: 'localhost:3000',
+    apiKey: '484944C1F5678664C99734283BCE596B'
   },
   function(identifier, profile, done) {
     // asynchronous verification, for effect...
