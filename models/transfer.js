@@ -9,5 +9,5 @@ var transferSchema = new Schema({
 var Transfer = mongoose.model('Transfer', transferSchema);
 
 module.exports = {
-  Transfer: Transfer;
+  Transfer: Transfer
 };

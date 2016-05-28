@@ -12,6 +12,8 @@ var mongoose = require('mongoose');
 var session = require('express-session');
 var SteamStrategy = require('passport-steam').Strategy;
 
+var Game = require('./models/game').Game;
+
 passport.serializeUser(function(user, done) {
   done(null, user);
 });
@@ -25,9 +27,9 @@ passport.deserializeUser(function(obj, done) {
 //   credentials (in this case, an OpenID identifier and profile), and invoke a
 //   callback with a user object.
 passport.use(new SteamStrategy({
-    returnURL: 'https://csgo-site.herokuapp.com/auth/steam/return',
-    realm: 'https://csgo-site.herokuapp.com/',
-    apiKey: 'B1F50BFE3DEE43EEB024701EF4BA5AC5'
+    returnURL: process.env.AUTH_RETURN,
+    realm: process.env.AUTH_REALM,
+    apiKey: process.env.AUTH_API_KEY
   },
   function(identifier, profile, done) {
     // asynchronous verification, for effect...
@@ -79,8 +81,28 @@ app.get('/logout', function(req, res){
   res.redirect('/');
 });
 
-app.get('/games', ensureAuthenticated, function(req, res) {
-  res.render('games', {user: req.user});
+app.get('/games', function(req, res) {
+  Game.find({completed: false}, function(err, obj) {
+    if (err) {
+      res.redirect('/')
+    } else {
+      res.render('games', {user: req.user, games: obj});
+    }
+  });
+});
+
+app.get('/game/:id', function(req, res) {
+  Game.find({_id: req.params.id}, function(err, obj) {
+    if (err) {
+      res.redirect('/')
+    } else {
+      res.render('game', )
+    }
+  });
+});
+
+app.get('/join/:id', ensureAuthenticated, function(req, res) {
+  console.log('game requested: ' + req.params.id);
 });
 
 app.get('/auth/steam',
@@ -96,7 +118,9 @@ app.get('/auth/steam/return',
   });
 
 function ensureAuthenticated(req, res, next) {
-  if (req.isAuthenticated()) { return next(); }
+  if (req.isAuthenticated()) {
+    return next(); 
+  }
   res.redirect('/');
 }
 
