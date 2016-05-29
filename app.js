@@ -66,10 +66,6 @@ app.use(passport.session());
 
 var router = require('./router/index')(app);
 
-//app.use('/', routes);
-//app.use('/auth/steam', authSteam);
-//app.use('/auth/steam/return', authReturn);
-
 /*app.get('/', function(req, res){
   res.render('index', { user: req.user });
 });
@@ -109,7 +105,7 @@ app.get('/auth/steam/return',
 }*/
 
 module.exports = {
-  app,
+  App: app,
   ensureAuthenticated: function(req, res, next) {
     if (req.isAuthenticated()) {
       return next();

@@ -5,7 +5,7 @@ var index = require('./routes/index');
 var profile = require('./routes/profile');
 
 module.exports = function(app) {
-  //app.use('/games', games);
+  app.use('/games', games);
   app.use('/logout', logout);
   app.use('/auth', auth);
   app.use('/', index);
