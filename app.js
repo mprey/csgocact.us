@@ -64,11 +64,13 @@ app.use(express.static(path.join(__dirname, 'public')));
 app.use(passport.initialize());
 app.use(passport.session());
 
+var router = require('./router/index')(app);
+
 //app.use('/', routes);
 //app.use('/auth/steam', authSteam);
 //app.use('/auth/steam/return', authReturn);
 
-app.get('/', function(req, res){
+/*app.get('/', function(req, res){
   res.render('index', { user: req.user });
 });
 
@@ -81,7 +83,7 @@ app.get('/logout', function(req, res){
   res.redirect('/');
 });
 
-app.get('/games', function(req, res) {
+app.get('/games/coin-flip', function(req, res) {
   Game.find({completed: false}, function(err, obj) {
     if (err) {
       res.redirect('/')
@@ -91,19 +93,7 @@ app.get('/games', function(req, res) {
   });
 });
 
-app.get('/game/:id', function(req, res) {
-  Game.find({_id: req.params.id}, function(err, obj) {
-    if (err) {
-      res.redirect('/')
-    } else {
-      res.render('game', )
-    }
-  });
-});
-
-app.get('/join/:id', ensureAuthenticated, function(req, res) {
-  console.log('game requested: ' + req.params.id);
-});
+app.get('')
 
 app.get('/auth/steam',
   passport.authenticate('steam', { failureRedirect: '/' }),
@@ -116,12 +106,14 @@ app.get('/auth/steam/return',
   function(req, res) {
     res.redirect('/');
   });
+}*/
 
-function ensureAuthenticated(req, res, next) {
-  if (req.isAuthenticated()) {
-    return next(); 
+module.exports = {
+  app,
+  ensureAuthenticated: function(req, res, next) {
+    if (req.isAuthenticated()) {
+      return next();
+    }
+    res.redirect('/');
   }
-  res.redirect('/');
-}
-
-module.exports = app;
+};
