@@ -73,6 +73,43 @@ app.use(passport.session());
 
 var router = require('./router/index')(app);
 
+/*app.get('/', function(req, res){
+  res.render('index', { user: req.user });
+});
+
+app.get('/account', ensureAuthenticated, function(req, res){
+  res.render('account', { user: req.user });
+});
+
+app.get('/logout', function(req, res){
+  req.logout();
+  res.redirect('/');
+});
+
+app.get('/games/coin-flip', function(req, res) {
+  Game.find({completed: false}, function(err, obj) {
+    if (err) {
+      res.redirect('/')
+    } else {
+      res.render('games', {user: req.user, games: obj});
+    }
+  });
+});
+
+app.get('')
+
+app.get('/auth/steam',
+  passport.authenticate('steam', { failureRedirect: '/' }),
+  function(req, res) {
+    res.redirect('/');
+  });
+
+app.get('/auth/steam/return',
+  passport.authenticate('steam', { failureRedirect: '/' }),
+  function(req, res) {
+    res.redirect('/');
+  });
+}*/
 
 module.exports = {
   App: app,
