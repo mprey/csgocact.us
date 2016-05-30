@@ -1,7 +1,6 @@
 extends layout
-script(src="/javascripts/games.js")
+
 block content
+  script(src="/javascripts/games.js")
   h1 GAMES
-  ul
-    each game in games
-      li Creator=#{game.id_creator} | Amount=#{game.amount} | Face=#{game.starting_face} | #[a(href="/join/#{game._id}") Join]
+  ul.games

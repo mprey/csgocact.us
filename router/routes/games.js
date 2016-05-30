@@ -1,5 +1,6 @@
 var express = require('express');
-var router = express.Router;
+var router = express.Router();
+var app = require('./../../app');
 var Game = require('./../../models/game').Game;
 
 router.get('/coin-flip', function(req, res) {

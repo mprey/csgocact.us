@@ -14,6 +14,15 @@ var SteamStrategy = require('passport-steam').Strategy;
 
 var Game = require('./models/game').Game;
 
+var game = new Game({
+  id_creator: "5",
+  amount: 10
+});
+
+game.save(function(err) {
+  console.log(err);
+});
+
 passport.serializeUser(function(user, done) {
   done(null, user);
 });
@@ -32,7 +41,6 @@ passport.use(new SteamStrategy({
     apiKey: process.env.AUTH_API_KEY
   },
   function(identifier, profile, done) {
-    // asynchronous verification, for effect...
     process.nextTick(function () {
 
       // To keep the example simple, the user's Steam profile is returned to
@@ -47,7 +55,6 @@ passport.use(new SteamStrategy({
 
 var app = express();
 
-// view engine setup
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'jade');
 
@@ -66,50 +73,9 @@ app.use(passport.session());
 
 var router = require('./router/index')(app);
 
-//app.use('/', routes);
-//app.use('/auth/steam', authSteam);
-//app.use('/auth/steam/return', authReturn);
-
-/*app.get('/', function(req, res){
-  res.render('index', { user: req.user });
-});
-
-app.get('/account', ensureAuthenticated, function(req, res){
-  res.render('account', { user: req.user });
-});
-
-app.get('/logout', function(req, res){
-  req.logout();
-  res.redirect('/');
-});
-
-app.get('/games/coin-flip', function(req, res) {
-  Game.find({completed: false}, function(err, obj) {
-    if (err) {
-      res.redirect('/')
-    } else {
-      res.render('games', {user: req.user, games: obj});
-    }
-  });
-});
-
-app.get('')
-
-app.get('/auth/steam',
-  passport.authenticate('steam', { failureRedirect: '/' }),
-  function(req, res) {
-    res.redirect('/');
-  });
-
-app.get('/auth/steam/return',
-  passport.authenticate('steam', { failureRedirect: '/' }),
-  function(req, res) {
-    res.redirect('/');
-  });
-}*/
 
 module.exports = {
-  app,
+  App: app,
   ensureAuthenticated: function(req, res, next) {
     if (req.isAuthenticated()) {
       return next();
