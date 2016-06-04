@@ -15,7 +15,7 @@
     "jade": "~1.11.0",
     "mongoose": "^4.4.19",
     "morgan": "~1.6.1",
-    "passport": "^0.3.2",
+    "passport": "^0.2.2",
     "passport-steam": "^1.0.2",
     "serve-favicon": "~2.3.0",
     "socket.io": "^1.4.6"
@@ -23,6 +23,6 @@
   "author": "mprey",
   "license": "MIT",
   "engines": {
-    "node": "6.2.0"
+    "node": "6.2.1"
   }
 }
