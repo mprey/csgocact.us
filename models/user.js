@@ -2,9 +2,9 @@ var mongoose = require('mongoose');
 var Schema = mongoose.Schema;
 
 var userSchema = new Schema({
-  userid: {type: String, required: true},
-  total_bets: {type: Number, required: true, default: 0},
-  total_wagered: {type: Number, required: true, default: 0},
+  _id: {type: Number, required: true},
+  total_coin_flips: {type: Number, required: true, default: 0},
+  total_coin_flips_wagered: {type: Number, required: true, default: 0},
   trade_url: {type: String, required: false},
   date_joined: {type: Date, default: Date.now, required: true}
 });

@@ -13,6 +13,7 @@ var session = require('express-session');
 var SteamStrategy = require('passport-steam').Strategy;
 
 var Game = require('./models/game').Game;
+var User = require('./models/user').User;
 
 var game = new Game({
   id_creator: "5",
@@ -24,10 +25,12 @@ game.save(function(err) {
 });
 
 passport.serializeUser(function(user, done) {
+  console.log(user);
   done(null, user);
 });
 
 passport.deserializeUser(function(obj, done) {
+  console.log(obj);
   done(null, obj);
 });
 
@@ -38,15 +41,14 @@ passport.deserializeUser(function(obj, done) {
 passport.use(new SteamStrategy({
     returnURL: process.env.AUTH_RETURN,
     realm: process.env.AUTH_REALM,
-    apiKey: process.env.AUTH_API_KEY
+    apiKey: process.env.AUTH_API_KEY,
+    profile: true,
+    stateless: true
   },
   function(identifier, profile, done) {
     process.nextTick(function () {
-
-      // To keep the example simple, the user's Steam profile is returned to
-      // represent the logged-in user.  In a typical application, you would want
-      // to associate the Steam account with a user record in your database,
-      // and return that user instead.
+      console.log(identifier);
+      console.log(profile);
       profile.identifier = identifier;
       return done(null, profile);
     });
@@ -59,7 +61,7 @@ app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'jade');
 
 app.use(session({
-  secret: 'secret',
+  secret: 'secret', //TODO save in process
   resave: true,
   saveUninitialized: true
 }));
@@ -72,6 +74,8 @@ app.use(passport.initialize());
 app.use(passport.session());
 
 var router = require('./router/index')(app);
+
+console.log(process.env);
 
 /*app.get('/', function(req, res){
   res.render('index', { user: req.user });
