@@ -1,7 +1,7 @@
 var mongoose = require('mongoose');
 var Schema = mongoose.Schema;
 
-var gameSchema = new Schema({
+var coinflipSchema = new Schema({
   id_creator: {type: String, required: true},
   id_joiner: {type: String},
   starting_face: {type: String, required: true, default: "heads"},
@@ -12,8 +12,8 @@ var gameSchema = new Schema({
   date_created: {type: Date, default: Date.now, required: true}
 });
 
-var Game = mongoose.model('Game', gameSchema);
+var Coinflip = mongoose.model('Coinflip', coinflipSchema);
 
 module.exports = {
-  Game: Game
+  Coinflip: Coinflip
 };

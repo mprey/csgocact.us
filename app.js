@@ -2,55 +2,55 @@ require('dotenv').config();
 require('./lib/db');
 
 var express = require('express');
-var path = require('path');
-var favicon = require('serve-favicon');
-var logger = require('morgan');
 var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
 var passport = require('passport');
+var path = require('path');
 var mongoose = require('mongoose');
 var session = require('express-session');
 var SteamStrategy = require('passport-steam').Strategy;
-
-var Game = require('./models/game').Game;
 var User = require('./models/user').User;
+var Coinflip = require('./models/coinflip').Coinflip;
 
-var game = new Game({
-  id_creator: "5",
-  amount: 10
+var c = new Coinflip({
+  id_creator: "76561198123588820",
+  amount: 5
 });
 
-game.save(function(err) {
-  console.log(err);
+c.save(function(err) {
+
 });
 
 passport.serializeUser(function(user, done) {
-  console.log(user);
-  done(null, user);
+  done(null, user._id);
 });
 
 passport.deserializeUser(function(obj, done) {
-  console.log(obj);
-  done(null, obj);
+  User.findById(obj, function (err, user) {
+    done(err, user);
+  });
 });
 
-// Use the SteamStrategy within Passport.
-//   Strategies in passport require a `validate` function, which accept
-//   credentials (in this case, an OpenID identifier and profile), and invoke a
-//   callback with a user object.
 passport.use(new SteamStrategy({
     returnURL: process.env.AUTH_RETURN,
     realm: process.env.AUTH_REALM,
-    apiKey: process.env.AUTH_API_KEY,
-    profile: true,
-    stateless: true
+    apiKey: process.env.AUTH_API_KEY
   },
   function(identifier, profile, done) {
     process.nextTick(function () {
-      console.log(identifier);
-      console.log(profile);
-      profile.identifier = identifier;
-      return done(null, profile);
+      var id = identifier.match(/\d+$/)[0];
+      User.findById(id, function (err, user) {
+        if (err) {
+          return done(err, null);
+        } else if (user) {
+          return done(err, user);
+        } else {
+          var newUser = new User({_id: id});
+          newUser.save(function (err1) {
+            return done(err1, newUser);
+          });
+        }
+      });
     });
   }
 ));
@@ -61,7 +61,8 @@ app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'jade');
 
 app.use(session({
-  secret: 'secret', //TODO save in process
+  secret: process.env.SESSION_SECRET,
+  name: 'CSGOExtreme Verification Cookie',
   resave: true,
   saveUninitialized: true
 }));
@@ -75,52 +76,4 @@ app.use(passport.session());
 
 var router = require('./router/index')(app);
 
-console.log(process.env);
-
-/*app.get('/', function(req, res){
-  res.render('index', { user: req.user });
-});
-
-app.get('/account', ensureAuthenticated, function(req, res){
-  res.render('account', { user: req.user });
-});
-
-app.get('/logout', function(req, res){
-  req.logout();
-  res.redirect('/');
-});
-
-app.get('/games/coin-flip', function(req, res) {
-  Game.find({completed: false}, function(err, obj) {
-    if (err) {
-      res.redirect('/')
-    } else {
-      res.render('games', {user: req.user, games: obj});
-    }
-  });
-});
-
-app.get('')
-
-app.get('/auth/steam',
-  passport.authenticate('steam', { failureRedirect: '/' }),
-  function(req, res) {
-    res.redirect('/');
-  });
-
-app.get('/auth/steam/return',
-  passport.authenticate('steam', { failureRedirect: '/' }),
-  function(req, res) {
-    res.redirect('/');
-  });
-}*/
-
-module.exports = {
-  App: app,
-  ensureAuthenticated: function(req, res, next) {
-    if (req.isAuthenticated()) {
-      return next();
-    }
-    res.redirect('/');
-  }
-};
+module.exports = app;

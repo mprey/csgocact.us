@@ -1,6 +1,11 @@
 extends layout
 
 block content
-  script(src="/javascripts/games.js")
+  script(src="/javascripts/coin-flip.js")
   h1 GAMES
-  ul.games
+  table.games
+    tr.header
+      td User
+      td Status
+      td Amount
+      td Face

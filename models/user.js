@@ -9,6 +9,11 @@ var userSchema = new Schema({
   date_joined: {type: Date, default: Date.now, required: true}
 });
 
+userSchema.methods.updateTradeURL = function (tradeURL, callback) {
+  this.tade_url = tradeURL;
+  this.save(callback);
+};
+
 var User = mongoose.model('User', userSchema);
 
 module.exports = {
