@@ -1,41 +1,49 @@
 var socket = io();
 
-$(document).ready(function() {
-  queryGames();
+var games = [];
 
-  $('.games').on('click', 'a.join-game', function(event) {
-    console.log($(this).text());
+$(document).ready(function() {
+
+  local_games.forEach(function(obj) {
+    addGame(obj);
+  });
+
+  $('.games > tbody > tr').on('click', 'a.join-game', function(event) {
+    var id = $(this).parent().parent().attr('class');
+    joinGame(id);
   });
 });
 
-
-function queryGames() {
-  socket.emit('request coin-flips', {});
+function getGame(id, cb) {
+  games.forEach(function(obj) {
+    if (obj._id == id) {
+      cb(obj);
+    };
+  })
 }
 
 function addGame(game) {
-  getProfile(game.id_creator, function(profile) {
-    if (!profile) {
-      return;
-    }
-    var face = game.starting_face;
-    var amount = game.amount;
-    var in_progress = game.id_joiner != null;
-    var id = game._id;
-    $("table.games").append(createElement(id,profile,in_progress,amount,face));
-  });
+  games.push(game);
+
+  var face = game.starting_face;
+  var amount = game.amount;
+  var in_progress = game.id_joiner != null;
+  var id = game._id;
+  var photo = game.creator_photo;
+  var name = game.creator_name;
+  $("table.games").append(createElement(id,name,photo,in_progress,amount,face));
 }
 
 function joinGame(id) {
-  console.log("joining game with id: " + id);
+  socket.emit('join coin-flip', id);
 }
 
-function createElement(id,profile,in_progress,amount,face) {
+function createElement(id,name,photo,in_progress,amount,face) {
   var append = '<tr class="' + id + '">';
 
   //user
   append += "<td class='user'>";
-  append += "<img class='profile' src='" + profile.images[0] + "'> <span class='name'>" + profile.name + "</span>";
+  append += "<img class='profile' src='" + photo + "'> <span class='name'>" + name + "</span>";
   append += "</td>";
 
   //status
@@ -65,16 +73,30 @@ function createElement(id,profile,in_progress,amount,face) {
   return append;
 }
 
-socket.on('send profile', function(data) {
-
-});
-
-socket.on('error', function(msg) {
+socket.on('alert', function(msg) {
   alert(msg);
 });
 
-socket.on('send coin-flips', function(data) {
-  data.games.forEach(function(game) {
-    addGame(game);
-  });
+socket.on('join coin-flip success', function(data) {
+
+});
+
+socket.on('remove coin-flip', function(id) {
+
+});
+
+socket.on('update coin-flip', function(data) {
+
+});
+
+socket.on('add coin-flip', function(data) {
+  addGame(data);
+});
+
+socket.on('add coins', function(amount) {
+
+});
+
+socket.on('remove coins', function(amount) {
+
 });

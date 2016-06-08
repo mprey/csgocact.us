@@ -1,79 +1,59 @@
+/**
+ *  Set up process.env variables
+ */
 require('dotenv').config();
-require('./lib/db');
 
 var express = require('express');
-var cookieParser = require('cookie-parser');
-var bodyParser = require('body-parser');
+var app = express();
+var http = require('http');
+var socketio = require('socket.io');
+var port = process.env.PORT || 3000;
+var mongoose = require('mongoose');
 var passport = require('passport');
 var path = require('path');
-var mongoose = require('mongoose');
+
+var cookieParser = require('cookie-parser');
+var bodyParser = require('body-parser');
 var session = require('express-session');
-var SteamStrategy = require('passport-steam').Strategy;
-var User = require('./models/user').User;
-var Coinflip = require('./models/coinflip').Coinflip;
+var MongoStore = require('connect-mongo')(session);
 
-var c = new Coinflip({
-  id_creator: "76561198123588820",
-  amount: 5
-});
+var server = http.createServer(app);
+var io = socketio.listen(server);
 
-c.save(function(err) {
+mongoose.connect(process.env.MONGODB_URI);
+var sessionStore = new MongoStore({ url: process.env.MONGODB_URI });
 
-});
+require('./lib/passport')(passport);
 
-passport.serializeUser(function(user, done) {
-  done(null, user._id);
-});
-
-passport.deserializeUser(function(obj, done) {
-  User.findById(obj, function (err, user) {
-    done(err, user);
-  });
-});
-
-passport.use(new SteamStrategy({
-    returnURL: process.env.AUTH_RETURN,
-    realm: process.env.AUTH_REALM,
-    apiKey: process.env.AUTH_API_KEY
-  },
-  function(identifier, profile, done) {
-    process.nextTick(function () {
-      var id = identifier.match(/\d+$/)[0];
-      User.findById(id, function (err, user) {
-        if (err) {
-          return done(err, null);
-        } else if (user) {
-          return done(err, user);
-        } else {
-          var newUser = new User({_id: id});
-          newUser.save(function (err1) {
-            return done(err1, newUser);
-          });
-        }
-      });
-    });
-  }
-));
-
-var app = express();
+app.use(cookieParser());
+app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({ extended: true }));
+app.use(express.static(path.join(__dirname, 'public')));
 
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'jade');
 
-app.use(session({
+var sessionMiddleware = session({
+  key: 'connect.sid',
+  name: 'connect.sid',
   secret: process.env.SESSION_SECRET,
-  name: 'CSGOExtreme Verification Cookie',
+  store: sessionStore,
   resave: true,
   saveUninitialized: true
-}));
+});
 
-app.use(bodyParser.json());
-app.use(bodyParser.urlencoded({ extended: false }));
-app.use(cookieParser());
-app.use(express.static(path.join(__dirname, 'public')));
+app.use(sessionMiddleware);
 app.use(passport.initialize());
 app.use(passport.session());
 
-var router = require('./router/index')(app);
+require('./router')(app);
 
-module.exports = app;
+server.listen(port, function() {
+  console.log('App running on port: ' + port);
+});
+
+io.use(function(socket, next) {
+  sessionMiddleware(socket.request, socket.request.res, next);
+});
+
+require('./lib/sockets')(io);

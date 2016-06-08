@@ -1,9 +1,13 @@
 extends layout
 
 block content
+  script.
+    var local_games = !{JSON.stringify(games)};
   script(src="/javascripts/coin-flip.js")
+  script(src="/countup.js/countUp.js")
   link(rel='stylesheet', href='/stylesheets/coin-flip.css')
-  h1 GAMES
+  h1 COIN-FLIPS
+  p Coins: #[span(class='balance') #{user.balance}]
   .games
     table.games
       tr

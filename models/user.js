@@ -3,15 +3,37 @@ var Schema = mongoose.Schema;
 
 var userSchema = new Schema({
   _id: {type: Number, required: true},
-  total_coin_flips: {type: Number, required: true, default: 0},
-  total_coin_flips_wagered: {type: Number, required: true, default: 0},
+  name: {type: String, required: true},
+  photos: {type: String, required: true},
   trade_url: {type: String, required: false},
+  role: {type: Number, required: true, default: 0},
+  balance: {type: Number, required: true, default: 0},
   date_joined: {type: Date, default: Date.now, required: true}
 });
 
-userSchema.methods.updateTradeURL = function (tradeURL, callback) {
+userSchema.methods.updateTradeURL = function(tradeURL, callback) {
   this.tade_url = tradeURL;
-  this.save(callback);
+  return this.save(callback);
+};
+
+userSchema.methods.addCoins = function(amount, callback) {
+  this.coins += amount;
+  return this.save(callback);
+};
+
+userSchema.methods.removeCoins = function(amount, callback) {
+  this.coins -= amount;
+  return this.save(callback);
+};
+
+userSchema.methods.hasEnough = function(amount, callback) {
+  return callback(this.balance > amount);
+};
+
+userSchema.methods.updateProfile = function(data, callback) {
+  this.name = data.name;
+  this.photos = JSON.stringify(data.photos);
+  return this.save(callback);
 };
 
 var User = mongoose.model('User', userSchema);

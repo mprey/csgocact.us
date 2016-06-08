@@ -1,32 +1,34 @@
 var passport = require('passport');
 var request = require('request');
 
+var coinflip = require('./../lib/coin-flip');
+
 module.exports = function(app) {
 
-  /*
-  index route
-  */
+  /**
+   *  Index route
+   */
   app.get('/', function (req, res) {
     res.render('index', {user: req.user});
   });
 
-  /*
-  deposit route
-  */
+  /**
+   *  Deposit route
+   */
   app.get('/deposit', ensureAuthenticated, function (req, res) {
     res.render('deposit', {user: req.user});
   });
 
-  /*
-  store route
-  */
+  /**
+   *  Store route
+   */
   app.get('/store', ensureAuthenticated, function (req, res) {
     res.render('store', {user: req.user});
   });
 
-  /*
-  profile route
-  */
+  /**
+   *  Profile route
+   */
   app.get('/profile', ensureAuthenticated, function (req, res) {
     res.redirect('/profile/' + req.user._id);
   });
@@ -36,20 +38,22 @@ module.exports = function(app) {
     console.log('request with id: ' + id);
   });
 
-  /*
-  games route
-  */
+  /**
+   *  Games route
+   */
   app.get('/games', function (req, res) {
     res.render('games', {user: req.user});
   });
 
   app.get('/games/coin-flip', ensureAuthenticated, function(req, res) {
-      res.render('coin-flip', {user: req.user});
+    coinflip.loadAvailableGames(function(err, data) {
+      res.render('coin-flip', {user: req.user, games: data});
+    });
   });
 
-  /*
-  auth route
-  */
+  /**
+   *  Authorization route
+   */
   app.get('/auth/steam', passport.authenticate('steam', { failureRedirect: '/' }), function (req, res) {
     res.redirect('/');
   });
@@ -58,17 +62,17 @@ module.exports = function(app) {
     res.redirect('/');
   });
 
-  /*
-  logout route
-  */
+  /**
+   *  Logout route
+   */
   app.get('/logout', function (req, res) {
     req.logout();
     res.redirect('/');
   });
 
-  /*
-  api route
-  */
+  /**
+   *  API route
+   */
   app.get('/api/user_data', function(req, res) {
     if (req.user) {
       res.json(JSON.stringify(req.user));
@@ -77,12 +81,8 @@ module.exports = function(app) {
     }
   });
 
-  app.get('/api/steam_data', function(req, res) {
-    if (req.user) {
-      res.redirect('/api/steam_data/' + req.user._id);
-    } else {
-      res.redirect('/404');
-    }
+  app.get('/api/steam_data', ensureAuthenticated, function(req, res) {
+    res.redirect('/api/steam_data/' + req.user._id);
   });
 
   app.get('/api/steam_data/:id', function(req, res) {
@@ -97,9 +97,9 @@ module.exports = function(app) {
     });
   });
 
-  /*
-  error catching
-  */
+  /**
+   *  Error handling
+   */
   app.get('/404', function(req, res) {
     res.status(404);
     res.render('404', {user: req.user});
@@ -109,6 +109,9 @@ module.exports = function(app) {
     res.redirect('/404');
   });
 
+  /**
+   *  Utility functions
+   */
   function ensureAuthenticated(req, res, next) {
     if (req.isAuthenticated()) {
       return next();
