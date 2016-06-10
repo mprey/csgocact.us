@@ -1,10 +1,8 @@
 doctype html
 html
-  head
-    title="CSGOExtreme - Play, Win, Withdraw"
-    link(rel='stylesheet', href='/stylesheets/main.css')
-    script(src="/socket.io/socket.io.js")
-    script(src="https://code.jquery.com/jquery-2.2.4.js")
-    script(src="/javascripts/main.js")
+  include ./includes/head.jade
   body
-    block content
+    include ./includes/nav.jade
+    .page-content
+      block content
+    include ./includes/foot.jade

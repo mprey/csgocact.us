@@ -12,6 +12,18 @@ $(document).ready(function() {
     var id = $(this).parent().parent().attr('class');
     joinGame(id);
   });
+
+  $('#create').click(function(event) {
+
+  });
+
+  $('#refresh').click(function(event) {
+
+  });
+
+  $('#add-coins').click(function(event) {
+    socket.emit('change coins', {amount: 100});
+  });
 });
 
 function getGame(id, cb) {
@@ -55,26 +67,30 @@ function createElement(id,name,photo,in_progress,amount,face) {
   }
   append += "</td>";
 
-  //amount
-  append += "<td class='amount'>";
-  append += amount + " D";
-  append += "</td>";
-
   //face
-  append += "<td class='face'>";
+  append += "<td class='amount'>";
+  append += "<span class='amount'>" + amount + " C</span> "
+
+  append += "<img class='face' src='";
   if (face == 1) {
-    append += "heads";
+    append += "../images/t-coin.png";
   } else {
-    append += "tails";
+    append += "../images/ct-coin.png";
   }
+  append += "'>"
   append += "</td>";
 
   append += '</tr>';
   return append;
 }
 
-socket.on('alert', function(msg) {
-  alert(msg);
+function updateCoins(amount) {
+  var newBalance = parseInt($('#balance').text(), 10) + amount;
+  $('#balance').text(newBalance);
+}
+
+socket.on('alert', function(data) {
+  alert(data.message);
 });
 
 socket.on('join coin-flip success', function(data) {
@@ -93,10 +109,14 @@ socket.on('add coin-flip', function(data) {
   addGame(data);
 });
 
-socket.on('add coins', function(amount) {
-
+socket.on('remove coins', function(data) {
+  updateCoins(-data.amount);
 });
 
-socket.on('remove coins', function(amount) {
+socket.on('add coins', function(data) {
+  updateCoins(data.amount);
+});
 
+socket.on('update coins', function(data) {
+  updateCoins(data.amount);
 });

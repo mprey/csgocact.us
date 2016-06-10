@@ -13,7 +13,7 @@ var coinflipSchema = new Schema({
 });
 
 coinflipSchema.methods.hasCompleted = function(callback) {
-  return callback(this.completed == false);
+  return callback(this.completed == true);
 };
 
 coinflipSchema.methods.isAvailable = function(callback) {

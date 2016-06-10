@@ -4,14 +4,23 @@ block content
   script.
     var local_games = !{JSON.stringify(games)};
   script(src="/javascripts/coin-flip.js")
-  script(src="/countup.js/countUp.js")
+  script(src="/javascripts/countUp.js")
+  script(src="/javascripts/countUp-jquery.js")
   link(rel='stylesheet', href='/stylesheets/coin-flip.css')
-  h1 COIN-FLIPS
-  p Coins: #[span(class='balance') #{user.balance}]
-  .games
-    table.games
-      tr
-        th User
-        th Status
-        th Amount
-        th Face
+  p Coins: #[span(id='balance') #{user.balance}]
+  .container
+    .header
+      h2.center Coin-flips
+    .game-box
+      .table-header
+        .pull-left
+          h3 Current Games
+        .pull-right
+          h4.left#create.
+            #[a(href="javascript:void(0)") Create]
+          h4.right#refresh.
+            #[a(href="javascript:void(0)") Refresh]
+      .games
+        table.games
+  button(id="add-coins" class="btn", data-action="bea").
+    Add 100 coins

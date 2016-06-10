@@ -49,7 +49,7 @@ app.use(passport.session());
 require('./router')(app);
 
 server.listen(port, function() {
-  console.log('App running on port: ' + port);
+  console.log(process.env.APP_NAME + ' running on port: ' + port);
 });
 
 io.use(function(socket, next) {

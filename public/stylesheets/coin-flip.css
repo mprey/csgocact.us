@@ -9,8 +9,92 @@ th, td {
 
 table {
   border-collapse: collapse;
+  width: 100%;
 }
 
-table {
+td {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.container {
+  width: auto;
+}
+
+.center {
+  text-align: center;
+}
+
+.header, .game-box {
   width: 100%;
+}
+
+.table-header {
+  width: 100%;
+  border: 1px solid black;
+  overflow: scroll;
+  display: inline-block;
+  white-space: nowrap;
+  padding: 10px;
+}
+
+.pull-left {
+  float: left;
+}
+
+.pull-right {
+  float: right;
+  width: 15%;
+}
+
+h4 > a {
+  text-decoration: none;
+}
+
+h4.left {
+  float: left;
+}
+
+h4.right {
+  float: right;
+}
+
+.face {
+  width: 20px;
+  height: auto;
+}
+
+a.join-game:hover {
+  color: green;
+}
+
+a.join-game {
+  text-decoration: none;
+  font-weight: bold;
+  color: blue;
+}
+
+img.profile {
+  vertical-align: middle;
+  border-radius: 20%;
+}
+
+img.face {
+  vertical-align: middle;
+}
+
+td.amount {
+  width: 37%;
+  text-align: right;
+}
+
+td.user {
+  width: 37%;
+  text-align: left;
+}
+
+td.status {
+  width: auto;
+  text-align: center;
 }

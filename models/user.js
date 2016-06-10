@@ -16,14 +16,17 @@ userSchema.methods.updateTradeURL = function(tradeURL, callback) {
   return this.save(callback);
 };
 
-userSchema.methods.addCoins = function(amount, callback) {
-  this.coins += amount;
+userSchema.methods.updateCoins = function(amount, callback) {
+  this.balance += amount;
   return this.save(callback);
 };
 
 userSchema.methods.removeCoins = function(amount, callback) {
-  this.coins -= amount;
-  return this.save(callback);
+  callback(this.updateCoins(-amount));
+};
+
+userSchema.methods.addCoins = function(amount, callback) {
+  callback(this.updateCoins(+amount));
 };
 
 userSchema.methods.hasEnough = function(amount, callback) {
