@@ -9,21 +9,21 @@ module.exports = function(app) {
    *  Index route
    */
   app.get('/', function (req, res) {
-    res.render('index', {user: req.user});
+    res.redirect('/games/coin-flip');
   });
 
   /**
    *  Deposit route
    */
-  app.get('/deposit', ensureAuthenticated, function (req, res) {
+  app.get('/deposit', function (req, res) {
     res.render('deposit', {user: req.user});
   });
 
   /**
    *  Store route
    */
-  app.get('/store', ensureAuthenticated, function (req, res) {
-    res.render('store', {user: req.user});
+  app.get('/withdraw', function (req, res) {
+    res.render('withdraw', {user: req.user});
   });
 
   /**
@@ -42,30 +42,38 @@ module.exports = function(app) {
    *  Games route
    */
   app.get('/games', function (req, res) {
-    res.render('games', {user: req.user});
+    res.redirect('/games/coin-flip');
   });
 
-  app.get('/games/coin-flip', ensureAuthenticated, function(req, res) {
+  app.get('/games/coin-flip', function(req, res) {
     coinflip.loadAvailableGames(function(err, data) {
       res.render('coin-flip', {user: req.user, games: data});
     });
   });
 
+  app.get('/games/roulette', function(req, res) {
+    res.render('roulette', {user: req.user});
+  });
+
   /**
    *  Authorization route
    */
-  app.get('/auth/steam', passport.authenticate('steam', { failureRedirect: '/' }), function (req, res) {
+  app.get('/auth/steam', passport.authenticate('steam', {
+    failureRedirect: '/'
+  }), function(req, res) {
     res.redirect('/');
   });
 
-  app.get('/auth/steam/return', passport.authenticate('steam', { failureRedirect: '/' }), function (req, res) {
+  app.get('/auth/steam/return', passport.authenticate('steam', {
+    failureRedirect: '/'
+  }), function(req, res) {
     res.redirect('/');
   });
 
   /**
    *  Logout route
    */
-  app.get('/logout', function (req, res) {
+  app.get('/logout', function(req, res) {
     req.logout();
     res.redirect('/');
   });

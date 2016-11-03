@@ -7,7 +7,7 @@ var userSchema = new Schema({
   photos: {type: String, required: true},
   trade_url: {type: String, required: false},
   role: {type: Number, required: true, default: 0},
-  balance: {type: Number, required: true, default: 0},
+  credits: {type: Number, required: true, default: 0},
   date_joined: {type: Date, default: Date.now, required: true}
 });
 
@@ -17,7 +17,7 @@ userSchema.methods.updateTradeURL = function(tradeURL, callback) {
 };
 
 userSchema.methods.updateCoins = function(amount, callback) {
-  this.balance += amount;
+  this.credits += amount;
   return this.save(callback);
 };
 
@@ -29,8 +29,8 @@ userSchema.methods.addCoins = function(amount, callback) {
   callback(this.updateCoins(+amount));
 };
 
-userSchema.methods.hasEnough = function(amount, callback) {
-  return callback(this.balance > amount);
+userSchema.methods.hasEnough = function(amount) {
+  return (this.credits > amount);
 };
 
 userSchema.methods.updateProfile = function(data, callback) {

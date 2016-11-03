@@ -12,12 +12,12 @@ var coinflipSchema = new Schema({
   date_created: {type: Date, default: Date.now, required: true}
 });
 
-coinflipSchema.methods.hasCompleted = function(callback) {
-  return callback(this.completed == true);
+coinflipSchema.methods.hasCompleted = function() {
+  return (this.completed == true);
 };
 
-coinflipSchema.methods.isAvailable = function(callback) {
-  return callback(this.id_joiner == null);
+coinflipSchema.methods.isAvailable = function() {
+  return (this.id_joiner == null);
 };
 
 var Coinflip = mongoose.model('Coinflip', coinflipSchema);

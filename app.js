@@ -12,7 +12,6 @@ var mongoose = require('mongoose');
 var passport = require('passport');
 var path = require('path');
 
-var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
 var session = require('express-session');
 var MongoStore = require('connect-mongo')(session);
@@ -21,11 +20,10 @@ var server = http.createServer(app);
 var io = socketio.listen(server);
 
 mongoose.connect(process.env.MONGODB_URI);
-var sessionStore = new MongoStore({ url: process.env.MONGODB_URI });
+var sessionStore = new MongoStore({ mongooseConnection: mongoose.connection });
 
 require('./lib/passport')(passport);
 
-app.use(cookieParser());
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(express.static(path.join(__dirname, 'public')));
