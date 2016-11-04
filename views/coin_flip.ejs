@@ -1,0 +1,183 @@
+<!doctype html>
+<html lang="en" class="no-js">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+
+	<script src="https://use.fontawesome.com/78d8a1e558.js"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
+
+	<link href="https://fonts.googleapis.com/css?family=Bungee+Hairline|PT+Sans" rel="stylesheet">
+	<link rel="stylesheet" href="stylesheets/reset.css">
+	<link rel="stylesheet" href="stylesheets/style.css">
+	<link rel="stylesheet" href="stylesheets/component.css">
+	<link rel="stylesheet" href="stylesheets/sweetalert.css">
+
+	<title>Coinflip | csgocact.us</title>
+</head>
+<body>
+	<header>
+		<div id="logo"><img src="images/small-logo.svg" alt="Homepage"></div>
+
+		<div id="hamburger-menu"><a class="img-replace" href="#0">Menu</a></div>
+		<div id="user-trigger"><a class="img-replace" href="#0">User</a></div>
+	</header>
+
+	<nav id="main-nav">
+		<ul>
+			<li><a class="current" href="#"><i class="fa fa-circle" aria-hidden="true"></i> Coinflip</a></li>
+			<li><a href="/games/roulette"><i class="fa fa-dot-circle-o" aria-hidden="true"></i> Roulette</a></li>
+			<li><a href="/deposit"><i class="fa fa-money" aria-hidden="true"></i>  Deposit</a></li>
+			<li><a href="/withdraw"><i class="fa fa-shopping-cart" aria-hidden="true"></i>  Withdraw</a></li>
+			<li><a href="/support"><i class="fa fa-envelope-o" aria-hidden="true"></i>  Support</a></li>
+		</ul>
+	</nav>
+
+	<main class="page-content clearfix">
+		<div id="coinflip-header" class="coinflip-div">
+
+		</div>
+		<div id="coinflip-flexbox">
+			<div id="coinflip-games" class="coinflip-div">
+
+			</div>
+			<div id="coinflip-history" class="coinflip-div">
+
+			</div>
+			<div id="coinflip-halloffame" class="coinflip-div">
+
+			</div>
+		</div>
+	</main>
+
+	<footer>
+		<div id="footer-wrapper">
+			<!-- above the break -->
+			<div id="above-break">
+				<div id="twitter-box">
+					<h2>"csgocact.us is now live! enjoy! @csgocact"</h2>
+					<a href="http://twitter.com/csgocact"><img src="images//follow-twitter.png"></img></a>
+				</div>
+				<div id="media-icons">
+					<div class="media-icon">
+						<p><a href="http://facebook.com/csgocactus"><i class="fa fa-facebook"></i></a></p>
+					</div>
+					<div class="media-icon">
+						<p><a href="http://twitter.com/csgocact"><i class="fa fa-twitter"></i></a></p>
+					</div>
+					<div class="media-icon">
+						<p><a href="http://steamcommunity.com/groups/csgocactus"><i class="fa fa-steam"></i></p>
+					</div>
+					<div class="media-icon">
+						<p><a href="http://reddit.com/u/csgocactus"><i class="fa fa-reddit"></i></a></p>
+					</div>
+				</div>
+			</div>
+			<hr id="footer" class="fancy-line">
+			<!-- below the break -->
+			<div id="below-break">
+				<img id="logo-large" src="images//large-logo.png"></img>
+				<ul>
+					<li><a href="/terms">Terms of Service</a> -</li>
+					<li><a href="/support">Support</a> -</li>
+					<li><a href="/faq">FAQ</a> -</li>
+					<li><a href="/provably-fair">Provably Fair</a></li>
+				</ul>
+			</div>
+		</div>
+		<div id="copyright-footer">
+			<p>csgocact.us &copy; 2016 - <a id="powered-by" href="http://steampowered.com">Powered by Steam</a><p>
+		</div>
+	</footer>
+
+	<!-- shadow layer for slide out menus -->
+	<div id="shadow-layer"></div>
+
+	<!-- slide out user menu -->
+	<div id="user-menu">
+		<h2>User Profile</h2>
+		<ul class="user-menu-items">
+			<li class="user-menu-item">
+				<input class="toggle-box" id="client-settings" type="checkbox">
+				<label for="client-settings" class="noselect">Client Settings</label>
+				<div class="sub-items-wrapper">
+					<ul class="sub-items">
+						<li id="volume-setting" class="clearfix">
+							<p><i class="fa fa-volume-up" aria-hidden="true"></i> Volume:</p>
+							<input type="range" name="volume" id="volume-slider" value="50" min="0" max="100">
+						</li>
+						<li id="auto-scroll" class="clearfix">
+							<p><i class="fa fa-arrows" aria-hidden="true"></i> Chat Auto-Scroll:</p>
+							<label class="switch noselect">
+  							<input type="checkbox" id="scroll-checkbox">
+  							<div class="slider round"></div>
+							</label>
+						</li>
+						<li id="message-ping" class="clearfix">
+							<p><i class="fa fa-music" aria-hidden="true"></i> Chat Message Ping:</p>
+							<label class="switch noselect">
+  							<input type="checkbox" id="ping-checkbox">
+  							<div class="slider round"></div>
+							</label>
+						</li>
+						<li id="language" class="clearfix">
+							<p><i class="fa fa-language" aria-hidden="true"></i> Language:</p>
+							<label class="noselect">
+  							<i class="fa fa-times-circle" aria-hidden="true"></i>
+							</label>
+						</li>
+					</ul>
+					<button id="settings-save" type="submit">Save</button>
+				</div>
+			</li>
+		</ul>
+		<a href="/auth/steam" class="login-btn">Sign in with Steam</a>
+	</div>
+
+	<!-- slide out chat box -->
+	<div id="chat-box">
+		<div id="chat-header">
+			<h2 id="chat-title"><i class="fa fa-users" aria-hidden="true"></i> Chat <span id="chat-online">0</span></h2>
+			<a id="chat-exit" href="#0"><img src="images/cd-remove-item.svg"></img></a>
+		</div>
+		<div id="chat-wrapper"></div>
+		<div id="chat-input">
+			<textarea id="chat-textarea" maxlength="200" placeholder="Type Something..."></textarea>
+			<div id="chat-buttons">
+				<a id="chat-emotes" href="#" class="md-trigger" data-modal="modal-emotes"><i class="fa fa-smile-o" aria-hidden="true"></i></a>
+				<button id="chat-submit" type="submit">SEND</button>
+			</div>
+		</div>
+	</div>
+
+	<!-- chat box trigger -->
+	<div id="chat-trigger">
+		<a id="chat-trigger-a" href="#0"><i class="fa fa-comment-o" aria-hidden="true"></i></a>
+		<span class="notification-counter"></span>
+	</div>
+
+	<!-- modals -->
+	<div class="md-modal md-effect-1" id="modal-emotes">
+		<div class="md-content">
+			<h2>Chat Emotes</h2>
+			<a class="md-exit md-close" href="#0"><img src="images/cd-remove-item.svg"></img></a>
+			<div id="emotes-wrapper"></div>
+		</div>
+	</div>
+
+	<div class="md-overlay"></div>
+
+	<!-- load libraries first -->
+	<script src="javascripts/classie.js"></script>
+	<script src="javascripts/cookies.min.js"></script>
+	<script src="javascripts/sweetalert.min.js"></script>
+	<script src="javascripts/modalEffects.js"></script>
+	<script src="javascripts/jquery.transit.js"></script>
+
+	<!-- load custom scripts -->
+	<script src="javascripts/settings.manager.js"></script>
+	<script src="javascripts/nav.manager.js"></script>
+	<script src="javascripts/chat.manager.js"></script>
+	<script src="javascripts/emotes.manager.js"></script>
+</body>
+</html>

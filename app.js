@@ -19,17 +19,17 @@ var MongoStore = require('connect-mongo')(session);
 var server = http.createServer(app);
 var io = socketio.listen(server);
 
-mongoose.connect(process.env.MONGODB_URI);
-var sessionStore = new MongoStore({ mongooseConnection: mongoose.connection });
-
 require('./lib/passport')(passport);
+require('./lib/db')(mongoose);
+
+var sessionStore = new MongoStore({ mongooseConnection: mongoose.connection });
 
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(express.static(path.join(__dirname, 'public')));
 
 app.set('views', path.join(__dirname, 'views'));
-app.set('view engine', 'jade');
+app.set('view engine', 'ejs');
 
 var sessionMiddleware = session({
   key: 'connect.sid',
@@ -54,4 +54,4 @@ io.use(function(socket, next) {
   sessionMiddleware(socket.request, socket.request.res, next);
 });
 
-require('./lib/sockets')(io);
+require('./lib/socket')(io);
