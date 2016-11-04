@@ -255,8 +255,7 @@ $(function() {
   };
 
   ChatManager.prototype.addChatMessage = function(data) { //data.id, data.profile_img, data.profile_name, data.text, data.rank
-    var date = new Date;
-    var timeText = date.getHours() + ':' + date.getMinutes();
+    var timeText = formatAMPM(new Date());
 
     var contentText = chat_manager.replaceWithEmotes(data.text);
 
@@ -328,6 +327,17 @@ $(function() {
       chat_manager.queryMessage($chat_textarea.val());
     }
   });
+
+  function formatAMPM(date) {
+    var hours = date.getHours();
+    var minutes = date.getMinutes();
+    var ampm = hours >= 12 ? 'pm' : 'am';
+    hours = hours % 12;
+    hours = hours ? hours : 12; // the hour '0' should be '12'
+    minutes = minutes < 10 ? '0'+minutes : minutes;
+    var strTime = hours + ':' + minutes + ' ' + ampm;
+    return strTime;
+  }
 
   window.chat_manager = chat_manager;
 });
