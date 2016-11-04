@@ -1,5 +1,5 @@
 $(function() {
 
-  var socket = io.connect("localhost:3000");
+  var socket = io.connect(process.env.SOCKET_SERVER);
 
 });
