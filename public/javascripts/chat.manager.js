@@ -329,45 +329,5 @@ $(function() {
     }
   });
 
-  chat_manager.addChatMessage({
-    id: '55555',
-    profile_img: 'images/large-logo-nobg.png',
-    profile_name: 'mprey',
-    text: 'MrDestructoid phantom lord viewer MrDestructoid ',
-    rank: ranks.BOT
-  });
-
-  chat_manager.addChatMessage({
-    id: '55555',
-    profile_img: 'images/large-logo-nobg.png',
-    profile_name: 'mprey',
-    text: 'i gonna /ban u Kappa',
-    rank: ranks.ADMIN
-  });
-
-  chat_manager.addChatMessage({
-    id: '55555',
-    profile_img: 'images/large-logo-nobg.png',
-    profile_name: 'mprey',
-    text: 'hello I am a moderator 4Head hello I am a moderator 4Head hello I am a moderator 4Head hello I am a moderator 4Head',
-    rank: ranks.MOD
-  });
-
-  chat_manager.addChatMessage({
-    id: '55555',
-    profile_img: 'images/large-logo-nobg.png',
-    profile_name: 'mprey',
-    text: 'hello I am a moderator 4Head hello I am a moderator 4Head hello I am a moderator 4Head hello I am a moderator 4Head',
-    rank: ranks.NORMAL
-  });
-
-  chat_manager.addChatMessage({
-    id: '55555',
-    profile_img: 'images/large-logo-nobg.png',
-    profile_name: 'mprey',
-    text: 'im the coder now ANELE',
-    rank: ranks.DEVELOPER
-  });
-
   window.chat_manager = chat_manager;
 });
