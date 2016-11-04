@@ -410,6 +410,18 @@ header {
 #user-menu .login-btn:hover {
     background: #a2dda8;
 }
+#user-menu .logout-btn {
+  display: block;
+  width: 100%;
+  height: 60px;
+  line-height: 60px;
+  background: #e86a6a;
+  color: #FFF;
+  text-align: center;
+}
+#user-meny .logout-btn:hover {
+  background: #e98c8c;
+}
 #user-menu .toggle-box {
     display: none;
 }

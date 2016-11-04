@@ -1,0 +1,33 @@
+<li class="user-menu-item">
+  <input class="toggle-box" id="client-settings" type="checkbox">
+  <label for="client-settings" class="noselect">Client Settings</label>
+  <div class="sub-items-wrapper">
+    <ul class="sub-items">
+      <li id="volume-setting" class="clearfix">
+        <p><i class="fa fa-volume-up" aria-hidden="true"></i> Volume:</p>
+        <input type="range" name="volume" id="volume-slider" value="50" min="0" max="100">
+      </li>
+      <li id="auto-scroll" class="clearfix">
+        <p><i class="fa fa-arrows" aria-hidden="true"></i> Chat Auto-Scroll:</p>
+        <label class="switch noselect">
+          <input type="checkbox" id="scroll-checkbox">
+          <div class="slider round"></div>
+        </label>
+      </li>
+      <li id="message-ping" class="clearfix">
+        <p><i class="fa fa-music" aria-hidden="true"></i> Chat Message Ping:</p>
+        <label class="switch noselect">
+          <input type="checkbox" id="ping-checkbox">
+          <div class="slider round"></div>
+        </label>
+      </li>
+      <li id="language" class="clearfix">
+        <p><i class="fa fa-language" aria-hidden="true"></i> Language:</p>
+        <label class="noselect">
+          <i class="fa fa-times-circle" aria-hidden="true"></i>
+        </label>
+      </li>
+    </ul>
+    <button id="client-settings-save" type="submit">Save</button>
+  </div>
+</li>

@@ -1,9 +1,10 @@
 $(function() {
 
-  var $client_settings_save = $('#settings-save');
+  var $client_settings_save = $('#client-settings-save');
   var $volume_slider = $('#volume-slider');
   var $scroll_checkbox = $('#scroll-checkbox');
   var $ping_checkbox = $('#ping-checkbox');
+  var $steam_settings_refresh = $('#steam-settings-refresh');
 
   var settings = new Settings();
 
