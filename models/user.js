@@ -4,10 +4,10 @@ var Schema = mongoose.Schema;
 var userSchema = new Schema({
   _id: {type: Number, required: true},
   name: {type: String, required: true},
-  photos: {type: String, required: true},
+  photo: {type: String, required: true},
   trade_url: {type: String, required: false},
-  role: {type: Number, required: true, default: 0},
-  credits: {type: Number, required: true, default: 0},
+  rank: {type: Number, required: true, default: 0},
+  credits: {type: Number, required: true, default: 0.000},
   date_joined: {type: Date, default: Date.now, required: true}
 });
 
@@ -35,7 +35,7 @@ userSchema.methods.hasEnough = function(amount) {
 
 userSchema.methods.updateProfile = function(data, callback) {
   this.name = data.name;
-  this.photos = JSON.stringify(data.photos);
+  this.photo = data.photo;
   return this.save(callback);
 };
 

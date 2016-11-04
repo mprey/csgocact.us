@@ -9,7 +9,7 @@ module.exports = function(app) {
    *  Index route
    */
   app.get('/', function (req, res) {
-    res.render('coin_flip', {user: req.user});
+    res.redirect('/coinflip');
   });
 
   /**
@@ -42,14 +42,14 @@ module.exports = function(app) {
    *  Games route
    */
   app.get('/games', function (req, res) {
-    res.redirect('/games/coin-flip');
+    res.redirect('/coinflip');
   });
 
-  app.get('/games/coin-flip', function(req, res) {
-    res.render('coin_flip', {user: req.user, games: data});
+  app.get('/coinflip', function(req, res) {
+    res.render('coin_flip', {user: req.user});
   });
 
-  app.get('/games/roulette', function(req, res) {
+  app.get('/roulette', function(req, res) {
     res.render('roulette', {user: req.user});
   });
 

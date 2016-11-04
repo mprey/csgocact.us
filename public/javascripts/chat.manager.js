@@ -41,7 +41,8 @@ $(function() {
     RELOAD_PAGE: 'CHAT_OUT_RELOAD_PAGE',
     CLEAR_CHAT: 'CHAT_OUT_CLEAR_CHAT',
     BOT_MESSAGE: 'CHAT_OUT_BOT_MESSAGE',
-    CHAT_MODE: 'CHAT_OUT_CHAT_MODE'
+    CHAT_MODE: 'CHAT_OUT_CHAT_MODE',
+    REQUEST_ONLINE: 'CHAT_OUT_REQUEST_ONLINE'
   };
 
   var commands = {
@@ -58,12 +59,10 @@ $(function() {
     DEMOTE: '/demote [id]'
   };
 
-  var chat_manager = new ChatManager();
-
-  function ChatManager(socket) {
+  function ChatManager() {
     this.socket = socket;
 
-    if (this.socket == null) return;
+    var instance = this;
 
     this.socket.on(socket_incoming.UPDATE_ONLINE, this.updateOnline);
     this.socket.on(socket_incoming.INCREMENT_ONLINE, this.incrementOnline);
@@ -79,7 +78,19 @@ $(function() {
     this.socket.on(socket_incoming.UNBAN_USER, this.handleUserUnban);
     this.socket.on(socket_incoming.MUTE_USER, this.handleUserMute);
     this.socket.on(socket_incoming.UNMUTE_USER, this.handleUserUnmute);
+
+    this.socket.emit(socket_outgoing.REQUEST_ONLINE);
   }
+
+  ChatManager.prototype.replaceWithEmotes = function(text) {
+    var newText = text;
+    for (var index in emotes) {
+      if (newText.indexOf(emotes[index]) >= 0) {
+        newText = newText.split(emotes[index]).join('<img class="chat-emote" src="images/emotes/' + emotes[index] + '.png">');
+      }
+    }
+    return newText;
+  };
 
   ChatManager.prototype.handleUserBan = function(data) { //data.profile_name, data.expire_date, data.reason
     this.addBotMessage({
@@ -217,7 +228,7 @@ $(function() {
   ChatManager.prototype.addBotMessage = function(data) {
     var data = {
       id: 'CHAT_BOT',
-      profile_img: '../img/chat-bot-profile.png',
+      profile_img: 'images/large-logo-bg.png',
       profile_name: 'Chat Bot',
       text: data.text,
       rank: ranks.BOT
@@ -247,12 +258,12 @@ $(function() {
     var date = new Date;
     var timeText = date.getHours() + ':' + date.getMinutes();
 
-    var contentText = this.replaceWithEmotes(data.text);
+    var contentText = chat_manager.replaceWithEmotes(data.text);
 
     var rankText = '';
 
     if (data.rank > 0) {
-      var rank = this.getRank(data.rank).toLowerCase();
+      var rank = chat_manager.getRank(data.rank).toLowerCase();
       rankText = '<span class="rank ' + rank + '">' + rank + '</span>';
     }
 
@@ -261,7 +272,7 @@ $(function() {
 
     $chat_wrapper.append(divText + hrBreak);
 
-    this.scrollToBottom();
+    chat_manager.scrollToBottom();
   };
 
   ChatManager.prototype.addNotification = function() {
@@ -280,16 +291,6 @@ $(function() {
     $chat_textarea.val(newText);
   };
 
-  ChatManager.prototype.replaceWithEmotes = function(text) {
-    var newText = text;
-    for (var index in emotes) {
-      if (newText.indexOf(emotes[index]) >= 0) {
-        newText = newText.split(emotes[index]).join('<img class="chat-emote" src="images/emotes/' + emotes[index] + '.png">');
-      }
-    }
-    return newText;
-  };
-
   ChatManager.prototype.getRank = function(value) {
     for (var key in ranks) {
       if (ranks[key] == value) {
@@ -306,6 +307,8 @@ $(function() {
       location.reload();
     }, 2000);
   };
+
+  var chat_manager = new ChatManager();
 
   $chat_submit.on('click', function(event) {
     event.preventDefault();

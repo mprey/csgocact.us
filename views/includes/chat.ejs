@@ -1,0 +1,40 @@
+<!-- slide out chat box -->
+<div id="chat-box">
+  <div id="chat-header">
+    <h2 id="chat-title"><i class="fa fa-users" aria-hidden="true"></i> Chat <span id="chat-online">0</span></h2>
+    <a id="chat-exit" href="#0"><img src="images/cd-remove-item.svg"></img></a>
+  </div>
+  <div id="chat-wrapper"></div>
+  <div id="chat-input">
+    <% if (user) {%>
+      <textarea id="chat-textarea" maxlength="200" placeholder="Type Something..."></textarea>
+      <div id="chat-buttons">
+        <a id="chat-emotes" href="#" class="md-trigger" data-modal="modal-emotes"><i class="fa fa-smile-o" aria-hidden="true"></i></a>
+        <button id="chat-submit" type="submit">SEND</button>
+      </div>
+    <% } else {%>
+      <div id="chat-nologin">
+        <a href="/auth/steam">Login to chat...</a>
+      </div>
+    <% } %>
+  </div>
+</div>
+
+<!-- chat box trigger -->
+<div id="chat-trigger">
+  <a id="chat-trigger-a" href="#0"><i class="fa fa-comment-o" aria-hidden="true"></i></a>
+  <span class="notification-counter"></span>
+</div>
+
+<!-- emote modal -->
+<div class="md-modal md-effect-1" id="modal-emotes">
+  <div class="md-content">
+    <h2>Chat Emotes</h2>
+    <a class="md-exit md-close" href="#0"><img src="images/cd-remove-item.svg"></img></a>
+    <div id="emotes-wrapper"></div>
+  </div>
+</div>
+
+<!-- shadow layer for slide out menus -->
+<div class="md-overlay"></div>
+<div id="shadow-layer"></div>

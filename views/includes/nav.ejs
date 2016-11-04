@@ -1,0 +1,16 @@
+<header>
+  <div id="logo"><img src="images/small-logo.svg" alt="Homepage"></div>
+
+  <div id="hamburger-menu"><a class="img-replace" href="#0">Menu</a></div>
+  <div id="user-trigger"><a class="img-replace" href="#0">User</a></div>
+</header>
+
+<nav id="main-nav">
+  <ul>
+    <li><a <% if (currentPage == "/coinflip") { %>class="current"<% } %> href="/games/coinflip"><i class="fa fa-circle" aria-hidden="true"></i> Coinflip</a></li>
+    <li><a <% if (currentPage == "/roulette") { %>class="current"<% } %> href="/games/roulette"><i class="fa fa-dot-circle-o" aria-hidden="true"></i> Roulette</a></li>
+    <li><a <% if (currentPage == "/deposit") { %>class="current"<% } %> href="/deposit"><i class="fa fa-money" aria-hidden="true"></i>  Deposit</a></li>
+    <li><a <% if (currentPage == "/withdraw") { %>class="current"<% } %> href="/withdraw"><i class="fa fa-shopping-cart" aria-hidden="true"></i>  Withdraw</a></li>
+    <li><a <% if (currentPage == "/support") { %>class="current"<% } %> href="/support"><i class="fa fa-envelope-o" aria-hidden="true"></i>  Support</a></li>
+  </ul>
+</nav>

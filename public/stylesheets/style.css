@@ -419,7 +419,7 @@ header {
   color: #FFF;
   text-align: center;
 }
-#user-meny .logout-btn:hover {
+#user-menu .logout-btn:hover {
   background: #e98c8c;
 }
 #user-menu .toggle-box {
@@ -764,6 +764,14 @@ hr#footer {
     border-color: #719ECE;
     box-shadow: 0 0 10px #719ECE;
 }
+#chat-nologin {
+  background-color: rgb(247, 244, 244);
+  width: 100%;
+  height: 100%;
+  text-align: center;
+  line-height: 100px;
+  font-weight: bold;
+}
 #chat-buttons {
     position: absolute;
     bottom: 6px;
@@ -807,7 +815,7 @@ hr#footer {
     right: 15px;
     height: 50px;
     width: 50px;
-    background-color: #25272b;
+    background-color: rgba(43, 50, 51, 0.76);
     line-height: 46px;
     text-align: center;
     font-size: 25px;
