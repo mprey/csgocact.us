@@ -4,7 +4,7 @@ $(function() {
 
   var emotesArray = ['4Head', 'ANELE', 'BabyRage', 'BibleThump', 'BrokeBack', 'cmonBruh', 'CoolCat', 'CorgiDerp', 'EleGiggle', 'FailFish', 'FeelsBadMan', 'FeelsGoodMan', 'Kappa', 'KappaPride', 'Kreygasm', 'MrDestructoid', 'OSfrog', 'PogChamp', 'SMOrc', 'SwiftRage', 'WutFace'];
 
-  const EMOTE_DIR = '../img/emotes/';
+  var EMOTE_DIR = 'images/emotes/';
 
   function init() {
     for (var index in emotesArray) {

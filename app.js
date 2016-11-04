@@ -51,6 +51,7 @@ server.listen(port, function() {
 });
 
 io.use(function(socket, next) {
+  console.log('request');
   sessionMiddleware(socket.request, socket.request.res, next);
 });
 

@@ -1,10 +1,12 @@
 {
-  "name": "csgo-site",
+  "name": "csgocact.us",
   "version": "1.0.0",
-  "description": "basic node.js app for csgo",
+  "description": "play now at http://csgocact.us",
   "scripts": {
-    "start": "node app.js"
+    "start": "node app.js",
+    "nodemon": "nodemon ./app.js"
   },
+  "repository": "https://github.com/mprey/csgocact.us.git",
   "dependencies": {
     "async": "^2.0.0-rc.5",
     "body-parser": "~1.13.2",

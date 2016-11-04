@@ -284,7 +284,7 @@ $(function() {
     var newText = text;
     for (var index in emotes) {
       if (newText.indexOf(emotes[index]) >= 0) {
-        newText = newText.split(emotes[index]).join('<img class="chat-emote" src="../img/emotes/' + emotes[index] + '.png">');
+        newText = newText.split(emotes[index]).join('<img class="chat-emote" src="images/emotes/' + emotes[index] + '.png">');
       }
     }
     return newText;
@@ -328,7 +328,7 @@ $(function() {
 
   chat_manager.addChatMessage({
     id: '55555',
-    profile_img: '../img/large-logo.png',
+    profile_img: 'images/large-logo.png',
     profile_name: 'mprey',
     text: 'MrDestructoid phantom lord viewer MrDestructoid ',
     rank: ranks.BOT
@@ -336,7 +336,7 @@ $(function() {
 
   chat_manager.addChatMessage({
     id: '55555',
-    profile_img: '../img/large-logo.png',
+    profile_img: 'images/large-logo.png',
     profile_name: 'mprey',
     text: 'i gonna /ban u Kappa',
     rank: ranks.ADMIN
@@ -344,7 +344,7 @@ $(function() {
 
   chat_manager.addChatMessage({
     id: '55555',
-    profile_img: '../img/large-logo.png',
+    profile_img: 'images/large-logo.png',
     profile_name: 'mprey',
     text: 'hello I am a moderator 4Head hello I am a moderator 4Head hello I am a moderator 4Head hello I am a moderator 4Head',
     rank: ranks.MOD
@@ -352,7 +352,7 @@ $(function() {
 
   chat_manager.addChatMessage({
     id: '55555',
-    profile_img: '../img/large-logo.png',
+    profile_img: 'images/large-logo.png',
     profile_name: 'mprey',
     text: 'hello I am a moderator 4Head hello I am a moderator 4Head hello I am a moderator 4Head hello I am a moderator 4Head',
     rank: ranks.NORMAL
@@ -360,7 +360,7 @@ $(function() {
 
   chat_manager.addChatMessage({
     id: '55555',
-    profile_img: '../img/large-logo.png',
+    profile_img: 'images/large-logo.png',
     profile_name: 'mprey',
     text: 'im the coder now ANELE',
     rank: ranks.DEVELOPER

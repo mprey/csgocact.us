@@ -9,7 +9,7 @@ module.exports = function(app) {
    *  Index route
    */
   app.get('/', function (req, res) {
-    res.redirect('/games/coin-flip');
+    res.render('coin_flip');
   });
 
   /**
@@ -46,9 +46,7 @@ module.exports = function(app) {
   });
 
   app.get('/games/coin-flip', function(req, res) {
-    coinflip.loadAvailableGames(function(err, data) {
-      res.render('coin-flip', {user: req.user, games: data});
-    });
+    res.render('coin_flip', {user: req.user, games: data});
   });
 
   app.get('/games/roulette', function(req, res) {
@@ -103,18 +101,6 @@ module.exports = function(app) {
         console.log("Error with steam_data API: ", error, ", status code: ", response.statusCode)
       }
     });
-  });
-
-  /**
-   *  Error handling
-   */
-  app.get('/404', function(req, res) {
-    res.status(404);
-    res.render('404', {user: req.user});
-  });
-
-  app.use(function (req, res, next) {
-    res.redirect('/404');
   });
 
   /**
