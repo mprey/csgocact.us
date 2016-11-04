@@ -1,6 +1,3 @@
-/**
- *  Set up process.env variables
- */
 require('dotenv').config();
 
 var express = require('express');
@@ -51,7 +48,6 @@ server.listen(port, function() {
 });
 
 io.use(function(socket, next) {
-  console.log('request');
   sessionMiddleware(socket.request, socket.request.res, next);
 });
 

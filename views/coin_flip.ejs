@@ -95,7 +95,11 @@
 
 	<!-- slide out user menu -->
 	<div id="user-menu">
-		<h2>User Profile</h2>
+		<% if (user.name) { $>
+			<h2><%= user.name %></h2>
+		<% } else { %>
+			<h2>User Profile</h2>
+		<% } %>
 		<ul class="user-menu-items">
 			<li class="user-menu-item">
 				<input class="toggle-box" id="client-settings" type="checkbox">

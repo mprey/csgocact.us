@@ -9,7 +9,7 @@ module.exports = function(app) {
    *  Index route
    */
   app.get('/', function (req, res) {
-    res.render('coin_flip');
+    res.render('coin_flip', {user: req.user});
   });
 
   /**
