@@ -9,6 +9,8 @@ $(function() {
 
   var emotes = ['4Head', 'ANELE', 'BabyRage', 'BibleThump', 'BrokeBack', 'cmonBruh', 'CoolCat', 'CorgiDerp', 'EleGiggle', 'FailFish', 'FeelsBadMan', 'FeelsGoodMan', 'Kappa', 'KappaPride', 'Kreygasm', 'MrDestructoid', 'OSfrog', 'PogChamp', 'SMOrc', 'SwiftRage', 'WutFace'];
 
+  var messagePing = new Audio('audio/message_ping.wav');
+
   var ranks = {
     NORMAL: 0,
     MOD: 1,
@@ -29,7 +31,8 @@ $(function() {
     RELOAD_PAGE: 'CHAT_IN_RELOAD_PAGE',
     CLEAR_CHAT: 'CHAT_IN_CLEAR_CHAT',
     BOT_MESSAGE: 'CHAT_IN_BOT_MESSAGE',
-    CHAT_MODE: 'CHAT_IN_CHAT_MODE'
+    CHAT_MODE: 'CHAT_IN_CHAT_MODE',
+    INIT_CHAT: 'CHAT_IN_INIT_CHAT'
   };
 
   var socket_outgoing = {
@@ -42,7 +45,7 @@ $(function() {
     CLEAR_CHAT: 'CHAT_OUT_CLEAR_CHAT',
     BOT_MESSAGE: 'CHAT_OUT_BOT_MESSAGE',
     CHAT_MODE: 'CHAT_OUT_CHAT_MODE',
-    REQUEST_ONLINE: 'CHAT_OUT_REQUEST_ONLINE'
+    INIT_CHAT: 'CHAT_OUT_INIT_CHAT'
   };
 
   var commands = {
@@ -64,7 +67,7 @@ $(function() {
 
     var instance = this;
 
-    this.socket.on(socket_incoming.UPDATE_ONLINE, this.updateOnline);
+    this.socket.on(socket_incoming.INIT_CHAT, this.initChat);
     this.socket.on(socket_incoming.INCREMENT_ONLINE, this.incrementOnline);
     this.socket.on(socket_incoming.DECREMENT_ONLINE, this.decrementOnline);
 
@@ -79,7 +82,14 @@ $(function() {
     this.socket.on(socket_incoming.MUTE_USER, this.handleUserMute);
     this.socket.on(socket_incoming.UNMUTE_USER, this.handleUserUnmute);
 
-    this.socket.emit(socket_outgoing.REQUEST_ONLINE);
+    this.socket.emit(socket_outgoing.INIT_CHAT);
+  }
+
+  ChatManager.prototype.initChat = function(data) { //data.current_users, data.previous_messages
+    chat_manager.updateOnline(data.current_users);
+    data.previous_messages.forEach(function(obj) {
+      chat_manager.addChatMessage(obj);
+    });
   }
 
   ChatManager.prototype.replaceWithEmotes = function(text) {
@@ -128,8 +138,8 @@ $(function() {
     $chat_online.text(current);
   };
 
-  ChatManager.prototype.updateOnline = function(data) {
-    $chat_online.text(data.amount);
+  ChatManager.prototype.updateOnline = function(amount) {
+    $chat_online.text(amount);
   };
 
   ChatManager.prototype.decrementOnline = function() {
@@ -254,8 +264,21 @@ $(function() {
     }
   };
 
-  ChatManager.prototype.addChatMessage = function(data) { //data.id, data.profile_img, data.profile_name, data.text, data.rank
-    var timeText = formatAMPM(new Date());
+  ChatManager.prototype.playPing = function() {
+    if (settings.messagePing()) {
+      var sound = new Howl({
+        src: 'audio/message_ping.wav',
+        volume: (settings.volumeValue() * .01),
+        autoplay: true,
+        loop: false
+      });
+    }
+  };
+
+  ChatManager.prototype.addChatMessage = function(data) { //data.id, data.profile_img, data.profile_name, data.text, data.rank, data.date
+    var date = data.date ? (new Date(Date.parse(data.date))) : new Date();
+    
+    var timeText = formatAMPM(date);
 
     var contentText = chat_manager.replaceWithEmotes(data.text);
 
@@ -272,6 +295,7 @@ $(function() {
     $chat_wrapper.append(divText + hrBreak);
 
     chat_manager.scrollToBottom();
+    chat_manager.playPing();
   };
 
   ChatManager.prototype.addNotification = function() {
@@ -330,7 +354,7 @@ $(function() {
 
   function formatAMPM(date) {
     var hours = date.getHours();
-    var minutes = date.getMinutes();
+    var minutes = date.getMinutes() || 00;
     var ampm = hours >= 12 ? 'pm' : 'am';
     hours = hours % 12;
     hours = hours ? hours : 12; // the hour '0' should be '12'

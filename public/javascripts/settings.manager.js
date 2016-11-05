@@ -61,10 +61,10 @@ $(function() {
   };
 
   Settings.prototype.messagePing = function() {
-    return values["messagePing"] == 1;
+    return values["message_ping_value"] == 1;
   };
 
-  Settings.prototype.getVolumeValue = function() {
+  Settings.prototype.volumeValue = function() {
     return values["volume_value"];
   }
 
