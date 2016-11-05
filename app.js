@@ -3,7 +3,6 @@ require('dotenv').config();
 var express = require('express');
 var app = express();
 var http = require('http');
-var socketio = require('socket.io');
 var port = process.env.PORT || 3000;
 var mongoose = require('mongoose');
 var passport = require('passport');
@@ -13,8 +12,8 @@ var bodyParser = require('body-parser');
 var session = require('express-session');
 var MongoStore = require('connect-mongo')(session);
 
-var server = http.createServer(app);
-var io = socketio.listen(server);
+var server = require('http').createServer(app);
+var io = require('socket.io').listen(server);
 
 require('./lib/passport')(passport);
 require('./lib/db')(mongoose);
@@ -43,9 +42,7 @@ app.use(passport.session());
 
 require('./router')(app);
 
-server.listen(port, function() {
-  console.log(process.env.APP_NAME + ' running on port: ' + port);
-});
+server.listen(port || 3000);
 
 io.use(function(socket, next) {
   sessionMiddleware(socket.request, {}, next);
