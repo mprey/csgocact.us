@@ -88,7 +88,7 @@ $(function() {
   ChatManager.prototype.initChat = function(data) { //data.current_users, data.previous_messages
     chat_manager.updateOnline(data.current_users);
     data.previous_messages.forEach(function(obj) {
-      obj.sound = false;
+      obj.no_sound = true;
       chat_manager.addChatMessage(obj);
     });
   }
@@ -276,12 +276,10 @@ $(function() {
     }
   };
 
-  ChatManager.prototype.addChatMessage = function(data) { //data.id, data.profile_img, data.profile_name, data.text, data.rank, data.date, data.sound
+  ChatManager.prototype.addChatMessage = function(data) { //data.id, data.profile_img, data.profile_name, data.text, data.rank, data.date, data.no_sound
     var date = data.date ? (new Date(Date.parse(data.date))) : new Date();
 
     var timeText = formatAMPM(date);
-
-    var sound = data.sound || true;
 
     var contentText = chat_manager.replaceWithEmotes(data.text);
 
@@ -298,7 +296,7 @@ $(function() {
     $chat_wrapper.append(divText + hrBreak);
 
     chat_manager.scrollToBottom();
-    if (sound) chat_manager.playPing();
+    if (!data.no_sound) {chat_manager.playPing();}
   };
 
   ChatManager.prototype.addNotification = function() {
