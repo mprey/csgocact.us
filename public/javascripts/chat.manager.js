@@ -50,16 +50,18 @@ $(function() {
 
   var commands = {
     HELP: '/help',
-    BAN: '/ban [id] [reason] (duration)',
-    MUTE: '/mute [id] [reason] (duration)',
-    UNBAN: '/unban [id]',
-    UNMUTE: '/unmute [id]',
+    BAN: '/ban id:[id] r:[reason] d:(duration)',
+    MUTE: '/mute id:[id] r:[reason] d:(duration)',
+    UNBAN: '/unban id:[id]',
+    UNMUTE: '/unmute id:[id]',
     RELOAD: '/reload',
     CLEAR: '/clear',
-    BOT: '/bot send [message]',
-    MODE: '/mode [normal:staff]',
-    PROMOTE: '/promote [id] [moderator:admin]',
-    DEMOTE: '/demote [id]'
+    BOT: '/bot send m:[message]',
+    MODE: '/mode m:[normal:staff]',
+    PROMOTE: '/promote id:[id] p:[moderator:admin]',
+    DEMOTE: '/demote id:[id]',
+    DURATION_EX: 'Duration example: "d:3mt,5d,4h,5m,6s"',
+    REASON_EX: 'Reason example: "r:Banned for spamming"'
   };
 
   function ChatManager() {
@@ -162,62 +164,6 @@ $(function() {
     this.socket.emit(socket_outgoing.SEND_CHAT, {
       text: text
     });
-  };
-
-  ChatManager.prototype.handleCommand = function(text) { //before sent to socket
-    var commandQuery = text.substring(1);
-
-    var args = commandQuery.split(" ");
-
-    if (args[0].toLowerCase() == 'help') {
-      this.sendHelpMessage();
-    } else if (args[0].toLowerCase() == 'ban') {
-      if (args.length == 3 || args.length == 4) {
-        //TODO
-      }
-      this.sendHelpMessage('ban');
-    } else if (args[0].toLowerCase() == 'mute') {
-      if (args.length == 3 || args.length == 4) {
-        //TODO
-      }
-      this.sendHelpMessage('mute');
-    } else if (args[0].toLowerCase() == 'unban') {
-      if (args.length == 2) {
-        //TODO
-      }
-      this.sendHelpMessage('unban');
-    } else if (args[0].toLowerCase() == 'unmute') {
-      if (args.length == 2) {
-        //TODO
-      }
-      this.sendHelpMessage('unmute');
-    } else if (args[0].toLowerCase() == 'reload') {
-      this.socket.emit(socket_outgoing.RELOAD_PAGE, {});
-    } else if (args[0].toLowerCase() == 'clear') {
-      this.socket.emit(socket_outgoing.CLEAR_CHAT, {});
-    } else if (args[0].toLowerCase() == 'bot') {
-      if (args.length > 2 && args[1].toLowerCase() == 'send') {
-        //TODO parse args from index 2->indefinite into bot message string
-      }
-      this.sendHelpMessage('bot');
-    } else if (args[0].toLowerCase() == 'mode') {
-      if (args.length == 2) {
-        //TODO
-      }
-      this.sendHelpMessage('mode');
-    } else if (args[0].toLowerCase() == 'promote') {
-      if (args.lenth == 3) {
-        //TODO
-      }
-      this.sendHelpMessage('promote');
-    } else if (args[0].toLowerCase() == 'demote') {
-      if (args.length == 2) {
-        //TODO
-      }
-      this.sendHelpMessage('demote');
-    } else {
-      this.sendHelpMessage();
-    }
   };
 
   ChatManager.prototype.sendHelpMessage = function(command) {
@@ -332,6 +278,72 @@ $(function() {
     }, 2000);
   };
 
+  ChatManager.prototype.handleCommand = function(text) { //before sent to socket
+    var commandQuery = text.substring(1);
+
+    var args = commandQuery.split(" ");
+
+    if (args[0].toLowerCase() == 'help') {
+      this.sendHelpMessage();
+    } else if (args[0].toLowerCase() == 'ban') { //ban id:5345342324 r:you are gay as fuck d:5d6h1m
+      if (args.length > 2) {
+        var command = getCommandProperties(args);
+        var data = {};
+        if (command.id && command.r) {
+          if (command.d) {
+            data.expire = futureDateFromText(command.d[0]);
+          }
+          data.banned_id = command.idea;
+          data.reason = command.r;
+          this.socket.emit(socket_outgoing.BAN_USER, data);
+          return;
+        }
+      }
+      this.sendHelpMessage('ban');
+    } else if (args[0].toLowerCase() == 'mute') { //data.muter_id, data.muted_id, data.reason, data.duration
+      if (args.length > 3) {
+        //TODO
+      }
+      this.sendHelpMessage('mute');
+    } else if (args[0].toLowerCase() == 'unban') { //data.unbanned_id, data.unbanner_id
+      if (args.length == 2) {
+        //TODO
+      }
+      this.sendHelpMessage('unban');
+    } else if (args[0].toLowerCase() == 'unmute') { //data.unmuted_id, data.unmuter_id
+      if (args.length == 2) {
+        //TODO
+      }
+      this.sendHelpMessage('unmute');
+    } else if (args[0].toLowerCase() == 'reload') {
+      this.socket.emit(socket_outgoing.RELOAD_PAGE, {});
+    } else if (args[0].toLowerCase() == 'clear') {
+      this.socket.emit(socket_outgoing.CLEAR_CHAT, {});
+    } else if (args[0].toLowerCase() == 'bot') {
+      if (args.length > 2 && args[1].toLowerCase() == 'send') {
+        //TODO parse args from index 2->indefinite into bot message string
+      }
+      this.sendHelpMessage('bot');
+    } else if (args[0].toLowerCase() == 'mode') {
+      if (args.length == 2) {
+        //TODO
+      }
+      this.sendHelpMessage('mode');
+    } else if (args[0].toLowerCase() == 'promote') {
+      if (args.lenth == 3) {
+        //TODO
+      }
+      this.sendHelpMessage('promote');
+    } else if (args[0].toLowerCase() == 'demote') {
+      if (args.length == 2) {
+        //TODO
+      }
+      this.sendHelpMessage('demote');
+    } else {
+      this.sendHelpMessage();
+    }
+  };
+
   var chat_manager = new ChatManager();
 
   $chat_submit.on('click', function(event) {
@@ -352,6 +364,73 @@ $(function() {
       chat_manager.queryMessage($chat_textarea.val());
     }
   });
+
+  function futureDateFromText(text) {
+    var parts = text.split(',');
+    var months = 0,
+        days = 0,
+        hours = 0,
+        minutes = 0,
+        seconds = 0;
+    for (var index in parts) {
+      var partArray = parts[index].match(/(\d+|[^\d]+)/g);
+      if (partArray.length == 2) {
+        switch(partArray[1]) {
+          case 'mt':
+            months += parseInt(partArray[0]);
+            break;
+          case 'd':
+            days += parseInt(partArray[0]);
+            break;
+          case 'h':
+            hours += parseInt(partArray[0]);
+            break;
+          case 'm':
+            minutes += parseInt(partArray[0]);
+            break;
+          case 's':
+            seconds += parseInt(partArray[0]);
+            break;
+          default:
+        }
+      }
+    }
+    var date = new Date();
+    date.setMonth(date.getMonth() + months);
+    date.setDate(date.getDate() + days);
+    date.setHours(date.getHours() + hours);
+    date.setMinutes(date.getMinutes() + minutes);
+    date.setSeconds(date.getSeconds() + seconds);
+    return date;
+  }
+
+  function getCommandProperties(array) {
+    var command = {};
+    var reading = false,
+        readArray = [],
+        identifier = '';
+    for (var i = 1; i < array.length; i++) {
+      var current = array[i];
+      if (current.indexOf(":") != -1 && !reading) { //start reading
+        logData(current);
+      } else if (reading && current.indexOf(":") == -1) { //continue reading
+        readArray.push(current);
+      } else if (reading && current.indexOf(":") != -1){ //onto next object
+        reading = false;
+        identifier = '';
+        readArray = [];
+        logData(current);
+      }
+    }
+    function logData(current) {
+      reading = true;
+      var parts = current.split(":");
+      identifier = parts[0];
+      readArray.push(parts[1]);
+      command[identifier] = readArray;
+    }
+    return command;
+  }
 
   function formatAMPM(date) {
     var hours = date.getHours();

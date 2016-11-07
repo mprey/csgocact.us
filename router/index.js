@@ -20,29 +20,18 @@ module.exports = function(app) {
   });
 
   /**
-   *  Store route
+   *  Withdraw route
    */
   app.get('/withdraw', function (req, res) {
     res.render('withdraw', {user: req.user});
   });
 
-  /**
-   *  Profile route
-   */
-  app.get('/profile', ensureAuthenticated, function (req, res) {
-    res.redirect('/profile/' + req.user._id);
+  app.get('/support', function(req, res) {
+    res.render('support', {user: req.user});
   });
 
-  app.get('/profile/:id', function (req, res) {
-    var id = req.params.id;
-    console.log('request with id: ' + id);
-  });
-
-  /**
-   *  Games route
-   */
-  app.get('/games', function (req, res) {
-    res.redirect('/coinflip');
+  app.get('/provably-fair', function(req, res) {
+    res.render('provably-fair', {user: req.user});
   });
 
   app.get('/coinflip', function(req, res) {
@@ -76,31 +65,9 @@ module.exports = function(app) {
     res.redirect('/');
   });
 
-  /**
-   *  API route
-   */
-  app.get('/api/user_data', function(req, res) {
-    if (req.user) {
-      res.json(JSON.stringify(req.user));
-    } else {
-      res.json({});
-    }
-  });
-
-  app.get('/api/steam_data', ensureAuthenticated, function(req, res) {
-    res.redirect('/api/steam_data/' + req.user._id);
-  });
-
-  app.get('/api/steam_data/:id', function(req, res) {
-    var url = "http://api.steampowered.com/ISteamUser/GetPlayerSummaries/v0002/?key=" + process.env.AUTH_API_KEY + "&steamids=" + req.params.id;
-    request(url, function(error, response, body) {
-      if (!error && response.statusCode === 200) {
-        res.send(JSON.parse(body));
-      } else {
-        res.redirect('/404');
-        console.log("Error with steam_data API: ", error, ", status code: ", response.statusCode)
-      }
-    });
+  app.use(function(req, res, next) {
+    res.status(404);
+    res.render('404');
   });
 
   /**
