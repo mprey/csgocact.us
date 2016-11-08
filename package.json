@@ -25,7 +25,8 @@
     "passport-steam": "^1.0.2",
     "request": "^2.78.0",
     "serve-favicon": "~2.3.0",
-    "socket.io": "^1.4.6"
+    "socket.io": "^1.4.6",
+    "socket.io-events": "^0.4.6"
   },
   "author": "mprey",
   "license": "MIT",

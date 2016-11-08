@@ -21,9 +21,31 @@ muteSchema.methods.isExpired = function() {
   return false;
 };
 
-muteSchema.methods.unmuteUser = function(userId, callback) {
+muteSchema.statics.isMuted = function(userId) {
+  this.findOne({
+    muted_id: userId
+  }, function(err, mute) {
+    if (!err && mute) {
+      return !mute.isExpired();
+    }
+    return false;
+  });
+};
+
+muteSchema.statics.findUserMute = function(userId, callback) {
+  this.findOne({
+    muted_id: userId
+  }, function(err, mute) {
+    if (!err && mute) {
+      callback(mute);
+    }
+    callback();
+  });
+}
+
+muteSchema.statics.unmuteUser = function(userId, callback) {
   this.remove({
-    banned_id, userId
+    muted_id: userId
   }, callback);
 };
 

@@ -40,6 +40,8 @@ app.use(sessionMiddleware);
 app.use(passport.initialize());
 app.use(passport.session());
 
+app.use(require('./lib/ban_middleware'));
+
 require('./router')(app);
 
 server.listen(port || 3000);

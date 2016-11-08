@@ -21,9 +21,31 @@ banSchema.methods.isExpired = function() {
   return false;
 };
 
-banSchema.methods.unbanUser = function(userId, callback) {
+banSchema.statics.findUserBan = function(userId, callback) {
+  this.findOne({
+    banned_id: userId
+  }, function(err, ban) {
+    if (!err && ban) {
+      callback(ban);
+    }
+    callback();
+  })
+};
+
+banSchema.statics.isBanned = function(userId) {
+  this.findOne({
+    banned_id: userId
+  }, function(err, ban) {
+    if (!err && ban) {
+      return !ban.isExpired();
+    }
+    return false;
+  });
+};
+
+banSchema.statics.unbanUser = function(userId, callback) {
   this.remove({
-    banned_id, userId
+    banned_id: userId
   }, callback);
 };
 

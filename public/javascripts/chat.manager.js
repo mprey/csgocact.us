@@ -105,15 +105,15 @@ $(function() {
     return newText;
   };
 
-  ChatManager.prototype.handleUserBan = function(data) { //data.profile_name, data.expire_date, data.reason
+  ChatManager.prototype.handleUserBan = function(data) { //data.profile_name, data.expire, data.reason
     this.addBotMessage({
-      text: '<br>User \'<strong>' + data.profile_name + '</strong>\' has been banned until ' + data.expire_date + '<br><br><strong>Reason: </strong>' + data.reason + '<br>'
+      text: '<br>User \'<strong>' + data.profile_name + '</strong>\' has been banned until ' + data.expire + '<br><br><strong>Reason: </strong>' + data.reason + '<br>'
     });
   };
 
-  ChatManager.prototype.handleUserMute = function(data) { //data.profile_name, data.expire_date, data.reason
+  ChatManager.prototype.handleUserMute = function(data) { //data.profile_name, data.expire, data.reason
     this.addBotMessage({
-      text: '<br>User \'<strong>' + data.profile_name + '</strong>\' has been muted until ' + data.expire_date + '<br><br><strong>Reason: </strong>' + data.reason + '<br>'
+      text: '<br>User \'<strong>' + data.profile_name + '</strong>\' has been muted until ' + data.expire + '<br><br><strong>Reason: </strong>' + data.reason + '<br>'
     });
   };
 
