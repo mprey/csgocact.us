@@ -65,6 +65,10 @@ module.exports = function(app) {
     res.redirect('/');
   });
 
+  app.get('/error', function(req, res) {
+    res.send(req.params.error);
+  });
+
   app.use(function(req, res, next) {
     res.status(404);
     res.render('404');
@@ -78,6 +82,6 @@ module.exports = function(app) {
       return next();
     }
     var error = encodeURIComponent('You must be logged in to view that page.');
-    res.redirect('/?error=' + error);
+    res.redirect('/error?error=' + error);
   }
 }

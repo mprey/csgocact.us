@@ -106,31 +106,31 @@ $(function() {
   };
 
   ChatManager.prototype.handleUserBan = function(data) { //data.profile_name, data.expire, data.reason
-    this.addBotMessage({
-      text: '<br>User \'<strong>' + data.profile_name + '</strong>\' has been banned until ' + data.expire + '<br><br><strong>Reason: </strong>' + data.reason + '<br>'
+    chat_manager.addBotMessage({
+      text: '<br>User \'<strong>' + data.profile_name + '</strong>\' has been banned ' + (data.expire ? 'for ' + formatDate(data.expire) : 'permanently') + '<br><br><strong>Reason: </strong>' + data.reason + '<br>'
     });
   };
 
   ChatManager.prototype.handleUserMute = function(data) { //data.profile_name, data.expire, data.reason
-    this.addBotMessage({
-      text: '<br>User \'<strong>' + data.profile_name + '</strong>\' has been muted until ' + data.expire + '<br><br><strong>Reason: </strong>' + data.reason + '<br>'
+    chat_manager.addBotMessage({
+      text: '<br>User \'<strong>' + data.profile_name + '</strong>\' has been muted ' + (data.expire ? 'for ' + formatDate(data.expire) : 'permanently') + '<br><br><strong>Reason: </strong>' + data.reason + '<br>'
     });
   };
 
   ChatManager.prototype.handleUserUnmute = function(data) { //data.profile_name
-    this.addBotMessage({
+    chat_manager.addBotMessage({
       text: '<br>User \'<strong>' + data.profile_name + '</strong>\' has been unmuted. Kappa<br>'
     });
   };
 
   ChatManager.prototype.handleUserUnban = function(data) { //data.profile_name
-    this.addBotMessage({
+    chat_manager.addBotMessage({
       text: '<br>User \'<strong>' + data.profile_name + '</strong>\' has been unbanned. BibleThump<br>'
     });
   };
 
   ChatManager.prototype.setChatMode = function(data) { //data.mode ('normal' or 'staff')
-    this.addBotMessage({
+    chat_online.addBotMessage({
       text: '<br>Chat mode has been changed to: <strong>' + (data.mode == 'normal' ? 'Normal' : 'Staff Only') + '</strong><br>'
     });
   };
@@ -289,30 +289,52 @@ $(function() {
       if (args.length > 2) {
         var command = getCommandProperties(args);
         var data = {};
-        if (command.id && command.r) {
-          if (command.d) {
+        if (command.id[0] && command.r) {
+          if (command.d[0]) {
             data.expire = futureDateFromText(command.d[0]);
           }
-          data.banned_id = command.idea;
-          data.reason = command.r;
+          data.banned_id = command.id[0];
+          data.reason = command.r.join(' ');
           this.socket.emit(socket_outgoing.BAN_USER, data);
           return;
         }
       }
       this.sendHelpMessage('ban');
     } else if (args[0].toLowerCase() == 'mute') { //data.muter_id, data.muted_id, data.reason, data.duration
-      if (args.length > 3) {
-        //TODO
+      ff (args.length > 2) {
+        var command = getCommandProperties(args);
+        var data = {};
+        if (command.id[0] && command.r) {
+          if (command.d) {
+            data.expire = futureDateFromText(command.d[0]);
+          }
+          data.muted_id = command.id[0];
+          data.reason = command.r.join(' ');
+          this.socket.emit(socket_outgoing.MUTE_USER, data);
+          return;
+        }
       }
       this.sendHelpMessage('mute');
     } else if (args[0].toLowerCase() == 'unban') { //data.unbanned_id, data.unbanner_id
       if (args.length == 2) {
-        //TODO
+        var command = getCommandProperties(args);
+        var data = {};
+        if (command.id[0]) {
+          data.unbanned_id = command.id[0]
+          this.socket.emit(socket_outgoing.UNBAN_USER, data);
+          return;
+        }
       }
       this.sendHelpMessage('unban');
     } else if (args[0].toLowerCase() == 'unmute') { //data.unmuted_id, data.unmuter_id
       if (args.length == 2) {
-        //TODO
+        var command = getCommandProperties(args);
+        var data = {};
+        if (command.id[0]) {
+          data.unmuted_id = command.id[0]
+          this.socket.emit(socket_outgoing.UNMUTE_USER, data);
+          return;
+        }
       }
       this.sendHelpMessage('unmute');
     } else if (args[0].toLowerCase() == 'reload') {
@@ -321,7 +343,13 @@ $(function() {
       this.socket.emit(socket_outgoing.CLEAR_CHAT, {});
     } else if (args[0].toLowerCase() == 'bot') {
       if (args.length > 2 && args[1].toLowerCase() == 'send') {
-        //TODO parse args from index 2->indefinite into bot message string
+        var command = getCommandProperties(args);
+        if (command.m) {
+          this.socket.emit(socket_outgoing.BOT_MESSAGE, {
+            message: command.m.join(' ');
+          });
+          return;
+        }
       }
       this.sendHelpMessage('bot');
     } else if (args[0].toLowerCase() == 'mode') {
@@ -430,6 +458,11 @@ $(function() {
       command[identifier] = readArray;
     }
     return command;
+  }
+
+  function formatDate(date) {
+    console.log(date);
+    return 'derp';
   }
 
   function formatAMPM(date) {

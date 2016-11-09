@@ -1,12 +1,12 @@
 var mongoose = require('mongoose');
 var Schema = mongoose.Schema;
 
-var banSchema = {
+var banSchema = new Schema({
   banned_id: {type: Number, required: true},
   banner_id: {type: Number, required: true},
   reason: {type: String, required: true, default:'None'},
   expire: {type: Date}
-}
+});
 
 banSchema.methods.isExpired = function() {
   if (this.expire) {
@@ -26,20 +26,20 @@ banSchema.statics.findUserBan = function(userId, callback) {
     banned_id: userId
   }, function(err, ban) {
     if (!err && ban) {
-      callback(ban);
+      return callback(ban);
     }
-    callback();
+    return callback();
   })
 };
 
-banSchema.statics.isBanned = function(userId) {
+banSchema.statics.isBanned = function(userId, callback) {
   this.findOne({
     banned_id: userId
   }, function(err, ban) {
     if (!err && ban) {
-      return !ban.isExpired();
+      return callback(!ban.isExpired());
     }
-    return false;
+    return callback();
   });
 };
 
@@ -49,7 +49,7 @@ banSchema.statics.unbanUser = function(userId, callback) {
   }, callback);
 };
 
-var Ban = mongoose.model(banSchema, 'ban');
+var Ban = mongoose.model('ban', banSchema);
 
 module.exports = {
   Ban: Ban

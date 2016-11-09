@@ -1,12 +1,12 @@
 var mongoose = require('mongoose');
 var Schema = mongoose.Schema;
 
-var muteSchema = {
+var muteSchema = new Schema({
   muted_id: {type: Number, required: true},
   muter_id: {type: Number, required: true},
   reason: {type: String, required: true, default:'None'},
   expire: {type: Date}
-}
+});
 
 muteSchema.methods.isExpired = function() {
   if (this.expire) {
@@ -21,14 +21,14 @@ muteSchema.methods.isExpired = function() {
   return false;
 };
 
-muteSchema.statics.isMuted = function(userId) {
+muteSchema.statics.isMuted = function(userId, callback) {
   this.findOne({
     muted_id: userId
   }, function(err, mute) {
     if (!err && mute) {
-      return !mute.isExpired();
+      return callback(!mute.isExpired());
     }
-    return false;
+    return callback();
   });
 };
 
@@ -49,7 +49,7 @@ muteSchema.statics.unmuteUser = function(userId, callback) {
   }, callback);
 };
 
-var Mute = mongoose.model(muteSchema, 'mute');
+var Mute = mongoose.model('mute', muteSchema);
 
 module.exports = {
   Mute: Mute
