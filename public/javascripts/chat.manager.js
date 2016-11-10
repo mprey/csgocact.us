@@ -130,7 +130,7 @@ $(function() {
   };
 
   ChatManager.prototype.setChatMode = function(data) { //data.mode ('normal' or 'staff')
-    chat_online.addBotMessage({
+    chat_manager.addBotMessage({
       text: '<br>Chat mode has been changed to: <strong>' + (data.mode == 'normal' ? 'Normal' : 'Staff Only') + '</strong><br>'
     });
   };
@@ -359,7 +359,15 @@ $(function() {
       this.sendHelpMessage('bot');
     } else if (args[0].toLowerCase() == 'mode') {
       if (args.length == 2) {
-        //TODO
+        if (args[1].toLowerCase() == 'm:staff' || args[1].toLowerCase() == 'm:normal') {
+          var command = getCommandProperties(args);
+          if (command.m) {
+            this.socket.emit(socket_outgoing.CHAT_MODE, {
+              mode: command.m[0]
+            });
+            return;
+          }
+        }
       }
       this.sendHelpMessage('mode');
     } else if (args[0].toLowerCase() == 'promote') {
