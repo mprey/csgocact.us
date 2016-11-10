@@ -37,9 +37,9 @@ muteSchema.statics.findUserMute = function(userId, callback) {
     muted_id: userId
   }, function(err, mute) {
     if (!err && mute) {
-      callback(mute);
+      return callback(mute);
     }
-    callback();
+    return callback();
   });
 }
 
