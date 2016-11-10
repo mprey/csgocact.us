@@ -190,7 +190,7 @@ $(function() {
       text: data.text,
       rank: ranks.BOT
     };
-    this.addChatMessage(data);
+    chat_manager.addChatMessage(data);
   };
 
   ChatManager.prototype.clearMessages = function() {
@@ -347,7 +347,7 @@ $(function() {
         var command = getCommandProperties(args);
         if (command.m) {
           this.socket.emit(socket_outgoing.BOT_MESSAGE, {
-            message: command.m.join(' ')
+            text: command.m.join(' ')
           });
           return;
         }
