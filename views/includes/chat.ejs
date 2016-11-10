@@ -6,7 +6,7 @@
   </div>
   <div id="chat-wrapper"></div>
   <div id="chat-input">
-    <% if (user) {%>
+    <% if (typeof user == 'object' && user) {%>
       <textarea id="chat-textarea" maxlength="200" placeholder="Type Something..."></textarea>
       <div id="chat-buttons">
         <a id="chat-emotes" href="#" class="md-trigger" data-modal="modal-emotes"><i class="fa fa-smile-o" aria-hidden="true"></i></a>

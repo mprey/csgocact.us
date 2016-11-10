@@ -1,6 +1,6 @@
 <!-- slide out user menu -->
 <div id="user-menu">
-  <% if (user) { %>
+  <% if (typeof user == 'object' && user) { %>
     <h2><%= user.name %></h2>
     <ul class="user-menu-items">
       <% include ../includes/client_settings %>

@@ -16,30 +16,54 @@ module.exports = function(app) {
    *  Deposit route
    */
   app.get('/deposit', function (req, res) {
-    res.render('deposit', {user: req.user});
+    res.render('layout', {
+      user: req.user,
+      content: 'deposit.ejs',
+      title: 'Deposit'
+    });
   });
 
   /**
    *  Withdraw route
    */
   app.get('/withdraw', function (req, res) {
-    res.render('withdraw', {user: req.user});
+    res.render('layout', {
+      user: req.user,
+      title: 'Withdraw',
+      content: 'withdraw.ejs'
+    });
   });
 
   app.get('/support', function(req, res) {
-    res.render('support', {user: req.user});
+    res.render('layout', {
+      user: req.user,
+      title: 'Support',
+      content: 'support.ejs'
+    });
   });
 
   app.get('/provably-fair', function(req, res) {
-    res.render('provably-fair', {user: req.user});
+    res.render('layout', {
+      user: req.user,
+      title: 'Provably Fair',
+      content: 'provably-fair.ejs'
+    });
   });
 
   app.get('/coinflip', function(req, res) {
-    res.render('coin_flip', {user: req.user});
+    res.render('layout', {
+      user: req.user,
+      title: 'Coinflip',
+      content: 'coin-flip.ejs'
+    });
   });
 
   app.get('/roulette', function(req, res) {
-    res.render('roulette', {user: req.user});
+    res.render('layout', {
+      user: req.user,
+      title: 'Roulette',
+      content: 'roulette.ejs'
+    });
   });
 
   /**
@@ -71,7 +95,10 @@ module.exports = function(app) {
 
   app.use(function(req, res, next) {
     res.status(404);
-    res.render('404');
+    res.render('layout', {
+      title: '404 Error',
+      content: '404.ejs'
+    });
   });
 
   /**
@@ -81,7 +108,6 @@ module.exports = function(app) {
     if (req.isAuthenticated()) {
       return next();
     }
-    var error = encodeURIComponent('You must be logged in to view that page.');
-    res.redirect('/error?error=' + error);
+    res.redirect('/nologin');
   }
 }

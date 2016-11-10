@@ -301,7 +301,7 @@ $(function() {
       }
       this.sendHelpMessage('ban');
     } else if (args[0].toLowerCase() == 'mute') { //data.muter_id, data.muted_id, data.reason, data.duration
-      ff (args.length > 2) {
+      if (args.length > 2) {
         var command = getCommandProperties(args);
         var data = {};
         if (command.id[0] && command.r) {
@@ -346,7 +346,7 @@ $(function() {
         var command = getCommandProperties(args);
         if (command.m) {
           this.socket.emit(socket_outgoing.BOT_MESSAGE, {
-            message: command.m.join(' ');
+            message: command.m.join(' ')
           });
           return;
         }

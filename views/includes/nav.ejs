@@ -7,10 +7,10 @@
 
 <nav id="main-nav">
   <ul>
-    <li><a <% if (currentPage == "/coinflip") { %>class="current"<% } %> href="/coinflip"><i class="fa fa-circle" aria-hidden="true"></i> Coinflip</a></li>
-    <li><a <% if (currentPage == "/roulette") { %>class="current"<% } %> href="/roulette"><i class="fa fa-dot-circle-o" aria-hidden="true"></i> Roulette</a></li>
-    <li><a <% if (currentPage == "/deposit") { %>class="current"<% } %> href="/deposit"><i class="fa fa-money" aria-hidden="true"></i>  Deposit</a></li>
-    <li><a <% if (currentPage == "/withdraw") { %>class="current"<% } %> href="/withdraw"><i class="fa fa-shopping-cart" aria-hidden="true"></i>  Withdraw</a></li>
-    <li><a <% if (currentPage == "/support") { %>class="current"<% } %> href="/support"><i class="fa fa-envelope-o" aria-hidden="true"></i>  Support</a></li>
+    <li><a page-title="coinflip" class="nav-item pjax-trigger <% if (title == 'Coinflip') { %>current<% } %>" href="/coinflip"><i class="fa fa-circle" aria-hidden="true"></i> Coinflip</a></li>
+    <li><a page-title="roulette" class="nav-item pjax-trigger <% if (title == 'Roulette') { %>current<% } %>" href="/roulette"><i class="fa fa-dot-circle-o" aria-hidden="true"></i> Roulette</a></li>
+    <li><a page-title="deposit" class="nav-item pjax-trigger <% if (title == 'Deposit') { %>current<% } %>" href="/deposit"><i class="fa fa-money" aria-hidden="true"></i>  Deposit</a></li>
+    <li><a page-title="withdraw" class="nav-item pjax-trigger <% if (title == 'Withdraw') { %>current<% } %>" href="/withdraw"><i class="fa fa-shopping-cart" aria-hidden="true"></i>  Withdraw</a></li>
+    <li><a page-title="support" class="nav-item pjax-trigger <% if (title == 'Support') { %>current<% } %>" href="/support"><i class="fa fa-envelope-o" aria-hidden="true"></i>  Support</a></li>
   </ul>
 </nav>

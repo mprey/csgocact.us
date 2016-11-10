@@ -1,0 +1,28 @@
+<% if (!(typeof pjax == 'undefined')) {%>
+
+  <%-include(content)-%>
+
+<%} else {%>
+
+<% include includes/head %>
+
+  <body>
+
+  	<% include includes/nav %>
+
+  	<%-include(content)-%>
+
+  	<%-include includes/user_menu-%>
+
+  	<% include includes/chat %>
+
+  	<% include includes/modals %>
+
+  	<% include includes/footer %>
+
+  	<% include includes/scripts %>
+
+  </body>
+</html>
+
+<%}%>

@@ -112,6 +112,15 @@ function togglePaneVisibility($lateral_panel, $background_layer, $body) {
 	}
 }
 
+function updateNavBar() {
+	$('.nav-item').each(function(item) {
+		$(this).removeClass('current');
+		if (window.location.pathname.indexOf($(this).attr('page-title')) != -1) {
+			$(this).addClass('current');
+		}
+	});
+}
+
 function moveNavigation($navigation, $MQ) {
 	if ($(window).width() >= $MQ) {
 		$navigation.detach();

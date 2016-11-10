@@ -12,6 +12,7 @@ var bodyParser = require('body-parser');
 var session = require('express-session');
 var MongoStore = require('connect-mongo')(session);
 var banMiddleware = require('./lib/ban_middleware');
+var pjax = require('./lib/pjax-middleware');
 
 var server = require('http').createServer(app);
 var io = require('socket.io').listen(server);
@@ -42,6 +43,7 @@ app.use(passport.initialize());
 app.use(passport.session());
 
 app.use(banMiddleware);
+app.use(pjax());
 
 require('./router')(app);
 
