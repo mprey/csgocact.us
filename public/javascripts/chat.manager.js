@@ -236,20 +236,24 @@ $(function() {
       rankText = '<span class="rank ' + rank + '">' + rank + '</span>';
     }
 
-    var divText = '<div class="chat-message clearfix" chat-id="' + data.id + '"><img class="chat-profile" src="' + data.profile_img + '"><div class="chat-message-content clearfix"><span class="chat-time">' + timeText + '</span><h5>' + rankText + ' ' + data.profile_name + '</h5><p>' + contentText + '</p></div></div>'
+    var divText = '<div class="chat-message clearfix" chat-id="' + data.id + '"><img class="chat-profile" src="' + data.profile_img + '"><div class="chat-message-content clearfix"><span class="chat-time">' + timeText + '</span><h5>' + rankText + ' <span id="profile-name">' + data.profile_name + '</span></h5><p>' + contentText + '</p></div></div>'
     var hrBreak = '<hr class="chat-break">';
 
     $chat_wrapper.append(divText + hrBreak);
 
     chat_manager.scrollToBottom();
-    if (!data.no_sound) {chat_manager.playPing();}
+    if (!data.no_sound) {
+      chat_manager.playPing();
+      chat_manager.addNotification();
+    }
   };
 
   ChatManager.prototype.addNotification = function() {
-    var val = isNaN(parseInt($notification_counter.text())) ? 0 : parseInt($notification_counter.text());
-    val++;
-
-    $notification_counter.css({opacity: 0}).text(val).css({top: '-10px'}).transition({top: '-2px', opacity: 1});
+    if (!isChatOpen) {
+      var val = isNaN(parseInt($notification_counter.text())) ? 0 : parseInt($notification_counter.text());
+      val++;
+      $notification_counter.css({opacity: 0}).text(val).css({top: '-10px'}).transition({top: '-2px', opacity: 1});
+    }
   };
 
   ChatManager.prototype.clearNotifications = function() {
@@ -374,6 +378,19 @@ $(function() {
   };
 
   var chat_manager = new ChatManager();
+
+  $('#chat-wrapper').on('click', '.chat-profile', function(event) {
+    var steam64Id = $(this).parent().attr('chat-id');
+    var name = $(this).parent().find('#profile-name').text();
+    swal({
+      title: name + "'s Steam64ID",
+      text: "Use Ctrl+C or Cmd+C to copy",
+      type: "input",
+      inputValue: steam64Id,
+      closeOnConfirm: true,
+      animation: "slide-from-top"
+    });
+  });
 
   $chat_submit.on('click', function(event) {
     event.preventDefault();

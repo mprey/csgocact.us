@@ -41,6 +41,7 @@ jQuery(document).ready(function($) {
 	$chat_trigger.on('click', function(event) {
 		event.preventDefault();
 		isChatOpen = true;
+		chat_manager.clearNotifications();
 
 		//close all lateral menus
 		$lateral_user_menu.removeClass('speed-in');
