@@ -290,7 +290,7 @@ $(function() {
         var command = getCommandProperties(args);
         var data = {};
         if (command.id[0] && command.r) {
-          if (command.d[0]) {
+          if (command.d) {
             data.expire = futureDateFromText(command.d[0]);
           }
           data.banned_id = command.id[0];
