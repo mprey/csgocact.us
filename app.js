@@ -11,7 +11,7 @@ var path = require('path');
 var bodyParser = require('body-parser');
 var session = require('express-session');
 var MongoStore = require('connect-mongo')(session);
-var banMiddleware = require('./lib/ban_middleware');
+var banMiddleware = require('./lib/ban-middleware');
 var pjax = require('./lib/pjax-middleware');
 
 var server = require('http').createServer(app);
