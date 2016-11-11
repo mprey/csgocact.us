@@ -249,6 +249,7 @@ $(function() {
   };
 
   ChatManager.prototype.addNotification = function() {
+    console.log(isChatOpen);
     if (!isChatOpen) {
       var val = isNaN(parseInt($notification_counter.text())) ? 0 : parseInt($notification_counter.text());
       val++;

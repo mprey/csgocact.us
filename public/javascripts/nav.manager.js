@@ -1,4 +1,4 @@
-jQuery(document).ready(function($) {
+$(function() {
 
 	var $L = 955,
 		$menu_navigation = $('#main-nav'),
@@ -40,7 +40,7 @@ jQuery(document).ready(function($) {
 
 	$chat_trigger.on('click', function(event) {
 		event.preventDefault();
-		isChatOpen = true;
+		window.isChatOpen = true;
 		chat_manager.clearNotifications();
 
 		//close all lateral menus
@@ -71,7 +71,7 @@ jQuery(document).ready(function($) {
 			});
 			$lateral_user_menu.removeClass('speed-in');
 			$menu_navigation.removeClass('speed-in');
-			isChatOpen = false;
+			window.isChatOpen = false;
 		}
 	});
 
@@ -93,8 +93,6 @@ jQuery(document).ready(function($) {
 			$('body').removeClass('overflow-hidden');
 		}
 	});
-
-	window.isChatOpen = isChatOpen;
 });
 
 function togglePaneVisibility($lateral_panel, $background_layer, $body) {

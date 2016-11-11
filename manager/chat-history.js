@@ -51,6 +51,9 @@ module.exports = {
     recentMessages.unshift(chatObj);
     recentMessages.length = RECENT_MESSAGE_CAP;
   },
+  clearChat: function() {
+    recentMessages = [];
+  },
   getHistory: function() {
     return recentMessages.slice().reverse();
   }
