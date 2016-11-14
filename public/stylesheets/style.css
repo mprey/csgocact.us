@@ -28,11 +28,12 @@ html * {
 * Default font and background styles
 */
 
-body {
+html, body {
     font-size: 100%;
     font-family: "PT Sans", sans-serif;
     color: #31353d;
     background-color: #eeeff7;
+    height: 100%;
 }
 /**
 * Default hide any overflow
@@ -397,6 +398,12 @@ header {
 }
 #volume-slider::-moz-range-thumb:hover {
     background: #435779;
+}
+#profile-img {
+  margin-top: -2px;
+  height: 24px;
+  width: 24px;
+  border-radius: 5px;
 }
 #user-menu .login-btn {
     display: block;

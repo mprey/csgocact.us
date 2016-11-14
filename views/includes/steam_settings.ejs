@@ -3,7 +3,18 @@
   <label for="steam-settings" class="noselect">Steam Settings</label>
   <div class="sub-items-wrapper">
     <ul class="sub-items">
-
+      <li class="clearfix">
+        <p><i class="fa fa-picture-o" aria-hidden="true"></i> Image:</p>
+        <label class="noselect">
+          <img id="profile-img" src="<%= user.photo %>"></img>
+        </label>
+      </li>
+      <li class="clearfix">
+        <p><i class="fa fa-user" aria-hidden="true"></i> Name:</p>
+        <label class="noselect">
+          <p><%= user.name %></p>
+        </label>
+      </li>
     </ul>
     <button id="steam-settings-refresh" type="submit">Refresh</button>
   </div>
