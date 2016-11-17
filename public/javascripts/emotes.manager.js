@@ -14,7 +14,7 @@ $(function() {
 
   function createEmote(emote) {
     var HTML = '<div id="emote-wrapper">' +
-                  '<a href="#" onclick="handleEmoteClick($(this));" class="tooltip"><img src="' + (EMOTE_DIR + emote) + '.png"><span>' + emote + '</span></img></a>' +
+                  '<a href="#0" onclick="handleEmoteClick($(this));" class="tooltip"><img src="' + (EMOTE_DIR + emote) + '.png"><span>' + emote + '</span></img></a>' +
                '</div>';
     $emotes_wrapper.append(HTML);
   }

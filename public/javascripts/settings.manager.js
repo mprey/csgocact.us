@@ -17,7 +17,8 @@ $(function() {
   function Settings() {
     this.type = {
       CLIENT: 0,
-      USER: 1
+      USER: 1,
+      STEAM: 2
     };
   }
 
@@ -53,6 +54,17 @@ $(function() {
       setTimeout(function() {
         window.location.reload();
       }, 2000);
+    } else if (type == this.type.STEAM) {
+      swal({
+        title: "Steam Settings",
+        text: "Are you sure you want to update your steam settings?",
+        type: "info",
+        showCancelButton: true,
+        closeOnConfirm: false,
+        showLoaderOnConfirm: true,
+      }, function() {
+        
+      });
     }
   };
 
@@ -71,6 +83,11 @@ $(function() {
   $client_settings_save.on('click', function(event) {
     event.preventDefault();
     settings.save(settings.type.CLIENT);
+  });
+
+  $steam_settings_refresh.on('click', function(event) {
+    event.preventDefault();
+    settings.save(settings.type.STEAM);
   });
 
   settings.init();

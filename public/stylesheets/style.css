@@ -471,32 +471,45 @@ main {
         padding-top: 55px;
     }
 }
-.coinflip-div {
-  background: #eeeff7;
-  border-radius: 10px;
-  margin: 1em;
-}
-#coinlfip-flexbox {
-  display: flex;
-  height: 900px;
-  flex-flow: column;
-  flex-wrap: wrap;
-  align-content: flex-start;
+.content-div {
+  background-color: #eeeff7;
+  border-radius: 5px;
 }
 #coinflip-header {
   height: 120px;
   width: calc(100% - 2em);
+  margin: 1em 1em;
 }
 #coinflip-games {
-  width: 50%;
+  width: 500px;
   height: 500px;
+  float: left;
+  margin: 0em 1em 1em 1em;
+}
+#coinflip-container {
+  float: right;
+  width: 200px;
+  margin: 0em 1em 1em 0em;
 }
 #coinflip-history {
-  height: 10px;
-  width: 30%;
+  height: 250px;
+  margin-bottom: 1em;
 }
 #coinflip-halloffame {
-  width: 30%;
+  height: 350px;
+}
+@media only screen and (max-width: 750px) {
+  #coinflip-games {
+    width: calc(100% - 2em);
+    margin-left: 1em;
+    margin-right: 1em;
+    background-color: red;
+  }
+  #coinflip-container {
+    width: calc(100% - 2em);
+    margin-left: 1em;
+    margin-right: 1em;
+  }
 }
 /**
 * @section static footer at the bottom of page
