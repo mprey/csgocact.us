@@ -1040,19 +1040,21 @@ input:checked + .slider:before {
 */
 
 #spinner-container {
-  min-height: 100%;
-  background-color: #435779;
-  line-height: 100%;
+  position: relative;
+  height: 100vh;
+  background: #435779;
+  padding-top: 50px;
+  padding-bottom: 5px;
+  z-index: 0;
   display: none;
-  margin: 0;
-  padding: 0;
 }
 .spinner {
   width: 40px;
   height: 40px;
-
   position: relative;
-  margin: 100px auto;
+  margin: auto;
+  top: 50%;
+  transform: translateY(-50%);
 }
 
 .double-bounce1, .double-bounce2 {
@@ -1160,23 +1162,23 @@ a:hover.tooltip span {
 * Allows elements to disable highlighting (for drop down menus and such)
 */
 .noselect {
-    -webkit-touch-callout: none;
-    /* iOS Safari */
+  -webkit-touch-callout: none;
+  /* iOS Safari */
 
-    -webkit-user-select: none;
-    /* Chrome/Safari/Opera */
+  -webkit-user-select: none;
+  /* Chrome/Safari/Opera */
 
-    -khtml-user-select: none;
-    /* Konqueror */
+  -khtml-user-select: none;
+  /* Konqueror */
 
-    -moz-user-select: none;
-    /* Firefox */
+  -moz-user-select: none;
+  /* Firefox */
 
-    -ms-user-select: none;
-    /* Internet Explorer/Edge */
+  -ms-user-select: none;
+  /* Internet Explorer/Edge */
 
-    user-select: none;
-    /* Non-prefixed version, currently not supported by any browser */
+  user-select: none;
+  /* Non-prefixed version, currently not supported by any browser */
 }
 /**
 * @section keyframes

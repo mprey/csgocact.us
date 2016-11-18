@@ -10,13 +10,16 @@ $(function() {
       container: '.page-content'
     });
   });
+
   $(document).on('pjax:complete', function(event, xhr, textStatus, options) {
     updateNavBar();
+    $('.page-content').css('display', 'block');
+    $('#spinner-container').css('display', 'none');
   });
 
   $(document).on('pjax:start', function(event, xhr, textStatus, options) {
-    console.log('started');
-    $('.page-content').hide();
-    $('#spinner-container').show();
+    $('.page-content').css('display', 'none');
+    $('#spinner-container').css('display', 'block');
   });
+
 });
