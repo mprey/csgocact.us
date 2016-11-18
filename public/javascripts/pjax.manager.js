@@ -7,18 +7,21 @@ $(function() {
     event.preventDefault();
     $.pjax({
       url: this.href,
-      container: '.page-content'
+      container: 'main'
     });
   });
 
   $(document).on('pjax:complete', function(event, xhr, textStatus, options) {
     updateNavBar();
-    $('.page-content').css('display', 'block');
-    $('#spinner-container').css('display', 'none');
+    setTimeout(function() {
+      $('main').css('display', 'block');
+      $('#spinner-container').css('display', 'none');
+    }, 500);
   });
 
   $(document).on('pjax:start', function(event, xhr, textStatus, options) {
-    $('.page-content').css('display', 'none');
+    $('main').css('display', 'none');
+    $('main').css('padding-top', '0'); //this is buggy?
     $('#spinner-container').css('display', 'block');
   });
 

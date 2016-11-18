@@ -32,7 +32,7 @@ html, body {
     font-size: 100%;
     font-family: "PT Sans", sans-serif;
     color: #31353d;
-    background-color: #eeeff7;
+    background-color: #435779;
     height: 100%;
 }
 /**
@@ -462,13 +462,13 @@ main {
     position: relative;
     min-height: 100%;
     background: #435779;
-    padding-top: 50px;
-    padding-bottom: 5px;
+    padding-top: 45px;
+    padding: 5px 0px;
     z-index: 1;
 }
 @media only screen and (min-width: 955px) {
     main {
-        padding-top: 55px;
+        padding-top: 50px;
     }
 }
 .content-div {
