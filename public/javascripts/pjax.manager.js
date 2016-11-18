@@ -13,4 +13,10 @@ $(function() {
   $(document).on('pjax:complete', function(event, xhr, textStatus, options) {
     updateNavBar();
   });
+
+  $(document).on('pjax:start', function(event, xhr, textStatus, options) {
+    console.log('started');
+    $('.page-content').hide();
+    $('#spinner-container').show();
+  });
 });

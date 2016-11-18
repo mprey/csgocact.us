@@ -477,38 +477,49 @@ main {
 }
 #coinflip-header {
   height: 120px;
-  width: calc(100% - 2em);
-  margin: 1em 1em;
+  margin-bottom: 1em;
 }
 #coinflip-games {
-  width: 500px;
   height: 500px;
-  float: left;
-  margin: 0em 1em 1em 1em;
 }
-#coinflip-container {
+#coinflip-left {
+  float: left;
+  width: calc(70% - 2em);
+  margin: .5em 1em;
+}
+#coinflip-right {
   float: right;
-  width: 200px;
-  margin: 0em 1em 1em 0em;
+  width: calc(30% - 1em);
+  margin: .5em 1em .5em 0em;
+}
+#coinflip-user-history {
+  height: 450px;
+  margin-bottom: 1em;
 }
 #coinflip-history {
   height: 250px;
   margin-bottom: 1em;
 }
-#coinflip-halloffame {
+#coinflip-leaderboards {
   height: 350px;
+}
+.header {
+  width: 100%;
+  height: 40px;
+  background-color: #e8e9ee;
+  text-align: center;
+  line-height: 40px;
+  border-radius: inherit;
 }
 @media only screen and (max-width: 750px) {
   #coinflip-games {
-    width: calc(100% - 2em);
-    margin-left: 1em;
-    margin-right: 1em;
-    background-color: red;
+
   }
-  #coinflip-container {
-    width: calc(100% - 2em);
-    margin-left: 1em;
-    margin-right: 1em;
+  #coinflip-left {
+
+  }
+  #coinflip-rigt {
+
   }
 }
 /**
@@ -1027,6 +1038,56 @@ input:checked + .slider:before {
 /**
 * @section utility classes
 */
+
+#spinner-container {
+  min-height: 100%;
+  background-color: #435779;
+  line-height: 100%;
+  display: none;
+  margin: 0;
+  padding: 0;
+}
+.spinner {
+  width: 40px;
+  height: 40px;
+
+  position: relative;
+  margin: 100px auto;
+}
+
+.double-bounce1, .double-bounce2 {
+  width: 100%;
+  height: 100%;
+  border-radius: 50%;
+  background-color: #333;
+  opacity: 0.6;
+  position: absolute;
+  top: 0;
+  left: 0;
+
+  -webkit-animation: sk-bounce 2.0s infinite ease-in-out;
+  animation: sk-bounce 2.0s infinite ease-in-out;
+}
+
+.double-bounce2 {
+  -webkit-animation-delay: -1.0s;
+  animation-delay: -1.0s;
+}
+
+@-webkit-keyframes sk-bounce {
+  0%, 100% { -webkit-transform: scale(0.0) }
+  50% { -webkit-transform: scale(1.0) }
+}
+
+@keyframes sk-bounce {
+  0%, 100% {
+    transform: scale(0.0);
+    -webkit-transform: scale(0.0);
+  } 50% {
+    transform: scale(1.0);
+    -webkit-transform: scale(1.0);
+  }
+}
 
 /**
 * Tooltip class allows styled tooltips BELOW the element
