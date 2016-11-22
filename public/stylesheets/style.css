@@ -475,33 +475,68 @@ main {
   background-color: #eeeff7;
   border-radius: 5px;
 }
-#coinflip-header {
+#cf-header {
   height: 120px;
   margin-bottom: 1em;
 }
-#coinflip-games {
+#cf-games {
   height: 500px;
 }
-#coinflip-left {
+#cf-left {
   float: left;
   width: calc(70% - 2em);
   margin: .5em 1em;
 }
-#coinflip-right {
+#cf-right {
   float: right;
   width: calc(30% - 1em);
   margin: .5em 1em .5em 0em;
 }
-#coinflip-user-history {
-  height: 450px;
+#cf-user-history {
   margin-bottom: 1em;
+  min-height: 250px;
+  overflow: auto;
+  max-height: 400px;
 }
-#coinflip-history {
+#cf-history {
   height: 250px;
   margin-bottom: 1em;
 }
-#coinflip-leaderboards {
+#cf-leaderboards {
   height: 350px;
+}
+.cf-table {
+  width: 100%;
+  overflow-y: scroll;
+}
+.cf-table td {
+  border-right: .5px solid black;
+  border-bottom: 1px solid black;
+  border-top: .5px solid black;
+  text-align: center;
+}
+.cf-table td img {
+  height: 15px;
+  width: 15px;
+  vertical-align: middle;
+}
+#cf-history-table {
+}
+#history-side {
+  width: 40px;
+}
+#history-amount {
+  width: 70px;
+  font-size: 13px;
+}
+#history-user {
+  max-width: 10px;
+  text-overflow: ellipsis;
+  font-size: 12px;
+}
+#history-user img {
+  border-radius: 5px;
+  margin: 0 3px;
 }
 .header {
   width: 100%;
@@ -512,13 +547,13 @@ main {
   border-radius: inherit;
 }
 @media only screen and (max-width: 750px) {
-  #coinflip-games {
+  #cf-games {
 
   }
-  #coinflip-left {
+  #cf-left {
 
   }
-  #coinflip-rigt {
+  #cf-rigt {
 
   }
 }
