@@ -481,6 +481,10 @@ main {
   background-color: #eeeff7;
   border-radius: 5px;
   position: relative;
+  height: auto;
+}
+#ad-box {
+  height: 500px;
 }
 #cf-header {
   height: 120px;
@@ -501,22 +505,21 @@ main {
 }
 #cf-user-history {
   margin-bottom: 1em;
-  height: 350px;
 }
 #cf-history {
-  height: 350px;
   margin-bottom: 1em;
 }
 #cf-leaderboards {
-  height: 250px;
+
+}
+#cf-leaderboards-table {
+  height: 210px;
 }
 .table-wrapper {
   height: calc(100% - 40px);
-  position: absolute;
   overflow-y: scroll;
-  top: 40px;
-  left: 0;
-  right: 0;
+  height: 250px;
+  display: none;
 }
 .cf-table {
   width: 100%;
@@ -538,6 +541,14 @@ main {
 .cf-table tr:hover {
   background-color: rgb(226, 226, 226);
   cursor: pointer;
+}
+.cf-table tr:hover td:first-child {
+  border-bottom-left-radius: 10px;
+  border-bottom-right-radius: 10px;
+}
+.cf-table tr:hover td:last-child {
+  border-bottom-left-radius: 10px;
+  border-bottom-right-radius: 10px;
 }
 .cf-table td img {
   height: 15px;
@@ -583,18 +594,29 @@ main {
   border-radius: 5px;
   margin: 0 3px;
 }
+#cf-dropdown-trigger {
+  right: 8px;
+  top: 0px;
+  cursor: pointer;
+  position: absolute;
+}
+.opened {
+  display: block;
+}
+.closed {
+  display: none;
+}
 .header {
   height: 40px;
   background-color: #e8e9ee;
   text-align: center;
   line-height: 40px;
-  border-top-left-radius: inherit;
-  border-top-right-radius: inherit;
+  border-radius: inherit;
+}
+.border-bottom {
   border-bottom: 1px solid black;
-  position: absolute;
-  left: 0;
-  top: 0;
-  right: 0;
+  border-bottom-left-radius: 0px;
+  border-bottom-right-radius: 0px;
 }
 @media only screen and (max-width: 750px) {
   #cf-games {
@@ -603,7 +625,7 @@ main {
   #cf-left {
 
   }
-  #cf-rigt {
+  #cf-right {
 
   }
 }
