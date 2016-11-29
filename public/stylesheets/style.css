@@ -514,6 +514,7 @@ main {
 }
 #cf-leaderboards-table {
   height: 210px;
+  overflow-y: hidden;
 }
 .table-wrapper {
   height: calc(100% - 40px);
