@@ -518,6 +518,7 @@ main {
 .table-wrapper {
   height: calc(100% - 40px);
   overflow-y: scroll;
+  overflow-x: hidden;
   height: 250px;
   display: none;
 }
