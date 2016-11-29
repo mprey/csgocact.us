@@ -1,6 +1,6 @@
 $(function() {
 
-  $('.header').on('click', '#cf-dropdown-trigger', function(event) {
+  $('.page-content').on('click', '#cf-dropdown-trigger', function(event) {
     var header = $(this).parent().parent();
     $(this).hide();
     if ($(this).hasClass('opened')) {
