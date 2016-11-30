@@ -1,0 +1,1547 @@
+/**
+* @file style.css
+* @author mprey
+*/
+/**
+* @section global vars
+*/
+$dark_blue: #435779;
+@import 'reset';
+@import 'sweetalert';
+@import 'component';
+/**
+* @section primary styles
+*/
+/**
+* Apply font-smoothing to all children
+*/
+html * {
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+/**
+* Include margin and padding in total width and height
+*/
+*,
+*:after,
+*:before {
+  -webkit-box-sizing: border-box;
+  -moz-box-sizing: border-box;
+  box-sizing: border-box;
+}
+/**
+* Default font and background styles
+*/
+body,
+html {
+  font-size: 100%;
+  font-family: "PT Sans", sans-serif;
+  color: #31353d;
+  background-color: #435779;
+  height: 100%;
+}
+/**
+* Default hide any overflow
+*/
+body.overflow-hidden {
+  overflow: hidden;
+}
+/**
+* Default link styles
+*/
+a {
+  color: #0B4F6C;
+  text-decoration: none;
+}
+/**
+* Image width default values
+*/
+img {
+  max-width: 100%;
+}
+/**
+* Replace text with a background image
+*/
+.img-replace {
+  display: inline-block;
+  overflow: hidden;
+  text-indent: 100%;
+  white-space: nowrap;
+}
+/**
+* @section slide-out menu triggers (user-trigger, hamburger-menu)
+*/
+/**
+* Absolute position for trigger elements at the top of the page
+*/
+#hamburger-menu,
+#user-trigger {
+  position: absolute;
+  top: 0;
+  height: 100%;
+
+  a {
+    width: 60px;
+    height: 100%;
+  }
+}
+/**
+* Stick the hamburger-menu trigger to the left side of the screen
+*/
+#hamburger-menu {
+  left: 0;
+
+  a {
+    background: #26292f url("../images/hamburger-menu.svg") no-repeat center center;
+  }
+}
+/**
+* Stick the user-trigger to the right side of the screen
+*/
+#user-trigger {
+  right: 0;
+
+  a {
+    background: #26292f url("../images/user-menu.svg") no-repeat center center;
+  }
+}
+@media only screen and (min-width: 955px) {
+  /**
+  * Hide the hamburger-menu when the screen width is smaller than 955px
+  */
+  #hamburger-menu {
+    display: none;
+  }
+
+  #user-trigger {
+    right: 0;
+
+    a {
+      position: relative;
+      width: 80px;
+      border-left: none;
+      background-color: #26292f;
+    }
+  }
+}
+/**
+* @section pinned header at the top of page
+*/
+header {
+  position: fixed;
+  top: 0;
+  left: 0;
+  height: 45px;
+  width: 100%;
+  background: #31353d;
+  text-align: center;
+  box-shadow: 0 2px 0 rgba(0, 0, 0, 0.1);
+  z-index: 4;
+}
+@media screen and (min-width: 955px) {
+  header {
+    height: 50px;
+  }
+}
+/**
+* @section pinned logo in the top-left
+*/
+#logo {
+  padding-top: 0;
+  height: 100%;
+  -webkit-transform: scale(0.8);
+  -moz-transform: scale(0.8);
+  -ms-transform: scale(0.8);
+  -o-transform: scale(0.8);
+  transform: scale(0.8);
+}
+@media screen and (min-width: 955px) {
+  #logo {
+    padding-top: 1px;
+    position: absolute;
+    left: 2.4em;
+    top: 0;
+    -webkit-transform: scale(1);
+    -moz-transform: scale(1);
+    -ms-transform: scale(1);
+    -o-transform: scale(1);
+    transform: scale(1);
+  }
+}
+/**
+* @section main navigation styling
+*/
+#main-nav,
+#user-menu {
+  position: fixed;
+  top: 0;
+  height: 100%;
+  width: 260px;
+  padding-top: 45px;
+  overflow-y: auto;
+  -webkit-overflow-scrolling: touch;
+  box-shadow: 0 0 20px rgba(0, 0, 0, 0.2);
+  z-index: 3;
+}
+/* resize the menu on a little larger screen */
+@media only screen and (min-width: 768px) {
+  #main-nav,
+  #user-menu {
+    width: 350px;
+  }
+}
+@media only screen and (min-width: 955px) {
+  #main-nav,
+  #user-menu {
+    width: 30%;
+    padding-top: 50px;
+  }
+}
+
+#main-nav {
+  left: -100%;
+  background: #FFF;
+  -webkit-transition: left 0.3s;
+  -moz-transition: left 0.3s;
+  transition: left 0.3s;
+
+  &.speed-in {
+    left: 0;
+  }
+
+  ul a {
+    display: block;
+    height: 50px;
+    line-height: 50px;
+    padding: 0 1em;
+    border-bottom: 1px solid #e0e6ef;
+
+    &.current {
+      box-shadow: inset 3px 0 #435779;
+    }
+
+    &:hover {
+      background: #435779;
+      color: #FFF;
+    }
+  }
+}
+@media only screen and (min-width: 955px) {
+  #main-nav {
+    position: fixed;
+    height: auto;
+    width: auto;
+    left: auto;
+    right: 8em;
+    padding-top: 7px;
+    top: 0;
+    background: transparent;
+    box-shadow: none;
+
+    li {
+      display: inline-block;
+      margin-left: 1em;
+    }
+
+    ul a {
+      display: inline-block;
+      line-height: 37px;
+      height: 37px;
+      padding: 0 1.4em;
+      border-bottom: none;
+      color: rgba(255, 255, 255, 0.8);
+      border-radius: 0.25em;
+
+      &.current {
+        box-shadow: none;
+        background: #435779;
+        color: #FFF;
+      }
+
+      &:hover {
+        background: #435779;
+        color: #FFF;
+      }
+    }
+  }
+}
+/**
+* @section slide out user-menu
+*/
+#user-menu {
+  right: -100%;
+  background: #FFF;
+  -webkit-transition: right 0.3s;
+  -moz-transition: right 0.3s;
+  transition: right 0.3s;
+
+  &.speed-in {
+    right: 0;
+  }
+
+  & > * {
+    padding: 0 1em;
+  }
+
+  h2 {
+    font-size: 14px;
+    font-weight: bold;
+    text-transform: uppercase;
+    margin-top: 1em;
+    margin-bottom: 1em;
+  }
+
+  .user-menu-items {
+    padding: 0;
+
+    & > li {
+      position: relative;
+      padding: 1em;
+      border-top: 1px solid #e0e6ef;
+
+      &:last-child {
+        border-bottom: 1px solid #e0e6ef;
+      }
+    }
+  }
+
+  .sub-items > li {
+    position: relative;
+    margin: 0.8em 1.5em;
+    border-top: 0.7px solid #e0e6ef;
+    padding-top: 10px;
+
+    &:last-child {
+      border-bottom: 0.7px solid #e0e6ef;
+      padding-bottom: 10px;
+    }
+
+    i {
+      padding-right: 4px;
+    }
+
+    p {
+      float: left;
+    }
+
+    input,
+    label {
+      float: right;
+    }
+  }
+
+  .sub-items-wrapper {
+    text-align: center;
+
+    button {
+      border-radius: 4px;
+      color: #ffffff;
+      background: #2c3e50;
+      font-size: 10px;
+      padding: 6px 8px 7px;
+      margin-top: 1px;
+      font-weight: bold;
+      text-decoration: none;
+      cursor: pointer;
+      text-shadow: none !important;
+      border: none !important;
+      box-shadow: none !important;
+      -moz-transition: all 0.2s;
+      -o-transition: all 0.2s;
+      -webkit-transition: all 0.2s;
+      transition: all 0.2s;
+
+      &:hover {
+        border-radius: 6px;
+        background: #435779;
+      }
+    }
+  }
+
+  #volume-slider {
+    -webkit-appearance: none;
+    background: none;
+
+    &::-webkit-slider-runnable-track,
+    &::-moz-range-track {
+      height: 5px;
+      background: #ddd;
+      border: none;
+      border-radius: 3px;
+      margin-top: 4px;
+    }
+
+    &::-webkit-slider-thumb,
+    &::-moz-range-thumb {
+      -webkit-appearance: none;
+      margin-top: -5px;
+      height: 16px;
+      width: 16px;
+      border: none;
+      border-radius: 50%;
+      background: #2c3e50;
+      cursor: pointer;
+      transition: background 0.15s ease-in-out;
+      position: relative;
+    }
+  }
+
+  #volume-slider::-webkit-slider-thumb:hover {
+    background: #435779;
+  }
+
+  #volume-slider:active::-webkit-slider-thumb {
+    background: #435779;
+  }
+
+  #volume-slider:active::-moz-range-thumb {
+    background: #435779;
+  }
+
+  #volume-slider::-moz-range-thumb:hover {
+    background: #435779;
+  }
+
+  #profile-img {
+    margin-top: -2px;
+    height: 24px;
+    width: 24px;
+    border-radius: 5px;
+  }
+
+  .login-btn {
+    display: block;
+    width: 100%;
+    height: 60px;
+    line-height: 60px;
+    background: #7dcf85;
+    color: #FFF;
+    text-align: center;
+
+    &:hover {
+      background: #a2dda8;
+    }
+  }
+
+  .logout-btn {
+    display: block;
+    width: 100%;
+    height: 60px;
+    line-height: 60px;
+    background: #e86a6a;
+    color: #FFF;
+    text-align: center;
+
+    &:hover {
+      background: #e98c8c;
+    }
+  }
+
+  .toggle-box {
+    display: none;
+
+    &:checked {
+      & + label:before {
+        font-family: FontAwesome;
+        content: "\f0d7";
+      }
+      & + label + div {
+        display: block;
+      }
+    }
+
+    & + label {
+      cursor: pointer;
+      display: block;
+
+      &:before {
+        font-family: FontAwesome;
+        content: "\f0da";
+        display: block;
+        float: left;
+        font-weight: bold;
+        margin-right: 5px;
+      }
+
+      & + div {
+        display: none;
+      }
+    }
+  }
+}
+
+/**
+* @section main content area of the page
+*/
+main {
+  position: relative;
+  min-height: 100%;
+  background: #435779;
+  padding: 5px 0;
+  padding-top: 45px;
+  z-index: 1;
+}
+@media only screen and (min-width: 955px) {
+  main {
+    padding-top: 50px;
+  }
+}
+
+.t-coin {
+  content: url('../images/t-coin.png');
+}
+
+.ct-coin {
+  content: url('../images/ct-coin.png');
+}
+
+.content-div {
+  background-color: #eeeff7;
+  border-radius: 5px;
+  position: relative;
+  height: auto;
+  box-shadow: 0 0 10px 0 rgba(0,0,0,.3);
+}
+
+#cf-header {
+  height: 120px;
+  margin-bottom: 1em;
+}
+
+$color-dark: #273c65;
+$speed: "0.25s";
+$transition: all #{$speed} cubic-bezier(0.310, -0.105, 0.430, 1.400);
+
+#create-game {
+  display: block;
+  position: relative;
+  background-color: $dark_blue;
+  width: 150px;
+  height: 50px;
+  line-height: 50px;
+  color: #fff;
+  cursor: pointer;
+  overflow: hidden;
+  border-radius: 5px;
+  box-shadow: 0 0 20px 0 rgba(0,0,0,.3);
+  transition: $transition;
+
+  .icon,
+  span {
+    display: block;
+    height: 100%;
+    text-align: center;
+    position: absolute;
+    top: 0;
+  }
+
+  span {
+    width: 72%;
+    line-height: inherit;
+    font-size: 12px;
+    text-transform: uppercase;
+    left: 0;
+    transition: $transition;
+
+    &:after {
+      content: '';
+      background-color: $color-dark;
+      width: 2px;
+      height: 70%;
+      position: absolute;
+      top: 15%;
+      right: -1px;
+    }
+  }
+
+  .icon {
+    width: 28%;
+    right: 0;
+    transition: $transition;
+
+    .fa {
+      font-size: 15px;
+      vertical-align: middle;
+      transition: $transition, height #{$speed} ease;
+    }
+  }
+
+  &:hover {
+    span {
+      left: -72%;
+      opacity: 0;
+    }
+
+    .icon {
+      width: 100%;
+
+      .fa {
+        font-size: 25px;
+      }
+    }
+  }
+
+  &:hover {
+    opacity: 0.9;
+  }
+
+  &:active {
+    opacity: 1;
+  }
+}
+
+#cf-games {
+  height: 500px;
+}
+
+#cf-left {
+  float: left;
+  width: calc(70% - 2em);
+  margin: 0.5em 1em;
+}
+
+#cf-right {
+  float: right;
+  width: calc(30% - 1em);
+  margin: 0.5em 1em 0.5em 0;
+}
+
+#cf-user-history {
+  margin-bottom: 1em;
+}
+
+#cf-history {
+  margin-bottom: 1em;
+}
+
+#cf-advert-box {
+  height: 300px;
+  text-align: center;
+  margin-bottom: 1em;
+}
+
+#cf-advert-box h5 {
+  position: absolute;
+  margin: 0 20px;
+  padding: 15px 10px;
+  border-radius: 5px;
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  background-color: rgb(220, 220, 228);
+}
+
+#cf-leaderboards {}
+
+#cf-leaderboards-table {
+  height: 210px;
+  overflow-y: hidden;
+}
+
+.table-wrapper {
+  height: calc(100% - 40px);
+  overflow-y: scroll;
+  overflow-x: hidden;
+  height: 250px;
+  display: none;
+}
+
+.cf-table {
+  width: 100%;
+  line-height: 40px;
+}
+
+.cf-table td {
+  border-right: 0.5px solid black;
+  text-align: center;
+}
+
+.cf-table td:last-child {
+  border-right: none;
+}
+
+.cf-table tr {
+  border-bottom: 1px solid black;
+}
+
+.cf-table tr:last-child {
+  border-bottom: none;
+}
+
+.cf-table tr:hover {
+  background-color: rgb(226, 226, 226);
+  cursor: pointer;
+}
+
+.cf-table tr:hover td:first-child {
+  border-bottom-left-radius: 10px;
+  border-bottom-right-radius: 10px;
+}
+
+.cf-table tr:hover td:last-child {
+  border-bottom-left-radius: 10px;
+  border-bottom-right-radius: 10px;
+}
+
+.cf-table td img {
+  height: 15px;
+  width: 15px;
+  vertical-align: middle;
+}
+
+.game-amount {
+  background-color: rgb(186, 186, 191);
+  padding: 2px 3px;
+  font-weight: bold;
+  border-radius: 3px;
+  color: #31353d;
+  margin-left: 3px;
+}
+
+.won {
+  color: rgb(106, 212, 101);
+}
+
+.won:before {
+  content: '+';
+}
+
+.lost {
+  color: rgb(199, 71, 71);
+}
+
+.lost:before {
+  content: '-';
+}
+
+.record {
+  font-weight: bold;
+}
+
+#history-side {
+  width: 40px;
+}
+
+#history-amount {
+  width: 70px;
+  font-size: 13px;
+}
+
+#history-user {
+  max-width: 10px;
+  text-overflow: ellipsis;
+  font-size: 12px;
+}
+
+#history-user img {
+  border-radius: 5px;
+  margin: 0 3px;
+}
+
+#cf-dropdown-trigger {
+  right: 8px;
+  top: 0;
+  cursor: pointer;
+  position: absolute;
+}
+
+.opened {
+  display: block;
+}
+
+.closed {
+  display: none;
+}
+
+.header {
+  height: 40px;
+  background-color: #e8e9ee;
+  text-align: center;
+  line-height: 40px;
+  border-radius: inherit;
+}
+
+.border-bottom {
+  border-bottom: 1px solid black;
+  border-bottom-left-radius: 0;
+  border-bottom-right-radius: 0;
+}
+@media only screen and (max-width: 750px) {
+  #cf-games {}
+
+  #cf-left {}
+
+  #cf-right {}
+}
+/**
+* @section static footer at the bottom of page
+*/
+footer {
+  bottom: 0;
+  width: 100%;
+  height: 250px;
+  background: #31353d;
+  position: relative;
+  color: #eeeff7;
+}
+
+footer ul {
+  list-style-type: none;
+  overflow: hidden;
+  padding-right: 50px;
+  float: right;
+}
+
+footer li {
+  display: inline-block;
+}
+
+footer li a {
+  color: #eeeff7;
+  text-decoration: underline;
+}
+
+footer #logo-large {
+  width: 100px;
+  height: 100px;
+  border-radius: 10px;
+  margin-left: 100px;
+  -webkit-box-sizing: border-box;
+  /* Safari/Chrome, other WebKit */
+  -moz-box-sizing: border-box;
+  /* Firefox, other Gecko */
+  box-sizing: border-box;
+}
+
+footer #twitter-box {
+  float: left;
+  margin-left: 20px;
+  padding: 5px;
+  background-color: #4099FF;
+}
+
+footer #media-icons {
+  float: right;
+  margin-right: 20px;
+  padding-top: 5px;
+}
+
+footer #twitter-box h2 {
+  float: left;
+  margin-right: 40px;
+  padding-left: 10px;
+}
+
+footer #twitter-box img:hover {
+  background-color: #2186fb;
+  border-radius: 2px;
+}
+
+footer #twitter-box img {
+  float: left;
+  padding-top: 4px;
+  padding-right: 10px;
+}
+
+footer .media-icon {
+  float: left;
+  margin-right: 10px;
+}
+
+footer #above-break {
+  width: 100%;
+  position: absolute;
+  bottom: 180px;
+  line-height: 30px;
+  text-align: center;
+  overflow: hidden;
+}
+
+footer #below-break {
+  width: 100%;
+  position: absolute;
+  bottom: 0;
+  line-height: 100px;
+}
+
+#copyright-footer {
+  bottom: 0;
+  height: 30px;
+  width: 100%;
+  background: #25272b;
+  position: absolute;
+  text-align: center;
+  line-height: 30px;
+}
+
+#copyright-footer a {
+  color: rgb(217, 75, 75);
+}
+@media only screen and (max-width: 955px) {
+  footer {}
+
+  footer #below-break {
+    line-height: 80px;
+    padding-bottom: 20px;
+  }
+
+  footer #logo-large {
+    height: 80px;
+    width: 80px;
+  }
+
+  footer #twitter-box {
+    display: none;
+  }
+}
+@media only screen and (max-width: 600px) {
+  footer #below-break {
+    line-height: 50px;
+  }
+
+  footer #below-break li {
+    font-size: 12px;
+  }
+
+  footer #below-break ul {
+    padding-right: 10px;
+  }
+
+  footer #logo-large {
+    height: 50px;
+    width: 50px;
+    margin-left: 10px;
+  }
+
+  hr#footer {
+    bottom: 50px;
+  }
+}
+/**
+* @section horizontal rules styling
+*/
+hr.fancy-line {
+  border: 0;
+  height: 1px;
+  width: 95%;
+  margin-right: auto;
+  margin-left: auto;
+  background-color: #eeeff7;
+}
+
+hr#footer {
+  align-content: center;
+  position: absolute;
+  bottom: 150px;
+}
+/**
+* @section shadow-layer to provide background for modals
+*/
+#shadow-layer {
+  position: fixed;
+  min-height: 100%;
+  width: 100%;
+  top: 0;
+  left: 0;
+  background: rgba(67, 87, 121, 0.6);
+  cursor: pointer;
+  z-index: 2;
+  display: none;
+}
+
+#shadow-layer.is-visible {
+  display: block;
+  -webkit-animation: fade-in 0.3s;
+  -moz-animation: fade-in 0.3s;
+  animation: fade-in 0.3s;
+}
+/**
+* @section slider chat-box styling
+*/
+#chat-box {
+  position: fixed;
+  top: 45px;
+  height: 100%;
+  width: 260px;
+  box-shadow: 0 0 20px rgba(0, 0, 0, 0.2);
+  z-index: 3;
+  right: -100%;
+  background: #FFF;
+  table-layout: fixed;
+  -webkit-transition: right 0.3s;
+  -moz-transition: right 0.3s;
+  transition: right 0.3s;
+}
+/* resize the menu on a little larger screen */
+@media only screen and (min-width: 768px) {
+  #chat-box {
+    width: 300px;
+  }
+}
+@media only screen and (min-width: 955px) {
+  #chat-box {
+    width: 350px;
+    top: 50px;
+  }
+}
+
+#chat-box.speed-in {
+  right: 0;
+}
+
+#chat-box h2 {
+  font-size: 14px;
+  font-size: 0.875rem;
+  font-weight: bold;
+  text-transform: uppercase;
+  margin: 0 1em;
+}
+
+#chat-online {
+  background-color: rgb(83, 205, 73);
+  margin-left: 10px;
+  border-radius: 30%;
+  padding: 3px 5px;
+  color: #FFF;
+}
+
+#chat-exit {
+  position: absolute;
+  right: 1em;
+  top: 8px;
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  text-align: center;
+  line-height: 38px;
+}
+
+#chat-exit:hover {
+  background-color: #e0e6ef;
+}
+
+#chat-header {
+  /* chat header */
+  position: relative;
+  width: 100%;
+  height: 50px;
+  line-height: 50px;
+  border-bottom: 1px solid #606060;
+}
+
+#chat-wrapper {
+  /* chat content */
+  position: relative;
+  height: calc(100% - 200px);
+  width: 100%;
+  overflow-y: scroll;
+}
+
+#chat-input {
+  /* chat footer */
+  position: absolute;
+  width: 100%;
+  height: 100px;
+  bottom: 45px;
+  /* account for chat box margin-top */
+  left: 0;
+  border-top: 1px solid #606060;
+}
+@media only screen and (min-width: 955px) {
+  #chat-buttons,
+  #chat-input {
+    bottom: 50px;
+    /* account for chat box margin-top */
+  }
+}
+
+#chat-input textarea {
+  position: absolute;
+  border-radius: 4px;
+  border: 1.5px solid #435779;
+  resize: none;
+  background-color: #f9fafb;
+  height: 60px;
+  left: 5px;
+  right: 5px;
+  top: 5px;
+  font-size: 0.775rem;
+}
+
+#chat-input textarea:focus {
+  outline: none !important;
+  border-color: #719ECE;
+  box-shadow: 0 0 10px #719ECE;
+}
+
+#chat-nologin {
+  background-color: rgb(247, 244, 244);
+  width: 100%;
+  height: 100%;
+  text-align: center;
+  line-height: 100px;
+  font-weight: bold;
+}
+
+#chat-buttons {
+  position: absolute;
+  bottom: 6px;
+  right: 8px;
+}
+
+#chat-buttons #chat-submit {
+  border-radius: 4px;
+  color: #ffffff;
+  background: #FDA8AA;
+  font-size: 10px;
+  padding: 6px 5px 7px;
+  font-weight: bold;
+  text-decoration: none;
+  cursor: pointer;
+  text-shadow: none !important;
+  border: none !important;
+  box-shadow: none !important;
+  -moz-transition: all 0.2s;
+  -o-transition: all 0.2s;
+  -webkit-transition: all 0.2s;
+  transition: all 0.2s;
+}
+
+#chat-buttons #chat-submit:hover {
+  border-radius: 6px;
+  background: #df7578;
+}
+
+#chat-buttons a {
+  margin-right: 7px;
+  color: #719ECE;
+  -moz-transition: all 0.2s;
+  -o-transition: all 0.2s;
+  -webkit-transition: all 0.2s;
+  transition: all 0.2s;
+}
+
+#chat-buttons a:hover {
+  color: black;
+}
+
+#chat-trigger {
+  position: fixed;
+  bottom: 20px;
+  right: 15px;
+  height: 50px;
+  width: 50px;
+  background-color: rgba(43, 50, 51, 0.76);
+  line-height: 46px;
+  text-align: center;
+  font-size: 25px;
+  border-radius: 50px;
+  border: 2px solid #dcdde4;
+  z-index: 1;
+}
+
+#chat-trigger:hover {
+  -webkit-transform: scale(1.1);
+  -ms-transform: scale(1.1);
+  transform: scale(1.1);
+}
+
+#chat-trigger .fa-comment-o {
+  color: #dcdde4;
+}
+
+#chat-wrapper h5 {
+  font-size: 10px;
+}
+
+.chat-message {
+  margin: 16px 0;
+  padding-left: 1em;
+  padding-right: 1em;
+  height: auto;
+}
+
+span.rank {
+  text-transform: uppercase;
+  font-weight: BOLD;
+  padding: 1px 3px;
+  border-radius: 5px;
+  color: #FFF;
+  text-align: center;
+}
+
+span.admin {
+  background-color: rgb(189, 73, 73);
+}
+
+span.mod {
+  background-color: rgb(35, 104, 156);
+}
+
+span.developer {
+  background-color: rgb(147, 19, 138);
+}
+
+span.bot {
+  background-color: rgb(86, 200, 215);
+}
+
+span:empty {
+  display: none;
+}
+
+.chat-message p {
+  margin: 0;
+  font-size: 12px;
+  margin-top: 3px;
+}
+
+.chat-message strong {
+  font-weight: bold;
+}
+
+.chat-profile {
+  border-radius: 50%;
+  float: left;
+  height: 25px;
+  width: 25px;
+  border: 0.5px solid grey;
+  cursor: pointer;
+}
+
+.chat-message-content {
+  margin-left: 50px;
+}
+
+.chat-emote {
+  max-width: 18px;
+  max-height: 18px;
+  vertical-align: middle;
+}
+
+.chat-time {
+  float: right;
+  font-size: 10px;
+}
+
+.chat-break {
+  background: #e9e9e9;
+  border: 0;
+  -moz-box-sizing: content-box;
+  box-sizing: content-box;
+  height: 1px;
+  margin: 0;
+  min-height: 1px;
+}
+/**
+* @section notification counters in a Facebook esque
+*/
+.notification-counter {
+  position: absolute;
+  top: -2px;
+  left: 0;
+  background-color: rgba(212, 19, 13, 1);
+  color: #fff;
+  border-radius: 3px;
+  padding: 1px 3px;
+  font: 10px Verdana;
+}
+
+.notification-counter:empty {
+  display: none;
+}
+/**
+* @section media-icons for social links in the footer
+*/
+.media-icon {
+  width: 30px;
+  height: 30px;
+  background-color: #25272b;
+  border-radius: 10px;
+  -moz-transition: all 0.2s;
+  -o-transition: all 0.2s;
+  -webkit-transition: all 0.2s;
+  transition: all 0.2s;
+}
+
+.media-icon a {
+  text-decoration: none;
+  color: #eeeff7;
+  outline: none;
+}
+
+.media-icon:hover {
+  border-radius: 20px;
+}
+/**
+* @section iOS-like sliders for toggle on and off
+*/
+/**
+* The background box around the slider
+*/
+.switch {
+  position: relative;
+  display: inline-block;
+  width: 30px;
+  height: 17px;
+}
+/**
+* Hide the default HTML checkbox
+*/
+.switch input {
+  display: none;
+}
+/**
+* The slider styling that the user clicks back and forth
+*/
+.slider {
+  position: absolute;
+  cursor: pointer;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: #ccc;
+  -webkit-transition: 0.4s;
+  transition: 0.4s;
+}
+
+.slider:before {
+  position: absolute;
+  content: "";
+  height: 13px;
+  width: 13px;
+  left: 2px;
+  bottom: 2px;
+  background-color: white;
+  -webkit-transition: 0.4s;
+  transition: 0.4s;
+}
+
+input:checked + .slider {
+  background-color: #2196F3;
+}
+
+input:focus + .slider {
+  box-shadow: 0 0 1px #2196F3;
+}
+
+input:checked + .slider:before {
+  -webkit-transform: translateX(12px);
+  -ms-transform: translateX(12px);
+  transform: translateX(12px);
+}
+/* Rounded sliders */
+.slider.round {
+  border-radius: 34px;
+}
+
+.slider.round:before {
+  border-radius: 50%;
+}
+/**
+* @section utility classes
+*/
+#spinner-container {
+  position: relative;
+  height: 100vh;
+  background: #435779;
+  padding-top: 50px;
+  padding-bottom: 5px;
+  z-index: 0;
+  display: none;
+}
+
+.spinner {
+  width: 40px;
+  height: 40px;
+  position: relative;
+  margin: auto;
+  top: 50%;
+  transform: translateY(-50%);
+}
+
+.double-bounce1,
+.double-bounce2 {
+  width: 100%;
+  height: 100%;
+  border-radius: 50%;
+  background-color: #333;
+  opacity: 0.6;
+  position: absolute;
+  top: 0;
+  left: 0;
+  -webkit-animation: sk-bounce 2.0s infinite ease-in-out;
+  animation: sk-bounce 2.0s infinite ease-in-out;
+}
+
+.double-bounce2 {
+  -webkit-animation-delay: -1.0s;
+  animation-delay: -1.0s;
+}
+@-webkit-keyframes sk-bounce {
+  0%,
+  100% {
+    -webkit-transform: scale(0.0);
+  }
+
+  50% {
+    -webkit-transform: scale(1.0);
+  }
+}
+@keyframes sk-bounce {
+  0%,
+  100% {
+    transform: scale(0.0);
+    -webkit-transform: scale(0.0);
+  }
+
+  50% {
+    transform: scale(1.0);
+    -webkit-transform: scale(1.0);
+  }
+}
+/**
+* Tooltip class allows styled tooltips BELOW the element
+*/
+.tooltip {
+  position: relative;
+  display: inline;
+}
+/**
+* Background display of the tooltip
+*/
+.tooltip span {
+  position: absolute;
+  width: 70px;
+  color: #ffffff;
+  background: #000000;
+  height: 20px;
+  line-height: 20px;
+  text-align: center;
+  visibility: hidden;
+  font-size: 11px;
+  border-radius: 6px;
+}
+/**
+* Carrot for the tooltip
+*/
+.tooltip span:after {
+  content: '';
+  position: absolute;
+  bottom: 100%;
+  left: 50%;
+  margin-left: -8px;
+  width: 0;
+  height: 0;
+  border-bottom: 8px solid #000000;
+  border-right: 8px solid transparent;
+  border-left: 8px solid transparent;
+}
+/**
+* Tooltip trigger to display
+*/
+a:hover.tooltip span {
+  visibility: visible;
+  opacity: 0.8;
+  top: 25px;
+  left: 50%;
+  margin-left: -37px;
+  z-index: 999;
+}
+/**
+* Clearfix class allows floated elements to be non-collapsable
+*/
+.clearfix {
+  zoom: 1;
+}
+
+.clearfix:after,
+.clearfix:before {
+  content: "";
+  display: table;
+}
+
+.clearfix:after {
+  clear: both;
+}
+/**
+* Allows elements to disable highlighting (for drop down menus and such)
+*/
+.noselect {
+  -webkit-touch-callout: none;
+  /* iOS Safari */
+  -webkit-user-select: none;
+  /* Chrome/Safari/Opera */
+  -khtml-user-select: none;
+  /* Konqueror */
+  -moz-user-select: none;
+  /* Firefox */
+  -ms-user-select: none;
+  /* Internet Explorer/Edge */
+  user-select: none;
+  /* Non-prefixed version, currently not supported by any browser */
+}
+/**
+* @section keyframes
+*/
+/**
+* Pulse keyframe scales the object in a quick succession
+*/
+@keyframes pulse {
+  25% {
+    transform: scale(1.1);
+  }
+
+  75% {
+    transform: scale(.9);
+  }
+}
+@-webkit-keyframes pulse {
+  25% {
+    transform: scale(1.1);
+  }
+
+  75% {
+    transform: scale(.9);
+  }
+}
+@-moz-keyframes pulse {
+  25% {
+    transform: scale(1.1);
+  }
+
+  75% {
+    transform: scale(.9);
+  }
+}
+/**
+* Fade-in keyframe changes the element's opacity
+*/
+@-webkit-keyframes fade-in {
+  0% {
+    opacity: 0;
+  }
+
+  100% {
+    opacity: 1;
+  }
+}
+@-moz-keyframes fade-in {
+  0% {
+    opacity: 0;
+  }
+
+  100% {
+    opacity: 1;
+  }
+}
+@keyframes fade-in {
+  0% {
+    opacity: 0;
+  }
+
+  100% {
+    opacity: 1;
+  }
+}

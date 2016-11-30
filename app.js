@@ -10,6 +10,7 @@ var path = require('path');
 
 var bodyParser = require('body-parser');
 var session = require('express-session');
+var sassMiddleware = require('node-sass-middleware');
 var MongoStore = require('connect-mongo')(session);
 var banMiddleware = require('./lib/ban-middleware');
 var pjax = require('./lib/pjax-middleware');
@@ -24,7 +25,6 @@ var sessionStore = new MongoStore({ mongooseConnection: mongoose.connection });
 
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
-app.use(express.static(path.join(__dirname, 'public')));
 
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'ejs');
@@ -38,12 +38,23 @@ var sessionMiddleware = session({
   saveUninitialized: true
 });
 
+var sassMiddleware = sassMiddleware({
+  src: path.join(__dirname, 'public/sass'),
+  dest: path.join(__dirname, 'public/stylesheets'),
+  debug: false,
+  outputStyle: 'compressed',
+  prefix:  '/stylesheets'
+});
+
 app.use(sessionMiddleware);
 app.use(passport.initialize());
 app.use(passport.session());
 
 app.use(banMiddleware);
 app.use(pjax());
+app.use(sassMiddleware);
+
+app.use(express.static(path.join(__dirname, 'public')));
 
 require('./router')(app);
 
