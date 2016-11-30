@@ -54,7 +54,8 @@ module.exports = function(app) {
     res.render('layout', {
       user: req.user,
       title: 'Coinflip',
-      content: 'coin-flip.ejs'
+      content: 'coin-flip.ejs',
+      js_file: 'coinflip.js'
     });
   });
 

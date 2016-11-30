@@ -1,6 +1,6 @@
 <!-- load libraries first -->
-<script src="https://use.fontawesome.com/78d8a1e558.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
+<script src="https://use.fontawesome.com/78d8a1e558.js"></script>
 <script src="javascripts/classie.js"></script>
 <script src="javascripts/cookies.min.js"></script>
 <script src="javascripts/sweetalert.min.js"></script>
@@ -11,10 +11,13 @@
 <script src="/socket.io/socket.io.js"></script>
 
 <!-- load custom scripts -->
-<script src="javascripts/socket.manager.js"></script>
+<script src="javascripts/csgocactus.js"></script>
 <script src="javascripts/settings.manager.js"></script>
 <script src="javascripts/nav.manager.js"></script>
 <script src="javascripts/chat.manager.js"></script>
 <script src="javascripts/emotes.manager.js"></script>
 <script src="javascripts/pjax.manager.js"></script>
-<script src="javascripts/coinflip.js"></script>
+
+<% if (!(typeof js_file == 'undefined')) { %>
+  <script src="javascripts/<%= js_file %>"></script>
+<% } %>

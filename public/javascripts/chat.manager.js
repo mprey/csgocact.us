@@ -67,8 +67,6 @@ $(function() {
   function ChatManager() {
     this.socket = socket;
 
-    var instance = this;
-
     this.socket.on(socket_incoming.INIT_CHAT, this.initChat);
     this.socket.on(socket_incoming.INCREMENT_ONLINE, this.incrementOnline);
     this.socket.on(socket_incoming.DECREMENT_ONLINE, this.decrementOnline);
@@ -93,7 +91,7 @@ $(function() {
       obj.no_sound = true;
       chat_manager.addChatMessage(obj);
     });
-  }
+  };
 
   ChatManager.prototype.replaceWithEmotes = function(text) {
     var newText = text;

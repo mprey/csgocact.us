@@ -6,6 +6,11 @@
 * @section global vars
 */
 $dark_blue: #435779;
+$dark_gray: #31353d;
+$color-dark: #273c65;
+$speed: "0.25s";
+$transition: all #{$speed} cubic-bezier(0.310, -0.105, 0.430, 1.400);
+
 @import 'reset';
 @import 'sweetalert';
 @import 'component';
@@ -506,15 +511,38 @@ main {
 #cf-header {
   height: 120px;
   margin-bottom: 1em;
-}
 
-$color-dark: #273c65;
-$speed: "0.25s";
-$transition: all #{$speed} cubic-bezier(0.310, -0.105, 0.430, 1.400);
+  #cf-sort-button {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    right: 25px;
+    font-size: 20px;
+    border: 1px solid $dark_gray;
+    cursor: pointer;
+    padding: 3px;
+    border-radius: 3px;
+    box-shadow: 0 0 10px 0 rgba(0,0,0,.2);
+    transition: $transition;
+    color: $dark_gray;
+
+    &:hover {
+      font-size: 24px;
+      right: 23px;
+    }
+
+    &.asc {
+      display: none;
+    }
+  }
+}
 
 #create-game {
   display: block;
-  position: relative;
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  left: 25px;
   background-color: $dark_blue;
   width: 150px;
   height: 50px;
@@ -743,6 +771,11 @@ $transition: all #{$speed} cubic-bezier(0.310, -0.105, 0.430, 1.400);
   top: 0;
   cursor: pointer;
   position: absolute;
+  transition: $transition;
+
+  &:hover {
+    transform: scale(1.1);
+  }
 }
 
 .opened {
@@ -832,15 +865,15 @@ footer #twitter-box h2 {
   padding-left: 10px;
 }
 
-footer #twitter-box img:hover {
-  background-color: #2186fb;
-  border-radius: 2px;
-}
-
 footer #twitter-box img {
   float: left;
   padding-top: 4px;
   padding-right: 10px;
+  transition: $transition;
+
+  &:hover {
+    transform: scale(1.1);
+  }
 }
 
 footer .media-icon {
