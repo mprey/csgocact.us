@@ -3,6 +3,10 @@
   <% if (typeof user == 'object' && user) { %>
     <h2><%= user.name %></h2>
     <ul class="user-menu-items">
+      <li class="user-menu-item">
+        <label><i class="fa fa-database" aria-hidden="true"></i> Credits</label>
+        <label class="menu-value"><%= user.credits %></label>
+      </li>
       <% include ../includes/client_settings %>
       <% include ../includes/steam_settings %>
     </ul>
