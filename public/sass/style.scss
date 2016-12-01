@@ -10,7 +10,6 @@ $dark_gray: #31353d;
 $color-dark: #273c65;
 $speed: "0.25s";
 $transition: all #{$speed} cubic-bezier(0.310, -0.105, 0.430, 1.400);
-
 @import 'reset';
 @import 'sweetalert';
 @import 'component';
@@ -367,8 +366,8 @@ header {
     -webkit-appearance: none;
     background: none;
 
-    &::-webkit-slider-runnable-track,
-    &::-moz-range-track {
+    &::-moz-range-track,
+    &::-webkit-slider-runnable-track {
       height: 5px;
       background: #ddd;
       border: none;
@@ -376,8 +375,8 @@ header {
       margin-top: 4px;
     }
 
-    &::-webkit-slider-thumb,
-    &::-moz-range-thumb {
+    &::-moz-range-thumb,
+    &::-webkit-slider-thumb {
       -webkit-appearance: none;
       margin-top: -5px;
       height: 16px;
@@ -450,6 +449,7 @@ header {
         font-family: FontAwesome;
         content: "\f0d7";
       }
+
       & + label + div {
         display: block;
       }
@@ -474,7 +474,6 @@ header {
     }
   }
 }
-
 /**
 * @section main content area of the page
 */
@@ -482,8 +481,7 @@ main {
   position: relative;
   min-height: 100%;
   background: #435779;
-  padding: 5px 0;
-  padding-top: 45px;
+  padding: 45px 0 5px;
   z-index: 1;
 }
 @media only screen and (min-width: 955px) {
@@ -862,6 +860,7 @@ footer #media-icons {
 footer #twitter-box h2 {
   float: left;
   margin-right: 40px;
+  margin-top: 2px;
   padding-left: 10px;
 }
 
@@ -869,6 +868,7 @@ footer #twitter-box img {
   float: left;
   padding-top: 4px;
   padding-right: 10px;
+  margin-bottom: 4px;
   transition: $transition;
 
   &:hover {
@@ -905,14 +905,12 @@ footer #below-break {
   position: absolute;
   text-align: center;
   line-height: 30px;
-}
 
-#copyright-footer a {
-  color: rgb(217, 75, 75);
+  a {
+    color: rgb(217, 75, 75);
+  }
 }
-@media only screen and (max-width: 955px) {
-  footer {}
-
+@media only screen and (min-width: 601px) and (max-width: 955px) {
   footer #below-break {
     line-height: 80px;
     padding-bottom: 20px;
@@ -923,21 +921,35 @@ footer #below-break {
     width: 80px;
   }
 
+  footer #media-icons {
+    float: none;
+    display: inline-block;
+  }
+
   footer #twitter-box {
     display: none;
   }
 }
 @media only screen and (max-width: 600px) {
+  footer {
+    height: 200px;
+  }
+
+  footer #above-break {
+    bottom: 130px;
+  }
+
   footer #below-break {
     line-height: 50px;
-  }
+    padding-bottom: 25px;
 
-  footer #below-break li {
-    font-size: 12px;
-  }
+    li {
+      font-size: 12px;
+    }
 
-  footer #below-break ul {
-    padding-right: 10px;
+    ul {
+      padding-right: 20px;
+    }
   }
 
   footer #logo-large {
@@ -946,8 +958,18 @@ footer #below-break {
     margin-left: 10px;
   }
 
-  hr#footer {
-    bottom: 50px;
+  footer #media-icons {
+    float: none;
+    display: inline-block;
+  }
+
+  footer #twitter-box {
+    display: none;
+  }
+
+  #footer-hr {
+    position: absolute;
+    top: 80px;
   }
 }
 /**
@@ -962,10 +984,10 @@ hr.fancy-line {
   background-color: #eeeff7;
 }
 
-hr#footer {
-  align-content: center;
+#footer-hr {
   position: absolute;
   bottom: 150px;
+  left: 2.5%;
 }
 /**
 * @section shadow-layer to provide background for modals
