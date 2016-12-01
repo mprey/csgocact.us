@@ -9,9 +9,14 @@ $(function() {
 		$notification_counter = $('.notification-counter'),
 		$chat_trigger = $('#chat-trigger-a'),
 		$lateral_chat_box = $('#chat-box'),
-		$chat_exit = $('#chat-exit');
+		$chat_exit = $('#chat-exit'),
+		$nav_item = $('.nav-item');
 
 	var isChatOpen = false;
+
+	$nav_item.on('click', function(event) {
+		$shadow_layer.click();
+	});
 
 	$chat_exit.on('click', function(event) {
 		event.preventDefault();

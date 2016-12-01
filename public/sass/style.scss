@@ -8,6 +8,7 @@
 $dark_blue: #435779;
 $dark_gray: #31353d;
 $color-dark: #273c65;
+$gray_color: #eeeff7;
 $speed: "0.25s";
 $transition: all #{$speed} cubic-bezier(0.310, -0.105, 0.430, 1.400);
 @import 'reset';
@@ -536,6 +537,42 @@ main {
   height: 120px;
   margin-bottom: 1em;
 
+  #cf-labels {
+    position: absolute;
+    left: 36.5%;
+    margin: 0 auto;
+    top: 50%;
+    margin-top: 3px;
+    transform: translateX(-50%);
+    transform: translateY(-50%);
+    border-collapse: separate;
+    border-spacing: 20px 2px;
+
+    th {
+      padding: 5px 10px;
+      border-radius: 10px;
+      background-color: $dark_blue;
+      color: #fff;
+      font-size: 12px;
+    }
+
+    td {
+      text-align: center;
+      font-size: 13px;
+
+      span {
+        padding: 0px 4px;
+        border-bottom-left-radius: 5px;
+        border-bottom-right-radius: 5px;
+        background: rgba(215, 213, 213, 0.49);
+
+        &#cf-wagered::before {
+          content: '$';
+        }
+      }
+    }
+  }
+
   #cf-sort-button {
     position: absolute;
     top: 50%;
@@ -823,12 +860,41 @@ main {
   border-bottom-left-radius: 0;
   border-bottom-right-radius: 0;
 }
-@media only screen and (max-width: 750px) {
-  #cf-games {}
+@media only screen and (max-width: 850px) {
+  #cf-left {
+    width: calc(100% - 2em);
+  }
 
-  #cf-left {}
+  #cf-right {
+    width: calc(100% - 2em);
+  }
+}
+@media only screen and (max-width: 580px) {
+  #cf-header {
+    height: 150px;
 
-  #cf-right {}
+    #create-game {
+      top: 50px;
+      left: 0;
+      right: 0;
+      margin: 0 auto;
+      position: relative;
+      display: block;
+    }
+
+    #cf-labels {
+      top: 70px;
+      left: 0;
+      right: 0;
+      margin: 0 auto;
+      position: relative;
+      display: block;
+    }
+
+    #cf-sort-button {
+      display: none;
+    }
+  }
 }
 /**
 * @section static footer at the bottom of page
