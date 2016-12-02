@@ -18,7 +18,7 @@ $(function() {
     this.socket.on(socket_incoming.INIT_COINFLIP, this.initCoinflip);
   }
 
-  CoinflipManager.prototype.initCoinflip = function(data) { //data.online, data.open_games, data.games
+  CoinflipManager.prototype.initCoinflip = function(data) { //data.online, data.open_games, data.total_wagered, data.games, data.history, data.user_history
 
   };
 
