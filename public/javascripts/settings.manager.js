@@ -6,7 +6,21 @@ $(function() {
   var $ping_checkbox = $('#ping-checkbox');
   var $steam_settings_refresh = $('#steam-settings-refresh');
 
+  var $steam_profile_img = $('#profile-img');
+  var $steam_profile_name = $('#steam-name');
+
+  var canRequestSteam = true;
+  var requestSteamTimeout = 0;
+
   var settings = new Settings();
+
+  var socket_outgoing = {
+    UPDATE_STEAM_SETTINGS: 'SETTINGS_OUT_UPDATE_STEAM'
+  };
+
+  var socket_incoming = {
+    UPDATE_STEAM_SETTINGS: 'SETTINGS_IN_UPDATE_STEAM'
+  };
 
   var values = {
     "volume_value": 50,
@@ -55,16 +69,28 @@ $(function() {
         window.location.reload();
       }, 2000);
     } else if (type == this.type.STEAM) {
-      swal({
-        title: "Steam Settings",
-        text: "Are you sure you want to update your steam settings?",
-        type: "info",
-        showCancelButton: true,
-        closeOnConfirm: false,
-        showLoaderOnConfirm: true,
-      }, function() {
-        
-      });
+      if (canRequestSteam) {
+        swal({
+          title: "Steam Settings",
+          text: "Are you sure you want to update your steam settings?",
+          type: "info",
+          showCancelButton: true,
+          closeOnConfirm: false,
+          showLoaderOnConfirm: true,
+        }, function() {
+          canRequestSteam = false;
+          console.log(socket_outgoing.UPDATE_STEAM_SETTINGS);
+          socket.emit(socket_outgoing.UPDATE_STEAM_SETTINGS);
+          requestSteamTimeout = setTimeout(function() {
+            swal('Steam Settings', 'Error while updating your steam settings.', 'error');
+          }, 10000);
+        });
+        setTimeout(function() {
+          canRequestSteam = true;
+        }, 20000);
+      } else {
+        swal('Overflow', 'You are sending requests too quickly.', 'error');
+      }
     }
   };
 
@@ -78,7 +104,15 @@ $(function() {
 
   Settings.prototype.volumeValue = function() {
     return values["volume_value"];
-  }
+  };
+
+  socket.on(socket_incoming.UPDATE_STEAM_SETTINGS, function(data) { //data.photo, data.name
+    $steam_profile_img.attr('src', data.photo);
+    $steam_profile_name.val(data.name);
+
+    clearTimeout(requestSteamTimeout);
+    swal('Steam Settings', 'Updated steam settings successfully.', 'success');
+  });
 
   $client_settings_save.on('click', function(event) {
     event.preventDefault();

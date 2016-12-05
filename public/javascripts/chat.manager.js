@@ -11,6 +11,8 @@ $(function() {
 
   var messagePing = new Audio('audio/message_ping.wav');
 
+  var onCooldown = false;
+
   var ranks = {
     NORMAL: 0,
     MOD: 1,
@@ -152,6 +154,11 @@ $(function() {
   ChatManager.prototype.queryMessage = function(text) { //before sent to socket
     if (!text || text.length == 0) return;
 
+    if (onCooldown) {
+      swal('Chat Overflow', 'You are sending messages too quickly.', 'error');
+      return;
+    }
+
     $chat_textarea.val('');
 
     if (text.substring(0, 1) == '/') {
@@ -162,6 +169,11 @@ $(function() {
     this.socket.emit(socket_outgoing.SEND_CHAT, {
       text: text
     });
+
+    onCooldown = true;
+    setTimeout(function() {
+      onCooldown = false;
+    }, 500);
   };
 
   ChatManager.prototype.sendHelpMessage = function(command) {

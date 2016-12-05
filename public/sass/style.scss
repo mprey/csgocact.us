@@ -324,6 +324,7 @@ header {
           transition: $transition;
 
           &.animate {
+            cursor: default;
             -webkit-animation: rotating 2s linear infinite;
             -moz-animation: rotating 2s linear infinite;
             -ms-animation: rotating 2s linear infinite;

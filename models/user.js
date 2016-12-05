@@ -7,7 +7,7 @@ var userSchema = new Schema({
   photo: {type: String, required: true},
   trade_url: {type: String, required: false},
   rank: {type: Number, required: true, default: 0},
-  credits: {type: Number, required: true, default: 0.000},
+  credits: {type: Number, required: true, default: 0.00},
   date_joined: {type: Date, default: Date.now, required: true}
 });
 
