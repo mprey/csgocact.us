@@ -49,12 +49,15 @@ module.exports = {
   },
   appendHistory: function(chatObj) {
     recentMessages.unshift(chatObj);
-    recentMessages.length = RECENT_MESSAGE_CAP;
+    if (recentMessages.length > RECENT_MESSAGE_CAP) {
+      recentMessages.length = RECENT_MESSAGE_CAP;
+    }
   },
   clearChat: function() {
     recentMessages = [];
   },
   getHistory: function() {
+    console.log(recentMessages);
     return recentMessages.slice().reverse();
   }
 }

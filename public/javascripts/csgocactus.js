@@ -50,7 +50,10 @@ $(function() {
   });
 
   socket.on(socket_incoming.FORCE_RELOAD, function() {
-    location.reload();
+    swal('Window is now reloading...');
+    setTimeout(function() {
+          location.reload();
+    }, 2000);
   });
 
   socket.on(socket_incoming.ADD_CREDITS, function(data) { //data.balance, data.added

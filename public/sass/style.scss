@@ -827,7 +827,7 @@ main {
     box-shadow: none;
     border-radius: none;
     border: solid 1px #dcdcdc;
-    transition: box-shadow 0.3s, border 0.3s, width 0.3s;
+    transition: box-shadow 0.3s, border 0.3s, width 0.1s;
     text-indent: 5px;
 
     &:focus {

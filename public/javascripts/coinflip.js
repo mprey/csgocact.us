@@ -6,8 +6,6 @@ $(function() {
   var $promo_input = $('#cf-promo-input');
   var $promo_submit = $('#cf-promo-submit');
 
-  console.log('ITS LOADING');
-
   var socket_incoming = {
     INIT_COINFLIP: 'COINFLIP_IN_INIT_COINFLIP',
     PROMO_CODE_END: 'PROMO_CODE_END'
@@ -58,8 +56,9 @@ $(function() {
   });
 
   socket.on(socket_incoming.PROMO_CODE_END, function() {
+    $promo_input.removeClass('focus');
     $promo_submit.removeClass('submitting');
-    $promo_submit.attr('disabled', 'false');
+    $promo_submit.hide();
   });
 
   $promo_input.focus(function() {
@@ -68,10 +67,8 @@ $(function() {
   });
 
   $promo_submit.on('click', function(event) {
-    console.log('its submitting');
-    if ($promo_input.val()) {
+    if ($promo_input.val() && !$(this).hasClass('submitting')) {
       $(this).addClass('submitting');
-      $(this).attr('disabled', 'true');
 
       var code = $promo_input.val();
       socket.emit(socket_outgoing.REQUEST_PROMO_CODE, {

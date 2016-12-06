@@ -47,7 +47,11 @@ $(function() {
     CLEAR_CHAT: 'CHAT_OUT_CLEAR_CHAT',
     BOT_MESSAGE: 'CHAT_OUT_BOT_MESSAGE',
     CHAT_MODE: 'CHAT_OUT_CHAT_MODE',
-    INIT_CHAT: 'CHAT_OUT_INIT_CHAT'
+    INIT_CHAT: 'CHAT_OUT_INIT_CHAT',
+    PROMOTE_USER: 'CHAT_OUT_PROMOTE_USER',
+    DEMOTE_USER: 'CHAT_OUT_DEMOTE_USER',
+    PROMO_CODE_CREATE: 'CHAT_OUT_PROMO_CREATE',
+    PROMO_CODE_DELETE: 'CHAT_OUT_PROMO_DELETE'
   };
 
   var commands = {
@@ -60,8 +64,9 @@ $(function() {
     CLEAR: '/clear',
     BOT: '/bot send m:[message]',
     MODE: '/mode m:[normal:staff]',
-    PROMOTE: '/promote id:[id] p:[moderator:admin]',
+    PROMOTE: '/promote id:[id] p:[mod:admin]',
     DEMOTE: '/demote id:[id]',
+    PROMO_CODE: '/promo [create|delete] c:[code] a:[amount] d:(duration)',
     DURATION_EX: 'Duration example: "d:3mt,5d,4h,5m,6s"',
     REASON_EX: 'Reason example: "r:Banned for spamming"'
   };
@@ -286,9 +291,7 @@ $(function() {
   };
 
   ChatManager.prototype.reloadPage = function() {
-    this.addBotMessage({
-      text: 'Window is now reloading...'
-    });
+    swal('Window is now reloading...');
     setTimeout(function() {
       location.reload();
     }, 2000);
@@ -306,7 +309,6 @@ $(function() {
         var command = getCommandProperties(args);
         var data = {};
         if (command.id[0] && command.r) {
-          console.log(command.d);
           if (command.d) {
             data.expire = futureDateFromText(command.d[0]);
           }
@@ -383,15 +385,54 @@ $(function() {
       }
       this.sendHelpMessage('mode');
     } else if (args[0].toLowerCase() == 'promote') {
-      if (args.lenth == 3) {
-        //TODO
+      if (args.length == 3 && (args[2].toLowerCase().indexOf('mod') != 0 || args[2].toLowerCase().indexOf('admin'))) {
+        var command = getCommandProperties(args);
+        if (command.id[0] && command.p) {
+          this.socket.emit(socket_outgoing.PROMOTE_USER, {
+            promote_id: command.id[0],
+            rank: command.p[0]
+          });
+          return;
+        }
       }
       this.sendHelpMessage('promote');
     } else if (args[0].toLowerCase() == 'demote') {
       if (args.length == 2) {
-        //TODO
+        var command = getCommandProperties(args);
+        if (command.id && command.id[0]) {
+          this.socket.emit(socket_outgoing.DEMOTE_USER, {
+            demote_id: command.id[0]
+          });
+          return;
+        }
       }
       this.sendHelpMessage('demote');
+    } else if (args[0].toLowerCase() == 'promo') { //promo create|delete c:code a:amount d:dur
+      if (args.length >= 3) {
+        var option = args[1];
+        if (option.toLowerCase() == 'create') { //data.code, data.amount, data.expire
+          var command = getCommandProperties(args);
+          var data = {};
+          if (command.c && command.a) {
+            if (command.d) {
+              data.expire = futureDateFromText(command.d[0]);
+            }
+            data.amount = command.a[0];
+            data.code = command.c.join(' ');
+            this.socket.emit(socket_outgoing.PROMO_CODE_CREATE, data);
+            return;
+          }
+        } else if (option.toLowerCase() == 'delete') { //data.code
+          var command = getCommandProperties(args);
+          if (command.c) {
+            this.socket.emit(socket_outgoing.PROMO_CODE_DELETE, {
+              code: command.c.join(' ')
+            });
+            return;
+          }
+        }
+      }
+      this.sendHelpMessage('promo_code');
     } else {
       this.sendHelpMessage();
     }
@@ -533,6 +574,7 @@ $(function() {
       return 'Never';
     }
   }
+
   function escapeHTML(unsafe) {
     return unsafe.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;").replace(/'/g, "&#039;");
   }

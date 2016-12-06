@@ -1,6 +1,14 @@
 var mongoose = require('mongoose');
 var Schema = mongoose.Schema;
 
+var ranks = {
+  NORMAL: 0,
+  MOD: 1,
+  ADMIN: 2,
+  DEVELOPER: 3,
+  BOT: 4
+};
+
 var userSchema = new Schema({
   _id: {type: Number, required: true},
   name: {type: String, required: true},
@@ -11,6 +19,11 @@ var userSchema = new Schema({
   date_joined: {type: Date, default: Date.now, required: true},
   promo_code: {type:Boolean, default: false, required: true}
 });
+
+userSchema.methods.setRank = function(rank, callback) {
+  this.rank = rank;
+  this.save(callback);
+};
 
 userSchema.methods.updateTradeURL = function(tradeURL, callback) {
   this.tade_url = tradeURL;
@@ -23,11 +36,11 @@ userSchema.methods.updateCoins = function(amount, callback) {
 };
 
 userSchema.methods.removeCoins = function(amount, callback) {
-  callback(this.updateCoins(-amount));
+  return this.updateCoins(-amount, callback);
 };
 
 userSchema.methods.addCoins = function(amount, callback) {
-  callback(this.updateCoins(+amount));
+  return this.updateCoins(+amount, callback);
 };
 
 userSchema.methods.hasEnough = function(amount) {
