@@ -1042,6 +1042,34 @@ footer {
   color: #eeeff7;
 }
 
+#terms {
+  max-height: 300px;
+  overflow-y: scroll;
+
+  h1 {
+    font-size: 13px;
+  }
+
+  p {
+    font-size: 10px;
+    margin: 0;
+    padding: 0;
+  }
+
+  h4 {
+    font-size: 13px;
+    font-weight: bold;
+    margin: 0;
+    padding: 0;
+  }
+
+  h1 {
+    i {
+      font-style: italic;
+    }
+  }
+}
+
 footer ul {
   list-style-type: none;
   overflow: hidden;

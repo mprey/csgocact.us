@@ -107,6 +107,9 @@ $(function() {
     var existingBalance = 0;
     if ($.isNumeric($balance_label.text().replace(/,/g, ''))) {
       existingBalance = Number($balance_label.text().replace(/,/g, ''));
+      if (existingBalance == newBalance) {
+        existingBalance = 0;
+      }
     }
     new CountUp('balance-label', existingBalance, newBalance, 2, 2.5).start();
   }
