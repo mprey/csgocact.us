@@ -1,16 +1,12 @@
-<% if (!(typeof pjax == 'undefined')) {%>
-
-  <%-include(content)-%>
-
-<% } else { %>
-
 <% include includes/head %>
 
   <body>
 
   	<% include includes/nav %>
 
-  	<%-include(content)-%>
+    <main class="page-content clearfix">
+  	   <%-include(content)-%>
+    </main>
 
   	<%-include includes/user_menu-%>
 
@@ -22,9 +18,7 @@
 
   	<% include includes/footer %>
 
-  	<% include includes/scripts %>
+    <% include includes/scripts %>
 
   </body>
 </html>
-
-<% } %>

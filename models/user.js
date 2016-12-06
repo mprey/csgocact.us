@@ -8,7 +8,8 @@ var userSchema = new Schema({
   trade_url: {type: String, required: false},
   rank: {type: Number, required: true, default: 0},
   credits: {type: Number, required: true, default: 0.00},
-  date_joined: {type: Date, default: Date.now, required: true}
+  date_joined: {type: Date, default: Date.now, required: true},
+  promo_code: {type:Boolean, default: false, required: true}
 });
 
 userSchema.methods.updateTradeURL = function(tradeURL, callback) {
@@ -31,6 +32,15 @@ userSchema.methods.addCoins = function(amount, callback) {
 
 userSchema.methods.hasEnough = function(amount) {
   return (this.credits > amount);
+};
+
+userSchema.methods.hasEnteredPromoCode = function() {
+  return this.promo_code == true;
+};
+
+userSchema.methods.enterPromoCode = function(callback) {
+  this.promo_code = true;
+  return this.save(callback);
 };
 
 userSchema.methods.updateProfile = function(data, callback) {

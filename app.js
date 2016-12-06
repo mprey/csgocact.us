@@ -13,7 +13,6 @@ var session = require('express-session');
 var sassMiddleware = require('node-sass-middleware');
 var MongoStore = require('connect-mongo')(session);
 var banMiddleware = require('./lib/ban-middleware');
-var pjax = require('./lib/pjax-middleware');
 
 var server = require('http').createServer(app);
 var io = require('socket.io').listen(server);
@@ -51,7 +50,6 @@ app.use(passport.initialize());
 app.use(passport.session());
 
 app.use(banMiddleware);
-app.use(pjax());
 app.use(sassMiddleware);
 
 app.use(express.static(path.join(__dirname, 'public')));

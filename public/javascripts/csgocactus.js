@@ -1,7 +1,7 @@
 $(function() {
 
-  $balance_reload = $('#balance-reload');
-  $balance_label = $('#balance-label');
+  var $balance_reload = $('#balance-reload');
+  var $balance_label = $('#balance-label');
 
   var requestingBalance = false;
   var requestBalanceTimeout = 0;
@@ -9,7 +9,7 @@ $(function() {
 
   var socket_outgoing = {
     REQUEST_UPDATE_BALANCE: 'REQUEST_UPDATE_BALANCE',
-    INIT: 'INIT_MAIN'
+    INIT: 'INIT_MAIN',
   };
 
   var socket_incoming = {
@@ -17,7 +17,9 @@ $(function() {
     NOTIFY: 'NOTIFY',
     FORCE_RELOAD: 'FORCE_RELOAD',
     UPDATE_BALANCE: 'UPDATE_BALANCE',
-    INIT: 'INIT_MAIN'
+    ADD_CREDITS: 'ADD_CREDITS',
+    REMOVE_CREDITS: 'REMOVE_CREDITS',
+    INIT: 'INIT_MAIN',
   };
 
   var socket = io.connect();
@@ -49,6 +51,15 @@ $(function() {
 
   socket.on(socket_incoming.FORCE_RELOAD, function() {
     location.reload();
+  });
+
+  socket.on(socket_incoming.ADD_CREDITS, function(data) { //data.balance, data.added
+    toastr.success('Added ' + data.added + ' credits to your account.', 'User Balance');
+    countUpBalance(data.balance);
+  });
+
+  socket.on(socket_incoming.REMOVE_CREDITS, function(data) { //data.balance, data.removed
+    countUpBalance(data.balance);
   });
 
   socket.on(socket_incoming.UPDATE_BALANCE, function(data) { //data.balance

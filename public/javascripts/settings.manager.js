@@ -108,7 +108,7 @@ $(function() {
 
   socket.on(socket_incoming.UPDATE_STEAM_SETTINGS, function(data) { //data.photo, data.name
     $steam_profile_img.attr('src', data.photo);
-    $steam_profile_name.val(data.name);
+    $steam_profile_name.text(data.name);
 
     clearTimeout(requestSteamTimeout);
     swal('Steam Settings', 'Updated steam settings successfully.', 'success');

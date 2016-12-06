@@ -1,209 +1,212 @@
-<main class="page-content clearfix" data-title="Coinfliper | csgocact.us">
-	<div id="cf-left">
-		<div id="cf-header" class="content-div">
-			<a id="create-game" class="noselect">
-				<span>Create</span>
-				<div class="icon">
-					<i class="fa fa-plus-square-o"></i>
-				</div>
-			</a>
-			<table id="cf-labels">
-				<tr id="cf-table-header">
-					<th>Online</th>
-					<th>Open Games</th>
-					<th>Total Wagered</th>
-				</tr>
-				<tr id="cf-table-content">
-					<td><span id="cf-online">0</span></td>
-					<td><span id="cf-open-games">0</span></td>
-					<td><span id="cf-wagered">0.00</span></td>
-				</tr>
-			</table>
-			<div id="cf-sort-button" class="noselect asc">
-				<i class="fa fa-sort-amount-asc" aria-hidden="true"></i>
+<div id="cf-left">
+	<div id="cf-header" class="content-div">
+		<a id="create-game" class="noselect">
+			<span>Create</span>
+			<div class="icon">
+				<i class="fa fa-plus-square-o"></i>
 			</div>
-			<div id="cf-sort-button" class="noselect desc">
-				<i class="fa fa-sort-amount-desc" aria-hidden="true"></i>
-			</div>
+		</a>
+		<table id="cf-labels">
+			<tr id="cf-table-header">
+				<th>Online</th>
+				<th>Open Games</th>
+				<th>Total Wagered</th>
+			</tr>
+			<tr id="cf-table-content">
+				<td><span id="cf-online">0</span></td>
+				<td><span id="cf-open-games">0</span></td>
+				<td><span id="cf-wagered">0.00</span></td>
+			</tr>
+		</table>
+		<div id="cf-sort-button" class="noselect asc">
+			<i class="fa fa-sort-amount-asc" aria-hidden="true"></i>
 		</div>
-		<div id="cf-games" class="content-div">
-			<div id="cf-game-header">
-
-			</div>
-			<div class="cf-game">
-
-			</div>
+		<div id="cf-sort-button" class="noselect desc">
+			<i class="fa fa-sort-amount-desc" aria-hidden="true"></i>
 		</div>
 	</div>
-	<div id="cf-right">
-		<div id="cf-advert-box" class="content-div">
-			<h5>Want your advertisement displayed here? Send a message to <a href="mailto:contact@csgocact.us">contact@csgocact.us</a></h5>
+	<div id="cf-games" class="content-div">
+		<div id="cf-game-header">
+
 		</div>
-		<% if (typeof user == 'object' && user) { %>
-			<div id="cf-user-history" class="content-div">
-				<div class="header">
-					<h5>
-						<i class="fa fa-server" aria-hidden="true"></i> Your History <span class="game-amount" id="user-game-amount">0</span>
-						<span id="cf-dropdown-trigger" class="opened noselect"><i class="fa fa-plus-square" aria-hidden="true"></i></span>
-						<span id="cf-dropdown-trigger" class="closed noselect"><i class="fa fa-minus-square" aria-hidden="true"></i></span>
-					</h5>
-				</div>
-				<div class="table-wrapper">
-					<table class="cf-table" id="cf-user-history-table">
-						<tr>
-							<td id="history-side"><img class="t-coin"></img></td>
-							<td id="history-user"><img src="images/large-logo-bg.png"></img><span>mprey</span></td>
-							<td id="history-amount"><span class="won">5.45</span></td>
-						</tr>
-						<tr>
-							<td id="history-side"><img class="t-coin"></img></td>
-							<td id="history-user"><img src="images/large-logo-bg.png"></img><span>mprey</span></td>
-							<td id="history-amount"><span class="won">51.45</span></td>
-						</tr>
-						<tr>
-							<td id="history-side"><img class="t-coin"></img></td>
-							<td id="history-user"><img src="images/large-logo-bg.png"></img><span>mprey</span></td>
-							<td id="history-amount"><span class="won">45.45</span></td>
-						</tr>
-						<tr>
-							<td id="history-side"><img class="ct-coin"></img></td>
-							<td id="history-user"><img src="images/large-logo-bg.png"></img><span>mprey</span></td>
-							<td id="history-amount"><span class="lost">5.45</span></td>
-						</tr>
-						<tr>
-							<td id="history-side"><img class="t-coin"></img></td>
-							<td id="history-user"><img src="images/large-logo-bg.png"></img><span>mprey</span></td>
-							<td id="history-amount"><span class="lost">5.45</span></td>
-						</tr>
-						<tr>
-							<td id="history-side"><img class="t-coin"></img></td>
-							<td id="history-user"><img src="images/large-logo-bg.png"></img><span>mprey</span></td>
-							<td id="history-amount"><span class="lost">5.45</span></td>
-						</tr>
-						<tr>
-							<td id="history-side"><img class="t-coin"></img></td>
-							<td id="history-user"><img src="images/large-logo-bg.png"></img><span>mprey</span></td>
-							<td id="history-amount"><span class="lost">5.45</span></td>
-						</tr>
-						<tr>
-							<td id="history-side"><img class="t-coin"></img></td>
-							<td id="history-user"><img src="images/large-logo-bg.png"></img><span>mprey</span></td>
-							<td id="history-amount"><span class="lost">5.45</span></td>
-						</tr>
-						<tr>
-							<td id="history-side"><img class="t-coin"></img></td>
-							<td id="history-user"><img src="images/large-logo-bg.png"></img><span>mprey</span></td>
-							<td id="history-amount"><span class="lost">5.45</span></td>
-						</tr>
-						<tr>
-							<td id="history-side"><img class="ct-coin"></img></td>
-							<td id="history-user"><img src="images/large-logo-bg.png"></img><span>mprey</span></td>
-							<td id="history-amount"><span class="lost">5.45</span></td>
-						</tr>
-					</table>
-				</div>
-			</div>
-		<% } %>
-		<div id="cf-history" class="content-div">
+		<div class="cf-game">
+
+		</div>
+	</div>
+</div>
+<div id="cf-right">
+	<div id="cf-advert-box" class="content-div">
+		<h5>Want your advertisement displayed here? Send a message to <a href="mailto:contact@csgocact.us">contact@csgocact.us</a></h5>
+	</div>
+	<div id="cf-promo-code" class="content-div">
+		<h5>PROMO CODE</h5>
+		<input id="cf-promo-input" type="text" placeholder="Enter code...">
+		<button id="cf-promo-submit" class="" type="submit"><span>Enter</span><i class="fa fa-refresh fa-spin fa-3x fa-fw"></i></button>
+	</div>
+	<% if (typeof user == 'object' && user) { %>
+		<div id="cf-user-history" class="content-div">
 			<div class="header">
 				<h5>
-					<i class="fa fa-history" aria-hidden="true"></i> History <span class="game-amount" id="history-game-amount">0</span>
+					<i class="fa fa-server" aria-hidden="true"></i> Your History <span class="game-amount" id="user-game-amount">0</span>
 					<span id="cf-dropdown-trigger" class="opened noselect"><i class="fa fa-plus-square" aria-hidden="true"></i></span>
 					<span id="cf-dropdown-trigger" class="closed noselect"><i class="fa fa-minus-square" aria-hidden="true"></i></span>
 				</h5>
 			</div>
 			<div class="table-wrapper">
-				<table class="cf-table" id="cf-history-table">
+				<table class="cf-table" id="cf-user-history-table">
 					<tr>
 						<td id="history-side"><img class="t-coin"></img></td>
 						<td id="history-user"><img src="images/large-logo-bg.png"></img><span>mprey</span></td>
-						<td id="history-amount"><span>5.45</span></td>
+						<td id="history-amount"><span class="won">5.45</span></td>
 					</tr>
 					<tr>
 						<td id="history-side"><img class="t-coin"></img></td>
 						<td id="history-user"><img src="images/large-logo-bg.png"></img><span>mprey</span></td>
-						<td id="history-amount"><span>51.45</span></td>
+						<td id="history-amount"><span class="won">51.45</span></td>
 					</tr>
 					<tr>
 						<td id="history-side"><img class="t-coin"></img></td>
 						<td id="history-user"><img src="images/large-logo-bg.png"></img><span>mprey</span></td>
-						<td id="history-amount"><span>45.45</span></td>
+						<td id="history-amount"><span class="won">45.45</span></td>
 					</tr>
 					<tr>
 						<td id="history-side"><img class="ct-coin"></img></td>
 						<td id="history-user"><img src="images/large-logo-bg.png"></img><span>mprey</span></td>
-						<td id="history-amount"><span>5.45</span></td>
+						<td id="history-amount"><span class="lost">5.45</span></td>
 					</tr>
 					<tr>
 						<td id="history-side"><img class="t-coin"></img></td>
 						<td id="history-user"><img src="images/large-logo-bg.png"></img><span>mprey</span></td>
-						<td id="history-amount"><span>5.45</span></td>
+						<td id="history-amount"><span class="lost">5.45</span></td>
 					</tr>
 					<tr>
 						<td id="history-side"><img class="t-coin"></img></td>
 						<td id="history-user"><img src="images/large-logo-bg.png"></img><span>mprey</span></td>
-						<td id="history-amount"><span>5.45</span></td>
+						<td id="history-amount"><span class="lost">5.45</span></td>
 					</tr>
 					<tr>
 						<td id="history-side"><img class="t-coin"></img></td>
 						<td id="history-user"><img src="images/large-logo-bg.png"></img><span>mprey</span></td>
-						<td id="history-amount"><span>5.45</span></td>
+						<td id="history-amount"><span class="lost">5.45</span></td>
 					</tr>
 					<tr>
 						<td id="history-side"><img class="t-coin"></img></td>
 						<td id="history-user"><img src="images/large-logo-bg.png"></img><span>mprey</span></td>
-						<td id="history-amount"><span>5.45</span></td>
+						<td id="history-amount"><span class="lost">5.45</span></td>
 					</tr>
 					<tr>
 						<td id="history-side"><img class="t-coin"></img></td>
 						<td id="history-user"><img src="images/large-logo-bg.png"></img><span>mprey</span></td>
-						<td id="history-amount"><span>5.45</span></td>
+						<td id="history-amount"><span class="lost">5.45</span></td>
 					</tr>
 					<tr>
 						<td id="history-side"><img class="ct-coin"></img></td>
 						<td id="history-user"><img src="images/large-logo-bg.png"></img><span>mprey</span></td>
-						<td id="history-amount"><span>5.45</span></td>
+						<td id="history-amount"><span class="lost">5.45</span></td>
 					</tr>
 				</table>
 			</div>
 		</div>
-		<div id="cf-leaderboards" class="content-div">
-			<div class="header">
-				<h5>
-					<i class="fa fa-signal" aria-hidden="true"></i> Leaderboards
-					<span id="cf-dropdown-trigger" class="opened noselect"><i class="fa fa-plus-square" aria-hidden="true"></i></span>
-					<span id="cf-dropdown-trigger" class="closed noselect"><i class="fa fa-minus-square" aria-hidden="true"></i></span>
-				</h5>
-			</div>
-			<div class="table-wrapper" id="cf-leaderboards-table">
-				<table class="cf-table" id="cf-history-table">
-					<tr>
-						<td id="history-side"><span>1.</span></td>
-						<td id="history-user"><img src="images/large-logo-bg.png"></img><span>fuck u</span></td>
-						<td id="history-amount"><span class="record">5.45</span></td>
-					</tr>
-					<tr>
-						<td id="history-side"><span>2.</span></img></td>
-						<td id="history-user"><img src="images/large-logo-bg.png"></img><span>mprey</span></td>
-						<td id="history-amount"><span class="record">5.45</span></td>
-					</tr>
-					<tr>
-						<td id="history-side"><span>3.</span></img></td>
-						<td id="history-user"><img src="images/large-logo-bg.png"></img><span>mprey</span></td>
-						<td id="history-amount"><span class="record">5.45</span></td>
-					</tr>
-					<tr>
-						<td id="history-side"><span>4.</span></img></td>
-						<td id="history-user"><img src="images/large-logo-bg.png"></img><span>mprey</span></td>
-						<td id="history-amount"><span class="record">5.45</span></td>
-					</tr>
-					<tr>
-						<td id="history-side"><span>5.</span></img></td>
-						<td id="history-user"><img src="images/large-logo-bg.png"></img><span>mprey</span></td>
-						<td id="history-amount"><span class="record">5.45</span></td>
-					</tr>
-				</table>
-			</div>
+	<% } %>
+	<div id="cf-history" class="content-div">
+		<div class="header">
+			<h5>
+				<i class="fa fa-history" aria-hidden="true"></i> History <span class="game-amount" id="history-game-amount">0</span>
+				<span id="cf-dropdown-trigger" class="opened noselect"><i class="fa fa-plus-square" aria-hidden="true"></i></span>
+				<span id="cf-dropdown-trigger" class="closed noselect"><i class="fa fa-minus-square" aria-hidden="true"></i></span>
+			</h5>
+		</div>
+		<div class="table-wrapper">
+			<table class="cf-table" id="cf-history-table">
+				<tr>
+					<td id="history-side"><img class="t-coin"></img></td>
+					<td id="history-user"><img src="images/large-logo-bg.png"></img><span>mprey</span></td>
+					<td id="history-amount"><span>5.45</span></td>
+				</tr>
+				<tr>
+					<td id="history-side"><img class="t-coin"></img></td>
+					<td id="history-user"><img src="images/large-logo-bg.png"></img><span>mprey</span></td>
+					<td id="history-amount"><span>51.45</span></td>
+				</tr>
+				<tr>
+					<td id="history-side"><img class="t-coin"></img></td>
+					<td id="history-user"><img src="images/large-logo-bg.png"></img><span>mprey</span></td>
+					<td id="history-amount"><span>45.45</span></td>
+				</tr>
+				<tr>
+					<td id="history-side"><img class="ct-coin"></img></td>
+					<td id="history-user"><img src="images/large-logo-bg.png"></img><span>mprey</span></td>
+					<td id="history-amount"><span>5.45</span></td>
+				</tr>
+				<tr>
+					<td id="history-side"><img class="t-coin"></img></td>
+					<td id="history-user"><img src="images/large-logo-bg.png"></img><span>mprey</span></td>
+					<td id="history-amount"><span>5.45</span></td>
+				</tr>
+				<tr>
+					<td id="history-side"><img class="t-coin"></img></td>
+					<td id="history-user"><img src="images/large-logo-bg.png"></img><span>mprey</span></td>
+					<td id="history-amount"><span>5.45</span></td>
+				</tr>
+				<tr>
+					<td id="history-side"><img class="t-coin"></img></td>
+					<td id="history-user"><img src="images/large-logo-bg.png"></img><span>mprey</span></td>
+					<td id="history-amount"><span>5.45</span></td>
+				</tr>
+				<tr>
+					<td id="history-side"><img class="t-coin"></img></td>
+					<td id="history-user"><img src="images/large-logo-bg.png"></img><span>mprey</span></td>
+					<td id="history-amount"><span>5.45</span></td>
+				</tr>
+				<tr>
+					<td id="history-side"><img class="t-coin"></img></td>
+					<td id="history-user"><img src="images/large-logo-bg.png"></img><span>mprey</span></td>
+					<td id="history-amount"><span>5.45</span></td>
+				</tr>
+				<tr>
+					<td id="history-side"><img class="ct-coin"></img></td>
+					<td id="history-user"><img src="images/large-logo-bg.png"></img><span>mprey</span></td>
+					<td id="history-amount"><span>5.45</span></td>
+				</tr>
+			</table>
 		</div>
 	</div>
-</main>
+	<div id="cf-leaderboards" class="content-div">
+		<div class="header">
+			<h5>
+				<i class="fa fa-signal" aria-hidden="true"></i> Leaderboards
+				<span id="cf-dropdown-trigger" class="opened noselect"><i class="fa fa-plus-square" aria-hidden="true"></i></span>
+				<span id="cf-dropdown-trigger" class="closed noselect"><i class="fa fa-minus-square" aria-hidden="true"></i></span>
+			</h5>
+		</div>
+		<div class="table-wrapper" id="cf-leaderboards-table">
+			<table class="cf-table" id="cf-history-table">
+				<tr>
+					<td id="history-side"><span>1.</span></td>
+					<td id="history-user"><img src="images/large-logo-bg.png"></img><span>fuck u</span></td>
+					<td id="history-amount"><span class="record">5.45</span></td>
+				</tr>
+				<tr>
+					<td id="history-side"><span>2.</span></img></td>
+					<td id="history-user"><img src="images/large-logo-bg.png"></img><span>mprey</span></td>
+					<td id="history-amount"><span class="record">5.45</span></td>
+				</tr>
+				<tr>
+					<td id="history-side"><span>3.</span></img></td>
+					<td id="history-user"><img src="images/large-logo-bg.png"></img><span>mprey</span></td>
+					<td id="history-amount"><span class="record">5.45</span></td>
+				</tr>
+				<tr>
+					<td id="history-side"><span>4.</span></img></td>
+					<td id="history-user"><img src="images/large-logo-bg.png"></img><span>mprey</span></td>
+					<td id="history-amount"><span class="record">5.45</span></td>
+				</tr>
+				<tr>
+					<td id="history-side"><span>5.</span></img></td>
+					<td id="history-user"><img src="images/large-logo-bg.png"></img><span>mprey</span></td>
+					<td id="history-amount"><span class="record">5.45</span></td>
+				</tr>
+			</table>
+		</div>
+	</div>
+</div>

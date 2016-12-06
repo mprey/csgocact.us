@@ -4,15 +4,21 @@
   <div class="sub-items-wrapper">
     <ul class="sub-items">
       <li class="clearfix">
-        <p><i class="fa fa-picture-o" aria-hidden="true"></i> Image:</p>
+        <p id="menu-image"><i class="fa fa-picture-o" aria-hidden="true"></i> Image:</p>
         <label class="noselect">
           <img id="profile-img" src="<%= user.photo %>"></img>
         </label>
       </li>
       <li class="clearfix">
-        <p><i class="fa fa-user" aria-hidden="true"></i> Name:</p>
+        <p id="menu-name"><i class="fa fa-user" aria-hidden="true"></i> Name:</p>
         <label class="noselect">
           <p id="steam-name"><%= user.name %></p>
+        </label>
+      </li>
+      <li class="clearfix">
+        <p id="menu-trade-url"><i class="fa fa-info" aria-hidden="true"></i> Trade URL:</p>
+        <label class="noselect">
+          <p id="steam-url">EDIT</p>
         </label>
       </li>
     </ul>

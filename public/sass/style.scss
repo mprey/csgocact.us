@@ -360,6 +360,22 @@ header {
 
     p {
       float: left;
+
+      &#menu-name {
+
+      }
+
+      &#menu-image i {
+        font-size: 12px;
+      }
+
+      &#menu-trade-url {
+        margin-left: 6px;
+      }
+    }
+
+    #steam-url {
+
     }
 
     input,
@@ -385,7 +401,6 @@ header {
       border: none !important;
       box-shadow: none !important;
       -moz-transition: all 0.2s;
-      -o-transition: all 0.2s;
       -webkit-transition: all 0.2s;
       transition: all 0.2s;
 
@@ -462,6 +477,10 @@ header {
     height: 24px;
     width: 24px;
     border-radius: 5px;
+  }
+
+  #steam-name {
+    font-size: 11px;
   }
 
   .login-btn {
@@ -731,6 +750,97 @@ main {
   height: 300px;
   text-align: center;
   margin-bottom: 1em;
+}
+
+#cf-promo-code {
+  height: 50px;
+  margin-bottom: 1em;
+  line-height: 50px;
+
+  h5 {
+    float: left;
+    border-top-left-radius: inherit;
+    border-bottom-left-radius: inherit;
+    font-weight: bold;
+    width: 25%;
+    background-color: #e5e5e9;
+    height: 50px;
+    line-height: 50px;
+    text-align: center;
+    font-size: 10px;
+  }
+
+  button {
+    display: none;
+    position: absolute;
+    right: 5px;
+    top: 50%;
+    transform: translateY(-50%);
+    border-radius: 4px;
+    background-color: #dcdce0;
+    font-size: 10px;
+    padding: 0;
+    width: 40px;
+    height: 25px;
+    font-weight: bold;
+    text-decoration: none;
+    cursor: pointer;
+    text-shadow: none !important;
+    border: none !important;
+    box-shadow: none !important;
+    -webkit-transition: all 0.2s;
+    transition: all 0.2s;
+
+    &.submitting {
+      cursor: default;
+
+      i {
+        display: block;
+      }
+      span {
+        display: none;
+      }
+    }
+
+    &:hover {
+      border-radius: 6px;
+      background-color: #d9d9de;
+    }
+
+    i {
+      display: none;
+      font-size: 11px;
+      margin-left: 12px;
+    }
+    span {
+      display: block;
+    }
+  }
+
+  input {
+    float: left;
+    height: 30px;
+    margin-top: 10px;
+    width: 65%;
+    margin-left: 14.5px;
+    appearance: none;
+    box-shadow: none;
+    border-radius: none;
+    border: solid 1px #dcdcdc;
+    transition: box-shadow 0.3s, border 0.3s, width 0.3s;
+    text-indent: 5px;
+
+    &:focus {
+      outline: none;
+      border: solid .5px $dark_blue;
+      box-shadow: 0 0 2px 1px $dark_blue;
+    }
+
+    &.focus {
+      width: 55%;
+      margin-left: 5px;
+    }
+  }
 }
 
 #cf-advert-box h5 {
@@ -1276,11 +1386,11 @@ hr.fancy-line {
   -o-transition: all 0.2s;
   -webkit-transition: all 0.2s;
   transition: all 0.2s;
-}
 
-#chat-buttons #chat-submit:hover {
-  border-radius: 6px;
-  background: #df7578;
+  &:hover {
+    border-radius: 6px;
+    background: #df7578;
+  }
 }
 
 #chat-buttons a {

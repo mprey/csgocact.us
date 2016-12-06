@@ -237,7 +237,9 @@ $(function() {
 
     var timeText = formatAMPM(date);
 
-    var contentText = chat_manager.replaceWithEmotes(data.text);
+    var escapedHtml = data.id == 'CHAT_BOT' ? data.text : escapeHTML(data.text);
+
+    var contentText = chat_manager.replaceWithEmotes(escapedHtml);
 
     var rankText = '';
 
@@ -259,7 +261,6 @@ $(function() {
   };
 
   ChatManager.prototype.addNotification = function() {
-    console.log(isChatOpen);
     if (!isChatOpen) {
       var val = isNaN(parseInt($notification_counter.text())) ? 0 : parseInt($notification_counter.text());
       val++;
@@ -531,6 +532,9 @@ $(function() {
     } else {
       return 'Never';
     }
+  }
+  function escapeHTML(unsafe) {
+    return unsafe.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;").replace(/'/g, "&#039;");
   }
 
   function formatAMPM(date) {
