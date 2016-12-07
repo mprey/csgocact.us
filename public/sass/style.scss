@@ -1096,6 +1096,11 @@ footer #logo-large {
   -moz-box-sizing: border-box;
   /* Firefox, other Gecko */
   box-sizing: border-box;
+  transition: all 0.4s;
+
+  &:hover {
+    transform: rotate(360deg);
+  }
 }
 
 footer #twitter-box {

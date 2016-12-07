@@ -57,7 +57,6 @@ module.exports = {
     recentMessages = [];
   },
   getHistory: function() {
-    console.log(recentMessages);
     return recentMessages.slice().reverse();
   }
 }
