@@ -724,6 +724,171 @@ main {
 
 #cf-games {
   height: 500px;
+
+  #cf-games-header {
+    width: 100%;
+    height: 50px;
+    border-top-left-radius: inherit;
+    border-top-right-radius: inherit;
+
+    h5 {
+      padding-top: 10px;
+      font-size: 20px;
+      text-align: center;
+      color: #283449;
+
+      span {
+        border-bottom: 3px solid rgb(220, 220, 228);
+      }
+    }
+
+    i {
+      position: absolute;
+      cursor: pointer;
+      right: 10px;
+      top: 12px;
+      font-size: 18px;
+      transition: all 0.2s;
+
+      &:hover {
+        transform: scale(1.2);
+        transform: rotate(180deg);
+      }
+    }
+  }
+
+  #cf-table-wrapper {
+    max-height: calc(100% - 65px);
+    overflow-y: scroll;
+    width: 95%;
+    margin: 0 auto;
+    border: 1px solid #e1e2e8;
+    border-radius: 3px;
+
+    &.empty {
+      border: none;
+      height: 50px;
+      background: red;
+    }
+  }
+
+  .cf-games-table {
+    width: 100%;
+    display: table;
+    margin: 0 auto;
+    overflow-y: scroll;
+
+    .cf-tr {
+      display: table-row;
+      overflow: hidden;
+      position: relative;
+
+      &:nth-child(even) {
+        background-color: #eaebf2;
+      }
+
+      .cf-td {
+        text-align: center;
+        position: relative;
+        width: 33%;
+        height: 50px;
+        overflow: hidden;
+        white-space: nowrap;
+        line-height: 50px;
+        display: table-cell;
+
+        &#cf-td-side {
+          span {
+            margin-right: 8px;
+
+            &:before {
+              content: '$';
+            }
+          }
+          img {
+            margin-right: 5px;
+            margin-bottom: 4px;
+          }
+        }
+
+        &#cf-td-profile {
+          overflow: scroll;
+          img {
+            border-radius: 5px;
+            margin-left: 3px;
+          }
+          span {
+            font-size: 12px;
+            position: absolute;
+            top: 0;
+            left: 25px;
+            right: 0;
+          }
+        }
+
+        &#cf-td-status {
+          &:not(.in-progress) {
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.2s ease-in;
+
+            &:hover {
+              background-color: rgba(#37b531, 0.37);
+            }
+          }
+        }
+
+        &:after {
+          position: absolute;
+          content: '';
+          bottom: 0;
+          left: 0;
+          width: 100%;
+          height: 1px;
+          background-color: rgb(204, 204, 213);
+        }
+
+        &:first-child {
+          text-align: left;
+        }
+
+        &:last-child {
+          text-align: right;
+        }
+
+        &:not(:first-child):before {
+          content: '';
+          height: 70%;
+          width: 1px;
+
+          position: absolute;
+          left: 0;
+          top: 50%;
+          transform: translateY(-50%);
+
+          background-color: rgb(204, 204, 213); // The color of your border
+        }
+      }
+
+      &:last-child {
+        .cf-td:after {
+          display: none;
+        }
+      }
+
+      img {
+        vertical-align: middle;
+      }
+
+      #cf-side {
+        width: 20px;
+      }
+
+      #cf-profile {
+        width: 20px;
+      }
+    }
+  }
 }
 
 #cf-left {
