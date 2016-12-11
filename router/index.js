@@ -1,8 +1,6 @@
 var passport = require('passport');
 var request = require('request');
 
-var coinflip = require('./../lib/games/coin-flip');
-
 module.exports = function(app) {
 
   /**

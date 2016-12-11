@@ -1,6 +1,6 @@
 <div id="cf-left">
 	<div id="cf-header" class="content-div">
-		<a id="create-game" class="noselect">
+		<a id="create-game" class="noselect md-trigger" data-modal="cf-modal-create-game" href="#0">
 			<span>Create</span>
 			<div class="icon">
 				<i class="fa fa-plus-square-o"></i>
@@ -26,58 +26,15 @@
 		</div>
 	</div>
 	<div id="cf-games" class="content-div">
+		<div class="cf-games-loader">
+			<i class="fa fa-spinner fa-pulse fa-3x fa-fw"></i>
+		</div>
 		<div id="cf-games-header">
 			<h5><span>Active Games</span></h5>
 			<i class="fa fa-refresh noselect" id="cf-games-reload" aria-hidden="true"></i>
 		</div>
 		<div id="cf-table-wrapper">
-			<div class="cf-games-table">
-				<div class="cf-tr">
-					<div class="cf-td" id="cf-td-profile"><img id="cf-profile" src="images/large-logo-bg.png"></img><span>mmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmm</span></div>
-					<div class="cf-td" id="cf-td-status"><span>Join</span></div>
-					<div class="cf-td" id="cf-td-side"><span>456.32</span><img id="cf-side" class="t-coin"></img></div>
-				</div>
-				<div class="cf-tr">
-					<div class="cf-td" id="cf-td-profile"><img id="cf-profile" src="images/large-logo-bg.png"></img><span>mprey csgocact</span></div>
-					<div class="cf-td in-progress" id="cf-td-status"><span>In Progresss</span></div>
-					<div class="cf-td" id="cf-td-side"><span>456.32</span><img id="cf-side" class="t-coin"></img></div>
-				</div>
-				<div class="cf-tr">
-					<div class="cf-td" id="cf-td-profile"><img id="cf-profile" src="images/large-logo-bg.png"></img><span>mprey csgocact</span></div>
-					<div class="cf-td" id="cf-td-status"><span>Join</span></div>
-					<div class="cf-td" id="cf-td-side"><span>45.00</span><img id="cf-side" class="ct-coin"></img></div>
-				</div>
-				<div class="cf-tr">
-					<div class="cf-td" id="cf-td-profile"><img id="cf-profile" src="images/large-logo-bg.png"></img><span>mprey csgocact</span></div>
-					<div class="cf-td" id="cf-td-status"><span>Join</span></div>
-					<div class="cf-td" id="cf-td-side"><span>45.00</span><img id="cf-side" class="ct-coin"></img></div>
-				</div>
-				<div class="cf-tr">
-					<div class="cf-td" id="cf-td-profile"><img id="cf-profile" src="images/large-logo-bg.png"></img><span>mprey csgocact</span></div>
-					<div class="cf-td" id="cf-td-status"><span>Join</span></div>
-					<div class="cf-td" id="cf-td-side"><span>45.00</span><img id="cf-side" class="ct-coin"></img></div>
-				</div>
-				<div class="cf-tr">
-					<div class="cf-td" id="cf-td-profile"><img id="cf-profile" src="images/large-logo-bg.png"></img><span>mprey csgocact</span></div>
-					<div class="cf-td" id="cf-td-status"><span>Join</span></div>
-					<div class="cf-td" id="cf-td-side"><span>45.00</span><img id="cf-side" class="ct-coin"></img></div>
-				</div>
-				<div class="cf-tr">
-					<div class="cf-td" id="cf-td-profile"><img id="cf-profile" src="images/large-logo-bg.png"></img><span>mprey csgocact</span></div>
-					<div class="cf-td" id="cf-td-status"><span>Join</span></div>
-					<div class="cf-td" id="cf-td-side"><span>45.00</span><img id="cf-side" class="ct-coin"></img></div>
-				</div>
-				<div class="cf-tr">
-					<div class="cf-td" id="cf-td-profile"><img id="cf-profile" src="images/large-logo-bg.png"></img><span>mprey csgocact</span></div>
-					<div class="cf-td" id="cf-td-status"><span>Join</span></div>
-					<div class="cf-td" id="cf-td-side"><span>45.00</span><img id="cf-side" class="ct-coin"></img></div>
-				</div>
-				<div class="cf-tr">
-					<div class="cf-td" id="cf-td-profile"><img id="cf-profile" src="images/large-logo-bg.png"></img><span>mprey csgocact</span></div>
-					<div class="cf-td" id="cf-td-status"><span>Join</span></div>
-					<div class="cf-td" id="cf-td-side"><span>45.00</span><img id="cf-side" class="ct-coin"></img></div>
-				</div>
-			</div>
+			<div class="cf-games-table"></div>
 		</div>
 	</div>
 </div>
@@ -100,58 +57,10 @@
 				</h5>
 			</div>
 			<div class="table-wrapper">
-				<table class="cf-table" id="cf-user-history-table">
-					<tr>
-						<td id="history-side"><img class="t-coin"></img></td>
-						<td id="history-user"><img src="images/large-logo-bg.png"></img><span>mprey</span></td>
-						<td id="history-amount"><span class="won">5.45</span></td>
-					</tr>
-					<tr>
-						<td id="history-side"><img class="t-coin"></img></td>
-						<td id="history-user"><img src="images/large-logo-bg.png"></img><span>mprey</span></td>
-						<td id="history-amount"><span class="won">51.45</span></td>
-					</tr>
-					<tr>
-						<td id="history-side"><img class="t-coin"></img></td>
-						<td id="history-user"><img src="images/large-logo-bg.png"></img><span>mprey</span></td>
-						<td id="history-amount"><span class="won">45.45</span></td>
-					</tr>
-					<tr>
-						<td id="history-side"><img class="ct-coin"></img></td>
-						<td id="history-user"><img src="images/large-logo-bg.png"></img><span>mprey</span></td>
-						<td id="history-amount"><span class="lost">5.45</span></td>
-					</tr>
-					<tr>
-						<td id="history-side"><img class="t-coin"></img></td>
-						<td id="history-user"><img src="images/large-logo-bg.png"></img><span>mprey</span></td>
-						<td id="history-amount"><span class="lost">5.45</span></td>
-					</tr>
-					<tr>
-						<td id="history-side"><img class="t-coin"></img></td>
-						<td id="history-user"><img src="images/large-logo-bg.png"></img><span>mprey</span></td>
-						<td id="history-amount"><span class="lost">5.45</span></td>
-					</tr>
-					<tr>
-						<td id="history-side"><img class="t-coin"></img></td>
-						<td id="history-user"><img src="images/large-logo-bg.png"></img><span>mprey</span></td>
-						<td id="history-amount"><span class="lost">5.45</span></td>
-					</tr>
-					<tr>
-						<td id="history-side"><img class="t-coin"></img></td>
-						<td id="history-user"><img src="images/large-logo-bg.png"></img><span>mprey</span></td>
-						<td id="history-amount"><span class="lost">5.45</span></td>
-					</tr>
-					<tr>
-						<td id="history-side"><img class="t-coin"></img></td>
-						<td id="history-user"><img src="images/large-logo-bg.png"></img><span>mprey</span></td>
-						<td id="history-amount"><span class="lost">5.45</span></td>
-					</tr>
-					<tr>
-						<td id="history-side"><img class="ct-coin"></img></td>
-						<td id="history-user"><img src="images/large-logo-bg.png"></img><span>mprey</span></td>
-						<td id="history-amount"><span class="lost">5.45</span></td>
-					</tr>
-				</table>
+				<div class="cf-games-loader">
+					<i class="fa fa-spinner fa-pulse fa-3x fa-fw"></i>
+				</div>
+				<table class="cf-table" id="cf-user-history-table"></table>
 			</div>
 		</div>
 	<% } %>
@@ -164,58 +73,10 @@
 			</h5>
 		</div>
 		<div class="table-wrapper">
-			<table class="cf-table" id="cf-history-table">
-				<tr>
-					<td id="history-side"><img class="t-coin"></img></td>
-					<td id="history-user"><img src="images/large-logo-bg.png"></img><span>mprey</span></td>
-					<td id="history-amount"><span>5.45</span></td>
-				</tr>
-				<tr>
-					<td id="history-side"><img class="t-coin"></img></td>
-					<td id="history-user"><img src="images/large-logo-bg.png"></img><span>mprey</span></td>
-					<td id="history-amount"><span>51.45</span></td>
-				</tr>
-				<tr>
-					<td id="history-side"><img class="t-coin"></img></td>
-					<td id="history-user"><img src="images/large-logo-bg.png"></img><span>mprey</span></td>
-					<td id="history-amount"><span>45.45</span></td>
-				</tr>
-				<tr>
-					<td id="history-side"><img class="ct-coin"></img></td>
-					<td id="history-user"><img src="images/large-logo-bg.png"></img><span>mprey</span></td>
-					<td id="history-amount"><span>5.45</span></td>
-				</tr>
-				<tr>
-					<td id="history-side"><img class="t-coin"></img></td>
-					<td id="history-user"><img src="images/large-logo-bg.png"></img><span>mprey</span></td>
-					<td id="history-amount"><span>5.45</span></td>
-				</tr>
-				<tr>
-					<td id="history-side"><img class="t-coin"></img></td>
-					<td id="history-user"><img src="images/large-logo-bg.png"></img><span>mprey</span></td>
-					<td id="history-amount"><span>5.45</span></td>
-				</tr>
-				<tr>
-					<td id="history-side"><img class="t-coin"></img></td>
-					<td id="history-user"><img src="images/large-logo-bg.png"></img><span>mprey</span></td>
-					<td id="history-amount"><span>5.45</span></td>
-				</tr>
-				<tr>
-					<td id="history-side"><img class="t-coin"></img></td>
-					<td id="history-user"><img src="images/large-logo-bg.png"></img><span>mprey</span></td>
-					<td id="history-amount"><span>5.45</span></td>
-				</tr>
-				<tr>
-					<td id="history-side"><img class="t-coin"></img></td>
-					<td id="history-user"><img src="images/large-logo-bg.png"></img><span>mprey</span></td>
-					<td id="history-amount"><span>5.45</span></td>
-				</tr>
-				<tr>
-					<td id="history-side"><img class="ct-coin"></img></td>
-					<td id="history-user"><img src="images/large-logo-bg.png"></img><span>mprey</span></td>
-					<td id="history-amount"><span>5.45</span></td>
-				</tr>
-			</table>
+			<div class="cf-games-loader">
+				<i class="fa fa-spinner fa-pulse fa-3x fa-fw"></i>
+			</div>
+			<table class="cf-table" id="cf-history-table"></table>
 		</div>
 	</div>
 	<div id="cf-leaderboards" class="content-div">
@@ -226,34 +87,11 @@
 				<span id="cf-dropdown-trigger" class="closed noselect"><i class="fa fa-minus-square" aria-hidden="true"></i></span>
 			</h5>
 		</div>
-		<div class="table-wrapper" id="cf-leaderboards-table">
-			<table class="cf-table" id="cf-history-table">
-				<tr>
-					<td id="history-side"><span>1.</span></td>
-					<td id="history-user"><img src="images/large-logo-bg.png"></img><span>fuck u</span></td>
-					<td id="history-amount"><span class="record">5.45</span></td>
-				</tr>
-				<tr>
-					<td id="history-side"><span>2.</span></img></td>
-					<td id="history-user"><img src="images/large-logo-bg.png"></img><span>mprey</span></td>
-					<td id="history-amount"><span class="record">5.45</span></td>
-				</tr>
-				<tr>
-					<td id="history-side"><span>3.</span></img></td>
-					<td id="history-user"><img src="images/large-logo-bg.png"></img><span>mprey</span></td>
-					<td id="history-amount"><span class="record">5.45</span></td>
-				</tr>
-				<tr>
-					<td id="history-side"><span>4.</span></img></td>
-					<td id="history-user"><img src="images/large-logo-bg.png"></img><span>mprey</span></td>
-					<td id="history-amount"><span class="record">5.45</span></td>
-				</tr>
-				<tr>
-					<td id="history-side"><span>5.</span></img></td>
-					<td id="history-user"><img src="images/large-logo-bg.png"></img><span>mprey</span></td>
-					<td id="history-amount"><span class="record">5.45</span></td>
-				</tr>
-			</table>
+		<div class="table-wrapper">
+			<div class="cf-games-loader">
+				<i class="fa fa-spinner fa-pulse fa-3x fa-fw"></i>
+			</div>
+			<table class="cf-table" id="cf-leaderboards-table"></table>
 		</div>
 	</div>
 </div>

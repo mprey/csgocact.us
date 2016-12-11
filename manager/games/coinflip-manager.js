@@ -1,27 +1,25 @@
-var Coinflip = require('./../../../models/coin-flip').Coinflip;
-var User = require('./../../../models/user').User;
+var Coinflip = require('./../../models/coin-flip').Coinflip;
+var User = require('./../../models/user').User;
 var async = require('async');
 
-var disabled = false;
-var disabledReason = '';
-
-var currentGames = [];
-
-var historyGames = []; //CAPS AT 50
-
-var userHistoryCache = {};
-
-var MAX_HISTORY_AMOUNT = 50;
+var MAX_HISTORY_AMOUNT = 20;
 
 function CoinflipManager() {
   this.init();
   this.disabled = false;
   this.disabledReason = '';
+
+  this.currentGames = [];
+  this.historyGames = [];
+  this.leaderboards = [];
+  this.userHistoryCache = {};
+
+  this.totalWagered = 0.00;
 }
 
 CoinflipManager.prototype.init = function() {
-  this.loadGamesFromDatabase();
-};
+  this.loadData();
+}
 
 CoinflipManager.prototype.toggledDisabled = function(toggle, reason) {
   this.disabled = toggle;
@@ -43,7 +41,7 @@ CoinflipManager.prototype.createGame = function(userId, amount, side, callback) 
   game.save(function(err) {
     callback(err);
   });
-};
+}
 
 CoinflipManager.prototype.joinGame = function(_id, userId, callback) {
   //TODO OPTIMIZE
@@ -119,7 +117,7 @@ CoinflipManager.prototype.loadUserHistory = function(userId, done) {
   }
 };
 
-CoinflipManager.prototype.loadGamesFromDatabase = function() {
+CoinflipManager.prototype.loadData = function() {
   Coinflip.getRecentGames(MAX_HISTORY_AMOUNT, function(err, obj) {
     var games = [];
     var index = 0;
@@ -155,6 +153,7 @@ CoinflipManager.prototype.loadGamesFromDatabase = function() {
         }, callback);
       }
     ], function(err) {
+      console.log('Coinflip - loaded ' + games.length + ' history games from the database');
       this.historyGames = games;
     });
   });
@@ -187,8 +186,29 @@ CoinflipManager.prototype.loadGamesFromDatabase = function() {
         }, callback);
       }
     ], function(err) {
+      console.log('Coinflip - loaded ' + games.length + ' open games from the database');
       this.currentGames = games;
     });
+  });
+  Coinflip.find({}).sort('-amount').limit(5).exec(function(err, values) {
+    if (!err && values) {
+      for (var index in values) {
+        var game = values[index];
+        console.log('Leaderboard game: ', game);
+      }
+    } else {
+      console.log('Coinflip - error while loading leaderboards: ' + err.message);
+    }
+  });
+  Coinflip.find({}).select('amount -_id').exec(function(err, values) {
+    if (!err && values) {
+      for (var index in values) {
+        var game = values[index];
+        console.log(game);
+      }
+    } else {
+      console.log('Coinflip - error while loading total wagered: ' + err.message);
+    }
   });
 };
 

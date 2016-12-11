@@ -722,8 +722,116 @@ main {
   }
 }
 
+.cf-games-loader {
+  text-align: center;
+  padding: 10px;
+  color: $dark_blue;
+}
+
+
+#cf-modal-create-game {
+  max-width: 700px;
+  width: 80%;
+
+  .md-content > div {
+    padding: 0;
+    margin: 0;
+  }
+
+  h2 {
+    font-size: 20px;
+    border-bottom: 1px solid rgba(#dfdfe4, 0.83);
+  }
+
+  #cf-coins-wrapper {
+    height: 70%;
+    left: 0;
+    right: 0;
+
+    .coin-div {
+      cursor: pointer;
+      text-align: center;
+      margin: 30px 80px 30px 80px;
+      transition: all 0.1s ease-in;
+
+      img {
+        height: 150px;
+        width: 150px;
+        border-radius: 50%;
+      }
+
+      p {
+
+        &.label {
+          font-size: 10px;
+          font-weight: bold;
+          margin: 0;
+          padding: 0 0 10px 0;
+        }
+
+        span {
+          margin-top: 5px;
+          background-color: $gray_color;
+          font-size: 11px;
+          padding: 3px 5px;
+          border-radius: 3px;
+        }
+      }
+
+      &.selected {
+        img {
+          box-shadow: 0px 0px 10px black;
+        }
+        p {
+          font-weight: bold;
+        }
+      }
+    }
+
+    #t-coin {
+      float: left;
+    }
+
+    #ct-coin {
+      float: right;
+    }
+
+    a {
+      right: 0;
+      bottom: 0;
+    }
+  }
+
+  #cf-modal-footer-wrapper {
+    width: 100%;
+    height: 80px;
+    border-top: 1px solid rgba(#dfdfe4, 0.83);
+
+    #create-game {
+      position: absolute;
+      right: 0;
+      bottom: 0;
+      margin: 0;
+    }
+  }
+}
+
 #cf-games {
   height: 500px;
+  position: relative;
+
+  .cf-games-loader {
+    text-align: center;
+    display: block;
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    left: 0;
+    right: 0;
+    margin: 0 auto;
+    font-size: 30px;
+    color: $dark_blue;
+  }
 
   #cf-games-header {
     width: 100%;
@@ -758,6 +866,7 @@ main {
   }
 
   #cf-table-wrapper {
+    display: none;
     max-height: calc(100% - 65px);
     overflow-y: scroll;
     width: 95%;
@@ -766,9 +875,20 @@ main {
     border-radius: 3px;
 
     &.empty {
+      text-align: center;
       border: none;
-      height: 50px;
-      background: red;
+
+      &:after {
+        content: 'No Games :(';
+        position: absolute;
+        top: 50%;
+        transform: translateY(-50%);
+        left: 0;
+        right: 0;
+        margin: auto;
+        font-size: 14px;
+        font-style: oblique;
+      }
     }
   }
 
@@ -777,6 +897,7 @@ main {
     display: table;
     margin: 0 auto;
     overflow-y: scroll;
+    position: relative;
 
     .cf-tr {
       display: table-row;
@@ -812,7 +933,9 @@ main {
         }
 
         &#cf-td-profile {
-          overflow: scroll;
+          overflow-x: scroll;
+          overflow-y: hidden;
+
           img {
             border-radius: 5px;
             margin-left: 3px;
@@ -1027,11 +1150,27 @@ main {
 }
 
 .table-wrapper {
-  height: calc(100% - 40px);
   overflow-y: scroll;
   overflow-x: hidden;
-  height: 250px;
+  max-height: 250px;
   display: none;
+
+  &.empty {
+    height: 50px;
+    position: relative;
+
+    &:after {
+      content: 'No games found';
+      position: absolute;
+      top: 50%;
+      transform: translateY(-50%);
+      left: 0;
+      right: 0;
+      margin: auto;
+      text-align: center;
+      font-style: oblique;
+    }
+  }
 }
 
 .cf-table {
