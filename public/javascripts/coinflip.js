@@ -21,6 +21,13 @@ $(function() {
   var $history_counter = $('#history-game-amount');
   var $leaderboards = $('#cf-leaderboards-table');
 
+  var $create_modal = $('#cf-modal-create-game');
+  var $input_range = $('#cf-input-range');
+  var $input_amount = $('#cf-amount-input');
+  var $finalize_game = $('#finalize-game');
+  var $t_coin = $('#t-coin');
+  var $ct_coin = $('#ct-coin');
+
   var socket_incoming = {
     INIT_COINFLIP: 'COINFLIP_IN_INIT_COINFLIP',
     PROMO_CODE_END: 'PROMO_CODE_END',
@@ -226,7 +233,62 @@ $(function() {
     }
   }
 
+  CoinflipManager.prototype.createGame = function(side, amount) {
+    $create_modal.find('#cf-create-wrapper').css('visibility', 'hidden');
+    $create_modal.find('.modal-loader').show();
+  }
+
   new CoinflipManager();
+
+  $finalize_game.on('click', function(event) {
+    var side = 0;
+    if ($ct_coin.hasClass('selected')) {
+      side = 1;
+    }
+    var amount = $input_amount.val();
+    if (!$.isNumeric(amount)) {
+      toastr.error('Unable to parse input: ' + amount, 'Error');
+      return;
+    }
+
+    _this.createGame(side, amount);
+  });
+
+  $t_coin.on('click', function(event) {
+    if (!$(this).hasClass('selected')) {
+      $(this).addClass('selected');
+    }
+    $ct_coin.removeClass('selected');
+  });
+
+  $ct_coin.on('click', function(event) {
+    if (!$(this).hasClass('selected')) {
+      $(this).addClass('selected');
+    }
+    $t_coin.removeClass('selected');
+  });
+
+  $create_game.on('click', function(event) {
+    if ($.isNumeric($('#balance-label').text())) {
+      var balance = $('#balance-label').text();
+      var value = balance * 0.3;
+      $input_range.attr({
+        max: balance
+      });
+      $input_amount.val(value.toFixed(2));
+      $input_range.val(value.toFixed(2));
+    }
+  });
+
+  $input_range.on('input change', function(event) {
+    $input_amount.val(Number($input_range.val()).toFixed(2));
+  });
+
+  $input_amount.on('change keyup paste', function(event) {
+    if ($.isNumeric($input_amount.val())) {
+      $input_range.val($input_amount.val());
+    }
+  });
 
   $refresh_games.on('click', function(event) {
     event.preventDefault();

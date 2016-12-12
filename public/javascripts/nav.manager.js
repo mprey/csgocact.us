@@ -12,7 +12,7 @@ $(function() {
 		$chat_exit = $('#chat-exit'),
 		$nav_item = $('.nav-item');
 
-	var isChatOpen = false;
+	window.isChatOpen = false;
 
 	$nav_item.on('click', function(event) {
 		$shadow_layer.click();

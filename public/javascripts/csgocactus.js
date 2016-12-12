@@ -105,13 +105,15 @@ $(function() {
 
   function countUpBalance(newBalance) {
     var existingBalance = 0;
-    if ($.isNumeric($balance_label.text().replace(/,/g, ''))) {
-      existingBalance = Number($balance_label.text().replace(/,/g, ''));
+    if ($.isNumeric($balance_label.text())) {
+      existingBalance = Number($balance_label.text());
       if (existingBalance == newBalance) {
         existingBalance = 0;
       }
     }
-    new CountUp('balance-label', existingBalance, newBalance, 2, 2.5).start();
+    new CountUp('balance-label', existingBalance, newBalance, 2, 2.5, {
+      separator : ''
+    }).start();
   }
 
   window.socket = socket;
