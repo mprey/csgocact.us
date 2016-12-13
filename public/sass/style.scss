@@ -934,7 +934,8 @@ main {
 }
 
 #cf-games {
-  height: 500px;
+  height: 100%;
+  min-height: 500px;
   position: relative;
 
   .cf-games-loader {
@@ -1038,10 +1039,6 @@ main {
         &#cf-td-side {
           span {
             margin-right: 8px;
-
-            &:before {
-              content: '$';
-            }
           }
           img {
             margin-right: 5px;

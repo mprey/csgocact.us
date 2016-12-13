@@ -30,21 +30,21 @@ userSchema.methods.updateTradeURL = function(tradeURL, callback) {
   return this.save(callback);
 };
 
-userSchema.methods.updateCoins = function(amount, callback) {
+userSchema.methods.updateCredits = function(amount, callback) {
   this.credits += amount;
   return this.save(callback);
 };
 
-userSchema.methods.removeCoins = function(amount, callback) {
-  return this.updateCoins(-amount, callback);
+userSchema.methods.removeCredits = function(amount, callback) {
+  return this.updateCredits(-amount, callback);
 };
 
-userSchema.methods.addCoins = function(amount, callback) {
-  return this.updateCoins(+amount, callback);
+userSchema.methods.addCredits = function(amount, callback) {
+  return this.updateCredits(+amount, callback);
 };
 
 userSchema.methods.hasEnough = function(amount) {
-  return (this.credits > amount);
+  return (this.credits >= amount);
 };
 
 userSchema.methods.hasEnteredPromoCode = function() {

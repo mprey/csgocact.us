@@ -4,7 +4,11 @@ var async = require('async');
 
 var MAX_HISTORY_AMOUNT = 20;
 
+var _this;
+
 function CoinflipManager() {
+  _this = this;
+
   this.init();
   this.disabled = false;
   this.disabledReason = '';
@@ -30,16 +34,18 @@ CoinflipManager.prototype.isDisabled = function() {
   return this.disabled;
 };
 
-CoinflipManager.prototype.createGame = function(userId, amount, side, callback) {
+CoinflipManager.prototype.createGame = function(user, amount, side, callback) {
   var game = new Coinflip({
     id_creator: user._id,
     starting_face: side,
     amount: amount
   });
-  //TODO add the creator_name and creator_photo to the attached object
-  this.currentGames.push(game);
   game.save(function(err) {
-    callback(err);
+    var temp = game.toObject();
+    temp.creator_name = user.name;
+    temp.creator_img = user.photo;
+    _this.currentGames.push(temp);
+    callback(err, temp);
   });
 }
 
@@ -72,8 +78,8 @@ CoinflipManager.prototype.joinGame = function(_id, userId, callback) {
 };
 
 CoinflipManager.prototype.loadUserHistory = function(userId, done) {
-  if (userHistoryCache.hasOwnProperty(userId)) {
-    done(userHistoryCache.userId);
+  if (_this.userHistoryCache.hasOwnProperty(userId)) {
+    return done(_this.userHistoryCache.userId);
   } else {
     Coinflip.getUserHistory(userId, MAX_HISTORY_AMOUNT, function(err, obj) {
       var games = [];
@@ -96,10 +102,20 @@ CoinflipManager.prototype.loadUserHistory = function(userId, done) {
                     games[index].creator_name = user.name;
                     games[index].creator_photo = user.photo;
                   }
+                  if (userId == val.id_creator) {
+                    games[index].won = (userId == val.id_winner);
+                    games[index].user_name = user.name;
+                    games[index].user_img = user.photo;
+                  }
                   User.findOne({ _id: val.id_joiner }, function(err, user1) {
                     if (user) {
                       games[index].joiner_name = user1.name;
                       games[index].joiner_photo = user1.photo;
+                    }
+                    if (userId == val.id_joiner) {
+                      games[index].won = (userId == val.id_winner);
+                      games[index].user_name = user1.name;
+                      games[index].user_img = user1.photo;
                     }
                     index++;
                     return callback();
@@ -110,8 +126,12 @@ CoinflipManager.prototype.loadUserHistory = function(userId, done) {
           }, callback);
         }
       ], function(err) {
-        userHistoryCache.userId = games;
-        done(userHistoryCache.userId);
+        if (err) {
+          console.log('Coinflip - Error while loading user history: ' + err.message);
+          return done();
+        }
+        _this.userHistoryCache.userId = games;
+        return done(_this.userHistoryCache.userId);
       });
     });
   }
@@ -154,7 +174,7 @@ CoinflipManager.prototype.loadData = function() {
       }
     ], function(err) {
       console.log('Coinflip - loaded ' + games.length + ' history games from the database');
-      this.historyGames = games;
+      _this.historyGames = games;
     });
   });
   Coinflip.getOpenGames(function(err, obj) {
@@ -176,7 +196,7 @@ CoinflipManager.prototype.loadData = function() {
               User.findOne({ _id: val.id_creator }, function(err, user) {
                 if (user) {
                   games[index].creator_name = user.name;
-                  games[index].creator_photo = user.photo;
+                  games[index].creator_img = user.photo;
                 }
                 index++;
                 return callback();
@@ -187,24 +207,24 @@ CoinflipManager.prototype.loadData = function() {
       }
     ], function(err) {
       console.log('Coinflip - loaded ' + games.length + ' open games from the database');
-      this.currentGames = games;
+      _this.currentGames = games;
     });
   });
-  Coinflip.find({}).sort('-amount').limit(5).exec(function(err, values) {
+  Coinflip.find({completed: true}).sort('-amount').limit(5).exec(function(err, values) {
     if (!err && values) {
       for (var index in values) {
         var game = values[index];
-        console.log('Leaderboard game: ', game);
+        //console.log('Leaderboard game: ', game);
       }
     } else {
       console.log('Coinflip - error while loading leaderboards: ' + err.message);
     }
   });
-  Coinflip.find({}).select('amount -_id').exec(function(err, values) {
+  Coinflip.find({completed: true}).select('amount -_id').exec(function(err, values) {
     if (!err && values) {
       for (var index in values) {
         var game = values[index];
-        console.log(game);
+        //console.log(game);
       }
     } else {
       console.log('Coinflip - error while loading total wagered: ' + err.message);

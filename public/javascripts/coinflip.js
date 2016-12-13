@@ -29,37 +29,40 @@ $(function() {
   var $ct_coin = $('#ct-coin');
 
   var socket_incoming = {
-    INIT_COINFLIP: 'COINFLIP_IN_INIT_COINFLIP',
+    COINFLIP_INIT: 'COINFLIP_IN_INIT_COINFLIP',
     PROMO_CODE_END: 'PROMO_CODE_END',
-    USER_HISTORY_DATA: 'COINFLIP_IN_USER_HISTORY_DATA',
-    CURRENT_GAMES_DATA: 'COINFLIP_IN_CURRENT_GAMES_DATA'
+    COINFLIP_USER_HISTORY_DATA: 'COINFLIP_IN_USER_HISTORY_DATA',
+    COINFLIP_CURRENT_GAMES_DATA: 'COINFLIP_IN_CURRENT_GAMES_DATA',
+    COINFLIP_ADD_GAME: 'COINFLIP_IN_ADD_GAME'
   };
 
   var socket_outgoing = {
-    INIT_COINFLIP: 'COINFLIP_OUT_INIT_COINFLIP',
+    COINFLIP_INIT: 'COINFLIP_OUT_INIT_COINFLIP',
     REQUEST_PROMO_CODE: 'REQUEST_PROMO_CODE',
-    REQUEST_CURRENT_GAMES: 'COINFLIP_OUT_REQUEST_CURRENT_GAMES'
+    COINFLIP_REQUEST_CURRENT_GAMES: 'COINFLIP_OUT_REQUEST_CURRENT_GAMES',
+    COINFLIP_CREATE_GAME: 'COINFLIP_OUT_CREATE_GAME'
   };
 
   var _this;
+  var desc = true;
 
   function CoinflipManager() {
     this.socket = socket;
 
     _this = this;
 
-    this.socket.on(socket_incoming.INIT_COINFLIP, this.initCoinflip);
-    this.socket.on(socket_incoming.USER_HISTORY_DATA, this.loadUserHistoryFromSocket);
-    this.socket.on(socket_incoming.CURRENT_GAMES_DATA, this.loadCurrentGamesFromSocket);
+    this.socket.on(socket_incoming.COINFLIP_INIT, this.initCoinflip);
+    this.socket.on(socket_incoming.COINFLIP_USER_HISTORY_DATA, this.loadUserHistoryFromSocket);
+    this.socket.on(socket_incoming.COINFLIP_CURRENT_GAMES_DATA, this.loadCurrentGamesFromSocket);
+    this.socket.on(socket_incoming.COINFLIP_ADD_GAME, this.addGame);
 
-    this.socket.emit(socket_outgoing.INIT_COINFLIP);
+    this.socket.emit(socket_outgoing.COINFLIP_INIT);
   }
 
   CoinflipManager.prototype.initCoinflip = function(data) { //data.online, data.total_wagered, data.games, data.history, data.leaderboards
     $games_loader.hide();
     $online.text(data.online);
     $total_wagered.text(data.total_wagered);
-    $open_games.text(data.games.length);
 
     _this.currentGames = data.games;
     _this.globalHistory = data.history;
@@ -105,9 +108,10 @@ $(function() {
   *   <div class="cf-td" id="cf-td-side"><span>456.32</span><img id="cf-side" class="t-coin"></img></div>
   * </div>
   */
-  CoinflipManager.prototype.loadCurrentGames = function(desc) {
+  CoinflipManager.prototype.loadCurrentGames = function() {
     $games_table.empty();
     $table_wrapper.show();
+    $open_games.text(this.currentGames.length);
 
     sortCoinflipGames(this.currentGames, desc);
 
@@ -119,11 +123,11 @@ $(function() {
                               '<img id="cf-profile" src="' + game.creator_img + '"></img>' +
                               '<span>' + game.creator_name + '</span>' +
                             '</div>' +
-                            '<div class="cf-td ' + (game.in_progress ? 'in-progress' : '') + '" id="cf-td-status>"' +
+                            '<div id="cf-td-status" class="cf-td' + (game.in_progress ? ' in-progress' : '') + '">' +
                               '<span>' + (game.in_progress ? 'In Progress' : 'Join') + '</span>' +
                             '</div>' +
                             '<div class="cf-td" id="cf-td-side">' +
-                              '<span>' + game.amount + '</span>' +
+                              '<span>' + (Number(game.amount).toFixed(2)) + '</span>' +
                               '<img id="cf-side" class="' + (game.starting_face == 0 ? 't-coin' : 'ct-coin') + '"</img>' +
                             '</div>' +
                           '</div>');
@@ -140,6 +144,15 @@ $(function() {
   CoinflipManager.prototype.loadCurrentGamesFromSocket = function(data) {
     _this.currentGames = data.games;
     _this.loadCurrentGames();
+  }
+
+  CoinflipManager.prototype.refreshCurrentGames = function() {
+    $table_wrapper.parent().find('.cf-games-loader').show();
+    $table_wrapper.hide();
+    socket.emit(socket_outgoing.COINFLIP_REQUEST_CURRENT_GAMES, function(data) {
+      $table_wrapper.parent().find('.cf-games-loader').hide();
+      _this.loadCurrentGamesFromSocket(data);
+    });
   }
 
   /*
@@ -233,12 +246,39 @@ $(function() {
     }
   }
 
+  CoinflipManager.prototype.addGame = function(data) {
+    _this.currentGames.push(data.game);
+    _this.loadCurrentGames();
+  }
+
   CoinflipManager.prototype.createGame = function(side, amount) {
     $create_modal.find('#cf-create-wrapper').css('visibility', 'hidden');
     $create_modal.find('.modal-loader').show();
+    socket.emit(socket_outgoing.COINFLIP_CREATE_GAME, {
+      side: side,
+      amount: amount
+    }, _this.finishGameCreation);
+  }
+
+  CoinflipManager.prototype.finishGameCreation = function(error, game) {
+    $create_modal.find('#cf-create-wrapper').removeAttr('style');
+    $create_modal.find('.modal-loader').hide();
+    $create_modal.find('.md-exit').click();
+
+    if (game && !error) {
+      _this.addGame({
+        game: game
+      });
+    } else if (error){
+      swal('Game Error', 'Error while creating the coinflip game: ' + error.message, 'error');
+    }
   }
 
   new CoinflipManager();
+
+  $table_wrapper.on('click', '#cf-td-status', function(event) {
+    console.log('clicked');
+  });
 
   $finalize_game.on('click', function(event) {
     var side = 0;
@@ -292,8 +332,7 @@ $(function() {
 
   $refresh_games.on('click', function(event) {
     event.preventDefault();
-    $table_wrapper.parent().find('.cf-games-loader').show();
-    $table_wrapper.hide();
+    _this.refreshCurrentGames();
   });
 
   $page_content.on('click', '#cf-dropdown-trigger', function(event) {
@@ -315,12 +354,13 @@ $(function() {
   $page_content.on('click', '#cf-sort-button', function(event) {
     $(this).hide();
     if ($(this).hasClass('asc')) {
-      //switch to descending
+      desc = true;
       $(this).next('#cf-sort-button').show();
     } else {
-      //switch to ascending
+      desc = false;
       $(this).prev('#cf-sort-button').show();
     }
+    _this.loadCurrentGames();
   });
 
   socket.on(socket_incoming.PROMO_CODE_END, function() {
@@ -368,9 +408,9 @@ $(function() {
       var amountA = a.amount;
       var amountB = b.amount;
       if (amountA < amountB) {
-        return desc ? -1 : 1;
-      } else if (amountA > amountB) {
         return desc ? 1 : -1;
+      } else if (amountA > amountB) {
+        return desc ? -1 : 1;
       } else {
         return 0;
       }

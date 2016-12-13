@@ -61,7 +61,7 @@ $(function() {
     countUpBalance(data.balance);
   });
 
-  socket.on(socket_incoming.REMOVE_CREDITS, function(data) { //data.balance, data.removed
+  socket.on(socket_incoming.REMOVE_CREDITS, function(data) { //data.balance
     countUpBalance(data.balance);
   });
 
