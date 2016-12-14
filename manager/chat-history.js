@@ -11,35 +11,23 @@ module.exports = {
     async.series([
       function(callback) {
         Chat.getRecentMessages(RECENT_MESSAGE_CAP, function(err, result) {
-          if (!err && result) {
-            data = result;
-            return callback();
-          } else {
-            return callback(err);
-          }
+          async.each(result, function(val, callback) {
+            data.push(val);
+            callback();
+          }, callback);
         });
       },
       function(callback) {
-        var counter = 0;
-        if (data.length > 0) {
-          data.forEach(function(obj) {
-            obj.formatChatMessage(function(err, msg) {
-              if (!err && msg) {
-                recentMessages.push(msg);
-                counter++;
-                if (data.length == counter) {
-                  return callback();
-                }
-              } else {
-                return callback(err);
-              }
-            });
+        async.each(data, function(val, callback) {
+          val.formatChatMessage(function(err, msg) {
+            if (!err && msg) {
+              recentMessages.push(msg);
+            }
+            return callback(err);
           });
-        } else {
-          return callback(new Error('No data loaded from the database'));
-        }
+        }, callback);
       }
-    ], function(err, results) {
+    ], function(err) {
       if (!err) {
         console.log('Loaded ' + recentMessages.length + ' chat messages from the database.');
       } else {

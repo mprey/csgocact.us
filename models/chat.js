@@ -22,9 +22,9 @@ chatSchema.methods.formatChatMessage = function(done) {
         date: instance.date,
         text: instance.content
       };
-      done(err, data);
+      return done(err, data);
     } else {
-      done(err);
+      return done(err);
     }
   });
 };
