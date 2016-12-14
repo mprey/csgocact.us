@@ -35,13 +35,14 @@ CoinflipManager.prototype.isDisabled = function() {
 };
 
 CoinflipManager.prototype.createGame = function(user, amount, side, callback) {
-  console.log(user._id);
   var game = new Coinflip({
     id_creator: user._id,
     starting_face: side,
     amount: amount
   });
+  console.log(game.id_creator);
   game.save(function(err) {
+    console.log(game.id_creator);
     var temp = game.toObject();
     temp.creator_name = user.name;
     temp.creator_img = user.photo;
