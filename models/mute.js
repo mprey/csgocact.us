@@ -2,8 +2,8 @@ var mongoose = require('mongoose');
 var Schema = mongoose.Schema;
 
 var muteSchema = new Schema({
-  muted_id: {type: Number, required: true},
-  muter_id: {type: Number, required: true},
+  muted_id: {type: String, required: true},
+  muter_id: {type: String, required: true},
   reason: {type: String, required: true, default:'None'},
   expire: {type: Date}
 });

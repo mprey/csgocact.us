@@ -2,12 +2,12 @@ var mongoose = require('mongoose');
 var Schema = mongoose.Schema;
 
 var coinflipSchema = new Schema({
-  id_creator: {type: Number},
-  id_joiner: {type: Number},
+  id_creator: {type: String, required: true},
+  id_joiner: {type: String},
   starting_face: {type: Number}, //1 = tails, 0 = heads
   winning_face: {type: Number},
   amount: {type: Number},
-  id_winner: {type: Number},
+  id_winner: {type: String},
   completed: {type: Boolean, required: true, default: false},
   date_created: {type: Date, default: Date.now, required: true}
 });

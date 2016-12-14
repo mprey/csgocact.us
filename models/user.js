@@ -10,14 +10,14 @@ var ranks = {
 };
 
 var userSchema = new Schema({
-  _id: {type: Number, required: true},
+  _id: {type: String, required: true},
   name: {type: String, required: true},
   photo: {type: String, required: true},
   trade_url: {type: String, required: false},
   rank: {type: Number, required: true, default: 0},
   credits: {type: Number, required: true, default: 0.00},
   date_joined: {type: Date, default: Date.now, required: true},
-  promo_code: {type:Boolean, default: false, required: true}
+  promo_code: {type: Boolean, default: false, required: true}
 });
 
 userSchema.methods.setRank = function(rank, callback) {

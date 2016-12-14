@@ -40,9 +40,7 @@ CoinflipManager.prototype.createGame = function(user, amount, side, callback) {
     starting_face: side,
     amount: amount
   });
-  console.log(game.id_creator);
   game.save(function(err) {
-    console.log(game.id_creator);
     var temp = game.toObject();
     temp.creator_name = user.name;
     temp.creator_img = user.photo;

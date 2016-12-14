@@ -3,7 +3,7 @@ var async = require('async');
 var Schema = mongoose.Schema;
 
 var chatSchema = new Schema({
-  sender_id: {type: Number, required: true},
+  sender_id: {type: String, required: true},
   content: {type: String, required: true},
   date: {type: Date, default: Date.now, required: true}
 });

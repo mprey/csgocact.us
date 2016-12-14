@@ -2,8 +2,8 @@ var mongoose = require('mongoose');
 var Schema = mongoose.Schema;
 
 var banSchema = new Schema({
-  banned_id: {type: Number, required: true},
-  banner_id: {type: Number, required: true},
+  banned_id: {type: String, required: true},
+  banner_id: {type: String, required: true},
   reason: {type: String, required: true, default:'None'},
   expire: {type: Date}
 });
