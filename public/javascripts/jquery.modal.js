@@ -115,7 +115,7 @@
       this.$blocker = $('<div class="jquery-modal blocker current"></div>').appendTo(this.$body);
       selectCurrent();
       if(this.options.doFade) {
-        this.$blocker.css('opacity',0).animate({opacity: 1}, this.options.fadeDuration);
+        this.$blocker.css('opacity',0).animate({ opacity: 1 }, this.options.fadeDuration);
       }
       this.$elm.trigger($.modal.BLOCK, [this._ctx()]);
     },
@@ -139,12 +139,9 @@
         this.closeButton = $('<a href="#close-modal" rel="modal:close" class="close-modal"></a>');
         this.$elm.append(this.closeButton);
       }
-      this.$elm.addClass(this.options.modalClass).appendTo(this.$blocker);
-      if(this.options.doFade) {
-        this.$elm.css('opacity',0).show().animate({opacity: 1}, this.options.fadeDuration);
-      } else {
-        this.$elm.show();
-      }
+      this.$elm.appendTo(this.$blocker);
+      this.$elm.show();
+      this.$elm.addClass(this.options.animateClass);
       this.$elm.trigger($.modal.OPEN, [this._ctx()]);
     },
 
@@ -161,6 +158,7 @@
           _this.$elm.trigger($.modal.AFTER_CLOSE, [_this._ctx()]);
         });
       }
+      this.$elm.removeClass(this.options.animateClass);
       this.$elm.trigger($.modal.CLOSE, [this._ctx()]);
     },
 
@@ -200,6 +198,7 @@
   $.modal.getCurrent = getCurrent;
 
   $.modal.defaults = {
+    animateClass: 'modal-animate',
     closeExisting: true,
     escapeClose: true,
     clickClose: true,
@@ -209,8 +208,8 @@
     spinnerHtml: null,
     showSpinner: true,
     showClose: true,
-    fadeDuration: 200,   // Number of milliseconds the fade animation takes.
-    fadeDelay: 1.0        // Point during the overlay's fade-in that the modal begins to fade in (.5 = 50%, 1.5 = 150%, etc.)
+    fadeDuration: '',   // Number of milliseconds the fade animation takes.
+    fadeDelay: 0.0        // Point during the overlay's fade-in that the modal begins to fade in (.5 = 50%, 1.5 = 150%, etc.)
   };
 
   // Event constants

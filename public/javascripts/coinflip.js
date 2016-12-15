@@ -292,8 +292,9 @@ $(function() {
   new CoinflipManager();
 
   $table_wrapper.on('click', '#cf-td-status', function(event) {
-    var modal = $('#cf-game-modal');
-    showModal(modal);
+    $('#cf-game-modal').modal({
+      showClose: false
+    });
   });
 
   $finalize_game.on('click', function(event) {
