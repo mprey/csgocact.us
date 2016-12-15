@@ -28,11 +28,11 @@ CoinflipManager.prototype.init = function() {
 CoinflipManager.prototype.toggledDisabled = function(toggle, reason) {
   this.disabled = toggle;
   this.disabledReason = reason;
-};
+}
 
 CoinflipManager.prototype.isDisabled = function() {
   return this.disabled;
-};
+}
 
 CoinflipManager.prototype.createGame = function(user, amount, side, callback) {
   var game = new Coinflip({
@@ -75,7 +75,7 @@ CoinflipManager.prototype.joinGame = function(_id, userId, callback) {
       });
     }
   });
-};
+}
 
 CoinflipManager.prototype.loadUserHistory = function(userId, done) {
   if (_this.userHistoryCache.hasOwnProperty(userId)) {
@@ -135,7 +135,7 @@ CoinflipManager.prototype.loadUserHistory = function(userId, done) {
       });
     });
   }
-};
+}
 
 CoinflipManager.prototype.loadData = function() {
   Coinflip.getRecentGames(MAX_HISTORY_AMOUNT, function(err, obj) {
@@ -152,24 +152,20 @@ CoinflipManager.prototype.loadData = function() {
       //Update each game in the array
       function(callback) {
         async.each(games, function(val, callback) {
-          async.series([
-            function (callback) {
-              User.findOne({ _id: val.id_creator }, function(err, user) {
-                if (user) {
-                  games[index].creator_name = user.name;
-                  games[index].creator_photo = user.photo;
-                }
-                User.findOne({ _id: val.id_joiner }, function(err, user1) {
-                  if (user) {
-                    games[index].joiner_name = user1.name;
-                    games[index].joiner_photo = user1.photo;
-                  }
-                  index++;
-                  return callback();
-                });
-              });
+          User.findOne({ _id: val.id_creator }, function(err, user) {
+            if (user) {
+              games[index].creator_name = user.name;
+              games[index].creator_photo = user.photo;
             }
-          ], callback);
+            User.findOne({ _id: val.id_joiner }, function(err, user1) {
+              if (user) {
+                games[index].joiner_name = user1.name;
+                games[index].joiner_photo = user1.photo;
+              }
+              index++;
+              return callback();
+            });
+          });
         }, callback);
       }
     ], function(err) {
@@ -210,7 +206,7 @@ CoinflipManager.prototype.loadData = function() {
       _this.currentGames = games;
     });
   });
-  Coinflip.find({completed: true}).sort('-amount').limit(5).exec(function(err, values) {
+  Coinflip.find({ completed: true }).sort('-amount').limit(5).exec(function(err, values) {
     if (!err && values) {
       for (var index in values) {
         var game = values[index];
@@ -220,7 +216,7 @@ CoinflipManager.prototype.loadData = function() {
       console.log('Coinflip - error while loading leaderboards: ' + err.message);
     }
   });
-  Coinflip.find({completed: true}).select('amount -_id').exec(function(err, values) {
+  Coinflip.find({ completed: true }).select('amount -_id').exec(function(err, values) {
     if (!err && values) {
       for (var index in values) {
         var game = values[index];
@@ -230,7 +226,7 @@ CoinflipManager.prototype.loadData = function() {
       console.log('Coinflip - error while loading total wagered: ' + err.message);
     }
   });
-};
+}
 
 var coinflipManager = new CoinflipManager();
 

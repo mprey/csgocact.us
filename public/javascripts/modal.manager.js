@@ -3,31 +3,36 @@ $(function() {
 	function init() {
 
 		var overlay = $('.md-overlay');
-		$('.md-trigger').each(function(i, obj) {
 
-			var el = $(obj);
-			var modal = $('#' + el.attr('data-modal'));
-			var close = modal.find('.md-close');
-
-			function removeModal() {
+		function removeModal() {
+			var modal = $('body').find('.md-show');
+			if (modal) {
 				modal.removeClass('md-show');
 				overlay.removeClass('md-show-overlay');
 				overlay.removeClass('md-ignore-overlay');
 			}
+		}
 
-			el.on('click', function( ev ) {
-				modal.addClass('md-show');
-				overlay.addClass(modal.hasClass('md-no-overlay') ? 'md-ignore-overlay' : 'md-show-overlay');
+		function showModal(modal) {
+			modal.addClass('md-show');
+			overlay.addClass(modal.hasClass('md-no-overlay') ? 'md-ignore-overlay' : 'md-show-overlay');
 
-				overlay.unbind('click');
-				overlay.on('click', removeModal);
-			});
+			overlay.unbind('click');
+			overlay.on('click', removeModal);
+		}
 
-			close.on('click', function(ev) {
-				ev.stopPropagation();
-				removeModal();
-			});
+		$('body').on('click', '.md-trigger', function(event) {
+			var modal = $('#' + $(this).attr('data-modal'));
+			showModal(modal);
 		});
+
+		$('body').on('click', '.md-close', function(event) {
+			event.stopPropagation();
+			removeModal();
+		});
+
+		window.removeModal = removeModal;
+		window.showModal = showModal;
 	}
 
 	init();

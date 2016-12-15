@@ -46,6 +46,8 @@ $(function() {
   var _this;
   var desc = true;
 
+  var MIN_BET = 0.50;
+
   function CoinflipManager() {
     this.socket = socket;
 
@@ -71,6 +73,13 @@ $(function() {
     _this.initData();
   }
 
+ /*
+  *
+  *
+  *
+  *
+  *
+  */
   CoinflipManager.prototype.watchGame = function(game) {
     //TODO
   }
@@ -93,7 +102,6 @@ $(function() {
    *    completed (boolean value if the game is completed)
    *    date_created (date time the game was created)
    */
-
   CoinflipManager.prototype.initData = function() {
     this.loadCurrentGames(true);
     this.loadGlobalHistory();
@@ -101,7 +109,7 @@ $(function() {
     this.loadUserHistory();
   }
 
-  /*
+ /*
   * <div class="cf-tr">
   *   <div class="cf-td" id="cf-td-profile"><img id="cf-profile" src="images/large-logo-bg.png"></img><span>mmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmm</span></div>
   *   <div class="cf-td" id="cf-td-status"><span>Join</span></div>
@@ -252,8 +260,8 @@ $(function() {
   }
 
   CoinflipManager.prototype.createGame = function(side, amount) {
-    $create_modal.find('#cf-create-wrapper').css('visibility', 'hidden');
-    $create_modal.find('.modal-loader').show();
+    $.modal.getCurrent().showSpinner();
+
     socket.emit(socket_outgoing.COINFLIP_CREATE_GAME, {
       side: side,
       amount: amount
@@ -261,23 +269,31 @@ $(function() {
   }
 
   CoinflipManager.prototype.finishGameCreation = function(error, game) {
-    $create_modal.find('#cf-create-wrapper').removeAttr('style');
-    $create_modal.find('.modal-loader').hide();
-    $create_modal.find('.md-exit').click();
+    $.modal.getCurrent().hideSpinner();
+    $.modal.close();
 
     if (game && !error) {
       _this.addGame({
         game: game
       });
     } else if (error){
-      swal('Game Error', 'Error while creating the coinflip game: ' + error.message, 'error');
+      swal('Game Error', 'Error while creating the coinflip game: ' + error, 'error');
     }
+  }
+
+  CoinflipManager.prototype.promptGameEntry = function(game) {
+
+  }
+
+  CoinflipManager.prototype.watchGame = function(game) {
+
   }
 
   new CoinflipManager();
 
   $table_wrapper.on('click', '#cf-td-status', function(event) {
-    console.log('clicked');
+    var modal = $('#cf-game-modal');
+    showModal(modal);
   });
 
   $finalize_game.on('click', function(event) {
@@ -312,6 +328,9 @@ $(function() {
     if ($.isNumeric($('#balance-label').text())) {
       var balance = $('#balance-label').text();
       var value = balance * 0.3;
+      if (!(value > MIN_BET)) {
+        value = 0.00;
+      }
       $input_range.attr({
         max: balance
       });

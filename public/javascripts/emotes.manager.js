@@ -14,17 +14,16 @@ $(function() {
 
   function createEmote(emote) {
     var HTML = '<div id="emote-wrapper">' +
-                  '<a href="#0" onclick="handleEmoteClick($(this));" class="tooltip"><img src="' + (EMOTE_DIR + emote) + '.png"><span>' + emote + '</span></img></a>' +
+                  '<a href="#0" class="tooltip"><img src="' + (EMOTE_DIR + emote) + '.png"><span>' + emote + '</span></img></a>' +
                '</div>';
     $emotes_wrapper.append(HTML);
   }
 
-  function handleEmoteClick(emote) {
-    chat_manager.appendText(emote.children('span').text());
-  }
+  $emotes_wrapper.on('click', '#emote-wrapper', function(event) {
+    event.preventDefault();
+    chat_manager.appendText($(this).find('span').text());
+  });
 
   init();
-
-  window.handleEmoteClick = handleEmoteClick;
 
 });

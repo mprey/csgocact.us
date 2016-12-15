@@ -3,7 +3,7 @@ $(function() {
   var $chat_textarea = $('#chat-textarea');
   var $chat_online = $('#chat-online');
   var $chat_submit = $('#chat-submit');
-  var $chat_emote = $('#emote-wrapper a');
+  var $emote_wrapper = $('#emote-wrapper');
   var $notification_counter = $('.notification-counter');
   var $chat_wrapper = $('#chat-wrapper');
 
@@ -466,7 +466,7 @@ $(function() {
   });
 
   $(document).keypress(function(event) {
-    if (event.which == 13 && isChatOpen) {
+    if (event.which == 13 && isChatOpen && !$.modal.isActive()) {
       event.preventDefault();
       chat_manager.queryMessage($chat_textarea.val());
     }

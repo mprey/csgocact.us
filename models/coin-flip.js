@@ -1,4 +1,5 @@
 var mongoose = require('mongoose');
+var autoIncrement = require('mongoose-auto-increment');
 var Schema = mongoose.Schema;
 
 var coinflipSchema = new Schema({
@@ -47,6 +48,8 @@ coinflipSchema.statics.getRecentGames = function(limit, done) {
 coinflipSchema.statics.getOpenGames = function(done) {
   return this.find({ completed: false }).exec(done);
 }
+
+coinflipSchema.plugin(autoIncrement.plugin, 'Coinflip');
 
 var Coinflip = mongoose.model('Coinflip', coinflipSchema);
 

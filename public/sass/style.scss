@@ -16,6 +16,8 @@ $transition: all #{$speed} cubic-bezier(0.310, -0.105, 0.430, 1.400);
 @import 'sweetalert';
 @import 'component';
 @import 'toastr';
+@import 'jquery.modal';
+
 /**
 * @section primary styles
 */
@@ -711,18 +713,18 @@ main {
   margin: auto;
 }
 
+#cf-game-modal {
+  width: 80%;
+  max-width: 700px;
+}
+
 
 #cf-modal-create-game {
   max-width: 700px;
   width: 80%;
 
-  .md-content > div {
-    padding: 0;
-    margin: 0;
-  }
-
   h2 {
-    font-size: 20px;
+    font-size: 19px;
     border-bottom: 1px solid rgba(#dfdfe4, 0.83);
   }
 

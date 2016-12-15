@@ -12,6 +12,7 @@ var bodyParser = require('body-parser');
 var session = require('express-session');
 var sassMiddleware = require('node-sass-middleware');
 var MongoStore = require('connect-mongo')(session);
+var autoIncrement = require('mongoose-auto-increment');
 var banMiddleware = require('./lib/ban-middleware');
 
 var server = require('http').createServer(app);
@@ -19,6 +20,8 @@ var io = require('socket.io').listen(server);
 
 require('./lib/passport')(passport);
 require('./lib/db')(mongoose);
+
+autoIncrement.initialize(mongoose.connection);
 
 var sessionStore = new MongoStore({ mongooseConnection: mongoose.connection });
 

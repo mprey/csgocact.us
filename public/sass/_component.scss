@@ -42,10 +42,6 @@ perspective effects (not including the modals and the overlay).
 	transform: translateX(-50%) translateY(-50%);
 }
 
-#modal-emotes {
-	width: 390px;
-}
-
 .md-show {
 	display: block;
 }
@@ -82,7 +78,7 @@ perspective effects (not including the modals and the overlay).
 	margin: 0 auto;
 }
 
-.md-content h2 {
+.modal h2 {
 	margin: 0;
 	padding: 0.4em;
 	text-align: center;
@@ -103,16 +99,6 @@ perspective effects (not including the modals and the overlay).
 	border-radius: 50%;
 }
 
-.md-content #emotes-wrapper {
-	width: 100%;
-}
-
-.md-content #emote-wrapper {
-	display: inline-block;
-	margin-right: 10px;
-	width: 40px;
-	height: 40px;
-}
 
 .md-content .md-exit:hover {
 	background-color: #e0e6ef;
