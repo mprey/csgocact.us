@@ -1,5 +1,6 @@
 var Coinflip = require('./../../models/coin-flip').Coinflip;
 var User = require('./../../models/user').User;
+var md5 = require('blueimp-md5');
 var async = require('async');
 
 var MAX_HISTORY_AMOUNT = 20;
@@ -38,7 +39,8 @@ CoinflipManager.prototype.createGame = function(user, amount, side, callback) {
   var game = new Coinflip({
     id_creator: user._id,
     starting_face: side,
-    amount: amount
+    amount: amount,
+    hash_code: md5(Math.random().toString(36).slice(2))
   });
   game.save(function(err) {
     var temp = game.toObject();

@@ -1,32 +1,33 @@
 $(function() {
 
-  var $page_content = $('.page-content');
-  var $dropdown_trigger = $('#cf-dropdown-trigger');
-  var $sort_trigger = $('#cf-sort-button');
-  var $promo_input = $('#cf-promo-input');
-  var $promo_submit = $('#cf-promo-submit');
+  var $pageContent = $('.page-content');
+  var $promoInput = $('#cf-promo-input');
+  var $promoSubmit = $('#cf-promo-submit');
   var $refresh_games = $('#cf-games-reload');
 
   var $online = $('#cf-online');
-  var $total_wagered = $('#cf-wagered');
-  var $open_games = $('#cf-open-games');
+  var $totalWagered = $('#cf-wagered');
+  var $openGames = $('#cf-open-games');
 
-  var $create_game = $('#create-game');
-  var $games_loader = $('.cf-games-loader');
-  var $games_table = $('.cf-games-table');
-  var $table_wrapper = $('#cf-table-wrapper');
-  var $user_history = $('#cf-user-history-table');
-  var $user_history_counter = $('#user-game-amount');
+  var $createGame = $('#create-game');
+  var $gamesLoader = $('.cf-games-loader');
+  var $gamesTable = $('.cf-games-table');
+  var $tableWrapper = $('#cf-table-wrapper');
+  var $userHistory = $('#cf-user-history-table');
+  var $userHistoryCounter = $('#user-game-amount');
   var $history = $('#cf-history-table');
-  var $history_counter = $('#history-game-amount');
+  var $historyCounter = $('#history-game-amount');
   var $leaderboards = $('#cf-leaderboards-table');
 
-  var $create_modal = $('#cf-modal-create-game');
-  var $input_range = $('#cf-input-range');
-  var $input_amount = $('#cf-amount-input');
+  var $inputRange = $('#cf-input-range');
+  var $inputAmount = $('#cf-amount-input');
   var $finalize_game = $('#finalize-game');
-  var $t_coin = $('#t-coin');
-  var $ct_coin = $('#ct-coin');
+  var $tCoin = $('#t-coin');
+  var $ctCoin = $('#ct-coin');
+
+  var $gameModal = $('#cf-game-modal');
+  var $gameModalId = $('#cf-game-id');
+  var $gameModalHash = $('#cf-hash-code');
 
   var socket_incoming = {
     COINFLIP_INIT: 'COINFLIP_IN_INIT_COINFLIP',
@@ -41,6 +42,13 @@ $(function() {
     REQUEST_PROMO_CODE: 'REQUEST_PROMO_CODE',
     COINFLIP_REQUEST_CURRENT_GAMES: 'COINFLIP_OUT_REQUEST_CURRENT_GAMES',
     COINFLIP_CREATE_GAME: 'COINFLIP_OUT_CREATE_GAME'
+  };
+
+  var gameType = {
+    CURRENT: 1,
+    HISTORY: 2,
+    USER_HISTORY: 3,
+    LEADERBOARDS: 4
   };
 
   var _this;
@@ -62,26 +70,15 @@ $(function() {
   }
 
   CoinflipManager.prototype.initCoinflip = function(data) { //data.online, data.total_wagered, data.games, data.history, data.leaderboards
-    $games_loader.hide();
+    $gamesLoader.hide();
     $online.text(data.online);
-    $total_wagered.text(data.total_wagered);
+    $totalWagered.text(data.total_wagered);
 
     _this.currentGames = data.games;
     _this.globalHistory = data.history;
     _this.leaderboards = data.leaderboards;
 
     _this.initData();
-  }
-
- /*
-  *
-  *
-  *
-  *
-  *
-  */
-  CoinflipManager.prototype.watchGame = function(game) {
-    //TODO
   }
 
   /*
@@ -117,16 +114,16 @@ $(function() {
   * </div>
   */
   CoinflipManager.prototype.loadCurrentGames = function() {
-    $games_table.empty();
-    $table_wrapper.show();
-    $open_games.text(this.currentGames.length);
+    $gamesTable.empty();
+    $tableWrapper.show();
+    $openGames.text(this.currentGames.length);
 
     sortCoinflipGames(this.currentGames, desc);
 
     for (var index in this.currentGames) {
       var game = this.currentGames[index];
       formatGame(game);
-      $games_table.append('<div class="cf-tr" game-id="' + game._id + '">' +
+      $gamesTable.append('<div class="cf-tr" game-id="' + game._id + '">' +
                             '<div class="cf-td" id="cf-td-profile">' +
                               '<img id="cf-profile" src="' + game.creator_img + '"></img>' +
                               '<span>' + game.creator_name + '</span>' +
@@ -143,9 +140,9 @@ $(function() {
     }
 
     if (this.currentGames.length == 0) {
-      $table_wrapper.addClass('empty');
+      $tableWrapper.addClass('empty');
     } else {
-      $table_wrapper.removeClass('empty');
+      $tableWrapper.removeClass('empty');
     }
   }
 
@@ -155,10 +152,10 @@ $(function() {
   }
 
   CoinflipManager.prototype.refreshCurrentGames = function() {
-    $table_wrapper.parent().find('.cf-games-loader').show();
-    $table_wrapper.hide();
+    $tableWrapper.parent().find('.cf-games-loader').show();
+    $tableWrapper.hide();
     socket.emit(socket_outgoing.COINFLIP_REQUEST_CURRENT_GAMES, function(data) {
-      $table_wrapper.parent().find('.cf-games-loader').hide();
+      $tableWrapper.parent().find('.cf-games-loader').hide();
       _this.loadCurrentGamesFromSocket(data);
     });
   }
@@ -173,12 +170,12 @@ $(function() {
 
   CoinflipManager.prototype.loadGlobalHistory = function() {
     $history.empty();
-    $history_counter.text(this.globalHistory.length);
+    $historyCounter.text(this.globalHistory.length);
 
     for (var index in this.globalHistory) {
       var game = this.globalHistory[index];
       formatGame(game);
-      $history.append('<tr>' +
+      $history.append('<tr game-id="' + game._id + '">' +
                         '<td id="history-side"><img class="' + (game.winning_face == 0 ? 't-coin' : 'ct-coin') + '"></img></td>' +
                         '<td id="history-user"><img src="' + game.winner_img + '"></img><span>' + game.winner_name + '</span></td>' +
                         '<td id="history-amount"><span>' + game.amount + '</span></td>' +
@@ -201,19 +198,19 @@ $(function() {
    */
   CoinflipManager.prototype.loadUserHistory = function() {
     if (!this.userHistory) {
-      $user_history.parent().find('.cf-games-loader').show();
+      $userHistory.parent().find('.cf-games-loader').show();
       return;
     } else {
-      $user_history.parent().find('.cf-games-loader').hide();
+      $userHistory.parent().find('.cf-games-loader').hide();
     }
 
-    $user_history.empty();
-    $user_history_counter.text(this.userHistory.length);
+    $userHistory.empty();
+    $userHistoryCounter.text(this.userHistory.length);
 
     for (var index in this.userHistory) {
       var game = this.userHistory[index];
       formatGame(game);
-      $userHistory.append('<tr>' +
+      $userHistory.append('<tr game-id="' + game._id + '">' +
                             '<td id="history-side"><img class="' + (game.winning_face == 0 ? 't-coin' : 'ct-coin') + '"></img></td>' +
                             '<td id="history-user"><img src="' + game.user_img + '"></img><span>' + game.user_name + '</span></td>' +
                             '<td id="history-amount"><span class="' + (game.won ? 'won' : 'lost') + '">' + game.amount + '</span></td>' +
@@ -221,9 +218,9 @@ $(function() {
     }
 
     if (this.userHistory.length == 0) {
-      $user_history.parent().addClass('empty');
+      $userHistory.parent().addClass('empty');
     } else {
-      $user_history.parent().removeClass('empty');
+      $userHistory.parent().removeClass('empty');
     }
   }
 
@@ -281,8 +278,13 @@ $(function() {
     }
   }
 
-  CoinflipManager.prototype.promptGameEntry = function(game) {
+  CoinflipManager.prototype.promptGameEntry = function(gameId) {
+    var game = findCoinflipGame(gameId, gameType.CURRENT);
 
+    $gameModalId.text(game._id);
+    $gameModalHash.text(game.hash_code);
+
+    $gameModal.modal();
   }
 
   CoinflipManager.prototype.watchGame = function(game) {
@@ -291,18 +293,16 @@ $(function() {
 
   new CoinflipManager();
 
-  $table_wrapper.on('click', '#cf-td-status', function(event) {
-    $('#cf-game-modal').modal({
-      showClose: false
-    });
+  $tableWrapper.on('click', '#cf-td-status', function(event) {
+    _this.promptGameEntry($(this).parent().attr('game-id'));
   });
 
   $finalize_game.on('click', function(event) {
     var side = 0;
-    if ($ct_coin.hasClass('selected')) {
+    if ($ctCoin.hasClass('selected')) {
       side = 1;
     }
-    var amount = $input_amount.val();
+    var amount = $inputAmount.val();
     if (!$.isNumeric(amount)) {
       toastr.error('Unable to parse input: ' + amount, 'Error');
       return;
@@ -311,42 +311,42 @@ $(function() {
     _this.createGame(side, amount);
   });
 
-  $t_coin.on('click', function(event) {
+  $tCoin.on('click', function(event) {
     if (!$(this).hasClass('selected')) {
       $(this).addClass('selected');
     }
-    $ct_coin.removeClass('selected');
+    $ctCoin.removeClass('selected');
   });
 
-  $ct_coin.on('click', function(event) {
+  $ctCoin.on('click', function(event) {
     if (!$(this).hasClass('selected')) {
       $(this).addClass('selected');
     }
-    $t_coin.removeClass('selected');
+    $tCoin.removeClass('selected');
   });
 
-  $create_game.on('click', function(event) {
+  $createGame.on('click', function(event) {
     if ($.isNumeric($('#balance-label').text())) {
       var balance = $('#balance-label').text();
       var value = balance * 0.3;
       if (!(value > MIN_BET)) {
         value = 0.00;
       }
-      $input_range.attr({
+      $inputRange.attr({
         max: balance
       });
-      $input_amount.val(value.toFixed(2));
-      $input_range.val(value.toFixed(2));
+      $inputAmount.val(value.toFixed(2));
+      $inputRange.val(value.toFixed(2));
     }
   });
 
-  $input_range.on('input change', function(event) {
-    $input_amount.val(Number($input_range.val()).toFixed(2));
+  $inputRange.on('input change', function(event) {
+    $inputAmount.val(Number($inputRange.val()).toFixed(2));
   });
 
-  $input_amount.on('change keyup paste', function(event) {
-    if ($.isNumeric($input_amount.val())) {
-      $input_range.val($input_amount.val());
+  $inputAmount.on('change keyup paste', function(event) {
+    if ($.isNumeric($inputAmount.val())) {
+      $inputRange.val($inputAmount.val());
     }
   });
 
@@ -355,7 +355,7 @@ $(function() {
     _this.refreshCurrentGames();
   });
 
-  $page_content.on('click', '#cf-dropdown-trigger', function(event) {
+  $pageContent.on('click', '#cf-dropdown-trigger', function(event) {
     var header = $(this).parent().parent();
     $(this).hide();
     if ($(this).hasClass('opened')) {
@@ -371,7 +371,7 @@ $(function() {
     });
   });
 
-  $page_content.on('click', '#cf-sort-button', function(event) {
+  $pageContent.on('click', '#cf-sort-button', function(event) {
     $(this).hide();
     if ($(this).hasClass('asc')) {
       desc = true;
@@ -384,21 +384,21 @@ $(function() {
   });
 
   socket.on(socket_incoming.PROMO_CODE_END, function() {
-    $promo_input.removeClass('focus');
-    $promo_submit.removeClass('submitting');
-    $promo_submit.hide();
+    $promoInput.removeClass('focus');
+    $promoSubmit.removeClass('submitting');
+    $promoSubmit.hide();
   });
 
-  $promo_input.focus(function() {
+  $promoInput.focus(function() {
     $(this).addClass('focus');
-    $promo_submit.show();
+    $promoSubmit.show();
   });
 
-  $promo_submit.on('click', function(event) {
-    if ($promo_input.val() && !$(this).hasClass('submitting')) {
+  $promoSubmit.on('click', function(event) {
+    if ($promoInput.val() && !$(this).hasClass('submitting')) {
       $(this).addClass('submitting');
 
-      var code = $promo_input.val();
+      var code = $promoInput.val();
       socket.emit(socket_outgoing.REQUEST_PROMO_CODE, {
         code: code
       });
@@ -406,6 +406,23 @@ $(function() {
       toastr.warning('Please enter a code before submitting.', 'Promo Code');
     }
   });
+
+  function findCoinflipGame(gameId, type) {
+    var array = [];
+    if (!type || type == gameType.CURRENT) {
+      array = _this.currentGames;
+    } else if (type == gameType.HISTORY) {
+      array = _this.globalHistory;
+    } else if (type == gameType.USER_HISTORY) {
+      array = _this.userHistory;
+    } else if (type == gameType.LEADERBOARDS) {
+      array = _this.leaderboards;
+    }
+    for (var index in array) {
+      var game = _this.currentGames[index];
+      if (game._id == gameId) return game;
+    }
+  }
 
   function formatGame(obj) {
     obj.creator_name = escapeHTML(obj.creator_name);
@@ -442,8 +459,8 @@ $(function() {
   }
 
   function blurPromoInput() {
-    $promo_input.removeClass('focus');
-    $promo_submit.hide();
+    $promoInput.removeClass('focus');
+    $promoSubmit.hide();
   }
 
   window.coinflipManager = _this;

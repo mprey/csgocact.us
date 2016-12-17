@@ -58,6 +58,48 @@
   }
 }
 
+#cf-game-modal {
+  width: 90%;
+  height: 500px;
+
+  .modal-header {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    margin: auto;
+    background: $dark_blue;
+    height: 40px;
+    color: #e7e8f0;
+    font-size: 15px;
+    text-align: left;
+    line-height: 40px;
+    border-top-right-radius: 3px; border-top-left-radius: 3px;
+
+    p {
+      margin-left: 1em;
+    }
+  }
+
+  .modal-footer {
+    position: absolute;
+    bottom: 0;
+    left: 0; right: 0;
+    margin: auto;
+    height: 30px;
+    text-align: right;
+    font-size: 11px;
+    line-height: 30px;
+    background: $gray_color;
+    border-bottom-left-radius: 3px; border-bottom-right-radius: 3px;
+
+    p {
+      margin-right: 1em;
+
+    }
+  }
+}
+
 #emotes-wrapper {
 	width: 100%;
 

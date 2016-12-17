@@ -9,6 +9,7 @@ var coinflipSchema = new Schema({
   winning_face: {type: Number},
   amount: {type: Number},
   id_winner: {type: String},
+  hash_code: {type: String},
   completed: {type: Boolean, required: true, default: false},
   date_created: {type: Date, default: Date.now, required: true}
 });
