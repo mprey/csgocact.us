@@ -63,7 +63,8 @@
 
 #cf-game-modal {
   height: 500px;
-  width: 70%;
+  max-width: 900px;
+  width: 80%;
 
   .modal-content {
     padding: 0;
@@ -71,7 +72,68 @@
     background-color: #f7f8fb;
     position: absolute;
     left: 0; right: 0; top: 40px;
-    height: 200px;
+    height: 250px;
+
+    #cf-content-center {
+      position: absolute;
+      left: 0;
+      right: 0;
+      height: 250px;
+      line-height: 250px;
+      margin: auto;
+      text-align: center;
+
+      #ct-and-t {
+        width: 170px;
+        height: 170px;
+        vertical-align: middle;
+        border-radius: 50%;
+        background-color: #f7f8fb;
+        box-shadow: 3px 3px 10px 0 #000000;
+      }
+    }
+
+    .profile-img {
+      height: 150px;
+      width: 150px;
+      border-radius: 5px;
+    }
+
+    .t-coin,
+    .ct-coin {
+      height: 30px;
+      width: 30px;
+    }
+
+    .cf-coin-tag {
+      position: absolute;
+      top: 175px;
+      right: 40px;
+    }
+
+    #cf-user-left {
+      float: left;
+    }
+
+    #cf-user-left,
+    #cf-user-right {
+      margin-top: 8px;
+      padding: 40px 55px;
+      position: relative;
+
+      span {
+        position: absolute;
+        top: 210px;
+        left: 0;
+        right: 0;
+        margin: auto;
+        text-align: center;
+      }
+    }
+
+    #cf-user-right {
+      float: right;
+    }
   }
 
   .modal-header {
