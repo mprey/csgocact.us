@@ -74,6 +74,96 @@
     left: 0; right: 0; top: 40px;
     height: 250px;
 
+    .modal-content-bottom {
+      position: absolute;
+      top: 250px;
+      left: 0;
+      right: 0;
+      height: 200px;
+
+      #cf-user-left-amount,
+      #cf-user-right-amount {
+        line-height: 180px;
+        font-size: 20px;
+
+        i {
+          margin: 0 5px;
+        }
+
+        p {
+
+          span {
+            background: #4e648a;
+            padding: 7px 4px;
+            border-radius: 4px;
+            font-weight: bold;
+            color: #fff;
+            font-size: 12px;
+          }
+        }
+      }
+
+      #cf-user-left-amount {
+        float: left;
+
+        p {
+          margin-left: 100px;
+        }
+      }
+
+      #cf-user-right-amount {
+        float: right;
+
+        p {
+          margin-right: 100px;
+        }
+      }
+
+      #cf-game-status {
+        position: absolute;
+        left: 0;
+        right: 0;
+        text-align: center;
+        line-height: 180px;
+
+        a {
+          box-shadow: 0px 0px 2px black;
+          padding: 15px 30px;
+          font-size: 13px;
+          border-radius: 5px;
+          cursor: pointer;
+          font-weight: bold;
+          color: #fff;
+          background: rgba(38, 207, 60, 0.87);
+
+          i {
+            display: none;
+          }
+
+          span {
+            display: inherit;
+          }
+
+          &.loading {
+            cursor: default;
+            i {
+              font-size: 20px;
+              vertical-align: middle;
+              display: inline-block;;
+            }
+            span {
+              display: none;
+            }
+          }
+
+          &:hover:not(.loading) {
+            transition: all .2s ease-in;
+            background: rgba(57, 224, 79, 0.87);
+          }
+        }
+      }
+    }
+
     #cf-content-center {
       position: absolute;
       left: 0;

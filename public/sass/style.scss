@@ -843,15 +843,35 @@ main {
         }
 
         &#cf-td-status {
-          &:not(.in-progress) {
+          cursor: pointer;
+          transition: all 0.2s ease-in;
+
+          &.join {
             font-weight: bold;
-            cursor: pointer;
-            transition: all 0.2s ease-in;
 
             &:hover {
               background-color: rgba(#37b531, 0.37);
             }
           }
+
+          &:not(.join) {
+            &:hover {
+              background: rgb(227, 227, 227);
+            }
+          }
+
+          &.completed {
+            span {
+              content: 'Completed'
+            }
+          }
+
+          &.in-progress {
+            span {
+              content: 'In Progress'
+            }
+          }
+
         }
 
         &:after {

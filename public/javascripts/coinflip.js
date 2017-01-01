@@ -28,20 +28,36 @@ $(function() {
   var $gameModal = $('#cf-game-modal');
   var $gameModalId = $('#cf-game-id');
   var $gameModalHash = $('#cf-hash-code');
+  var $gameModalCoin = $('#ct-and-t');
+  var $gameModalLeftName = $('#cf-user-name-left');
+  var $gameModalRightName = $('#cf-user-name-right');
+  var $gameModalLeftImage = $('#img-user-left');
+  var $gameModalRightImage = $('#img-user-right');
+  var $gameModalLeftCoin = $('#cf-coin-left');
+  var $gameModalRightCoin = $('#cf-coin-right');
+  var $gameModalLeftAmount = $('#cf-money-left');
+  var $gameModalRightAmount = $('#cf-money-right');
+  var $gameModalJoin = $('#cf-game-join-btn');
 
   var socket_incoming = {
     COINFLIP_INIT: 'COINFLIP_IN_INIT_COINFLIP',
     PROMO_CODE_END: 'PROMO_CODE_END',
     COINFLIP_USER_HISTORY_DATA: 'COINFLIP_IN_USER_HISTORY_DATA',
     COINFLIP_CURRENT_GAMES_DATA: 'COINFLIP_IN_CURRENT_GAMES_DATA',
-    COINFLIP_ADD_GAME: 'COINFLIP_IN_ADD_GAME'
+    COINFLIP_ADD_GAME: 'COINFLIP_IN_ADD_GAME',
+    COINFLIP_UPDATE_GAME: 'COINFLIP_IN_UPDATE_GAME',
+    COINFLIP_UPDATE_GLOBAL_HISTORY: 'COINFLIP_IN_UPDATE_GLOBAL_HISTORY',
+    COINFLIP_UPDATE_USER_HISTORY: 'COINFLIP_IN_UPDATE_USER_HISTORY',
+    COINFLIP_UPDATE_LEADERBOARDS: 'COINFLIP_IN_UPDATE_LEADERBOARDS',
+    COINFLIP_UPDATE_TOTAL_WAGERED: 'COINFLIP_IN_UPDATE_TOTAL_WAGERED'
   };
 
   var socket_outgoing = {
     COINFLIP_INIT: 'COINFLIP_OUT_INIT_COINFLIP',
     REQUEST_PROMO_CODE: 'REQUEST_PROMO_CODE',
     COINFLIP_REQUEST_CURRENT_GAMES: 'COINFLIP_OUT_REQUEST_CURRENT_GAMES',
-    COINFLIP_CREATE_GAME: 'COINFLIP_OUT_CREATE_GAME'
+    COINFLIP_CREATE_GAME: 'COINFLIP_OUT_CREATE_GAME',
+    COINFLIP_JOIN_GAME: 'COINFLIP_OUT_JOIN_GAME'
   };
 
   var gameType = {
@@ -51,10 +67,20 @@ $(function() {
     LEADERBOARDS: 4
   };
 
+  var updateType = {
+    IN_PROGRESS: 1,
+    COMPLETED: 2
+  };
+
   var _this;
   var desc = true;
+  var watching = null;
 
   var MIN_BET = 0.50;
+  var MAX_USER_HISTORY_AMOUNT = 20;
+  var MAX_GLOBAL_HISTORY_AMOUNT = 40;
+
+  var COMPLETED_TIMEOUT = 30 * 1000;
 
   function CoinflipManager() {
     this.socket = socket;
@@ -65,6 +91,11 @@ $(function() {
     this.socket.on(socket_incoming.COINFLIP_USER_HISTORY_DATA, this.loadUserHistoryFromSocket);
     this.socket.on(socket_incoming.COINFLIP_CURRENT_GAMES_DATA, this.loadCurrentGamesFromSocket);
     this.socket.on(socket_incoming.COINFLIP_ADD_GAME, this.addGame);
+    this.socket.on(socket_incoming.COINFLIP_UPDATE_GAME, this.updateGame);
+    this.socket.on(socket_incoming.COINFLIP_UPDATE_USER_HISTORY, this.loadUserHistoryFromSocket);
+    this.socket.on(socket_incoming.COINFLIP_UPDATE_GLOBAL_HISTORY, this.loadGlobalHistoryFromSocket);
+    this.socket.on(socket_incoming.COINFLIP_UPDATE_LEADERBOARDS, this.loadLeaderboardsFromSocket);
+    this.socket.on(socket_incoming.COINFLIP_UPDATE_TOTAL_WAGERED, this.updateTotalWagered);
 
     this.socket.emit(socket_outgoing.COINFLIP_INIT);
   }
@@ -72,7 +103,7 @@ $(function() {
   CoinflipManager.prototype.initCoinflip = function(data) { //data.online, data.total_wagered, data.games, data.history, data.leaderboards
     $gamesLoader.hide();
     $online.text(data.online);
-    $totalWagered.text(data.total_wagered);
+    _this.updateTotalWagered(data);
 
     _this.currentGames = data.games;
     _this.globalHistory = data.history;
@@ -106,6 +137,27 @@ $(function() {
     this.loadUserHistory();
   }
 
+  CoinflipManager.prototype.updateTotalWagered = function(data) { //data.total_wagered
+    if (data.total_wagered) {
+      var start = Number($totalWagered.text().replace(/\,/g,''));
+      var end = Number(data.total_wagered);
+      $totalWagered.countup({
+        startVal: start,
+        endVal: end,
+        decimals: 2
+      });
+    }
+  }
+
+  CoinflipManager.prototype.updateOpenGames = function(num) {
+    var end = Number(num);
+    var start = Number($openGames.text().replace(/\,/g,''));
+    $openGames.countup({
+      startVal: start,
+      endVal: end
+    });
+  }
+
  /*
   * <div class="cf-tr">
   *   <div class="cf-td" id="cf-td-profile"><img id="cf-profile" src="images/large-logo-bg.png"></img><span>mmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmm</span></div>
@@ -116,7 +168,7 @@ $(function() {
   CoinflipManager.prototype.loadCurrentGames = function() {
     $gamesTable.empty();
     $tableWrapper.show();
-    $openGames.text(this.currentGames.length);
+    _this.updateOpenGames(this.currentGames.length);
 
     sortCoinflipGames(this.currentGames, desc);
 
@@ -128,8 +180,8 @@ $(function() {
                               '<img id="cf-profile" src="' + game.creator_img + '"></img>' +
                               '<span>' + game.creator_name + '</span>' +
                             '</div>' +
-                            '<div id="cf-td-status" class="cf-td' + (game.in_progress ? ' in-progress' : '') + '">' +
-                              '<span>' + (game.in_progress ? 'In Progress' : 'Join') + '</span>' +
+                            '<div id="cf-td-status" class="cf-td ' + (game.in_progress ? 'in-progress' : (game.completed ? 'completed' : 'join')) + '">' +
+                              '<span>' + (game.in_progress ? 'In Progress' : (game.completed ? 'Completed' : 'Join')) + '</span>' +
                             '</div>' +
                             '<div class="cf-td" id="cf-td-side">' +
                               '<span>' + (Number(game.amount).toFixed(2)) + '</span>' +
@@ -189,6 +241,11 @@ $(function() {
     }
   }
 
+  CoinflipManager.prototype.loadGlobalHistoryFromSocket = function(data) {
+      _this.globalHistory = data.global_history;
+      _this.loadGlobalHistory();
+  }
+
   /*
    * <tr>
    *  <td id="history-side"><img class="t-coin"></img></td>
@@ -243,12 +300,18 @@ $(function() {
     for (var index in this.leaderboards) {
       var game = this.leaderboards[index];
       formatGame(game);
-      $leaderboards.append('<tr>' +
-                             '<td id="history-side"><span>' + (index + 1) + '.</span></td>' +
+      var place = Number(index) + 1;
+      $leaderboards.append('<tr game-id="' + game._id + '">' +
+                             '<td id="history-side"><span>' + (place) + '.</span></td>' +
                              '<td id="history-user"><img src="' + game.winner_img + '"></img><span>' + game.winner_name + '</span></td>' +
                              '<td id="history-amount"><span class="record">' + game.amount + '</span></td>' +
                            '</tr>');
     }
+  }
+
+  CoinflipManager.prototype.loadLeaderboardsFromSocket = function(data) {
+    _this.leaderboards = data.leaderboards;
+    _this.loadLeaderboards();
   }
 
   CoinflipManager.prototype.addGame = function(data) {
@@ -265,6 +328,39 @@ $(function() {
     }, _this.finishGameCreation);
   }
 
+  CoinflipManager.prototype.updateGame = function(data) { //data.game, //data.type
+    if (!data.game || !data.type) {
+      return;
+    }
+
+    var $elem = $('.cf-tr[game-id="' + data.game._id + '"]');
+    var gameObj = findCoinflipGame(data.game._id, gameType.CURRENT);
+
+    if (data.type == updateType.IN_PROGRESS) {
+      gameObj.in_progress = true;
+      $elem.find('#cf-td-status').removeClass('join').addClass('in_progress').find('span').text('In Progress');
+
+      if (watching == data.game._id) {
+        _this.watchGame(data.game, true);
+        return;
+      }
+    } else if (data.type == updateType.COMPLETED) {
+      gameObj.in_progress = false;
+      gameObj.completed = true;
+      $elem.find('#cf-td-status').removeClass('join').addClass('completed').find('span').text('Completed');
+
+      setTimeout(function() {
+        removeCurrentGame(gameObj._id);
+        _this.updateOpenGames(_this.currentGames.length);
+        $elem.remove();
+
+        if (_this.currentGames.length == 0) {
+          _this.loadCurrentGames();
+        }
+      }, COMPLETED_TIMEOUT);
+    }
+  }
+
   CoinflipManager.prototype.finishGameCreation = function(error, game) {
     $.modal.getCurrent().hideSpinner();
     $.modal.close();
@@ -273,28 +369,88 @@ $(function() {
       _this.addGame({
         game: game
       });
-    } else if (error){
+    } else if (error) {
       swal('Game Error', 'Error while creating the coinflip game: ' + error, 'error');
     }
   }
 
-  CoinflipManager.prototype.promptGameEntry = function(gameId) {
+  CoinflipManager.prototype.promptGameView = function(gameId) {
     var game = findCoinflipGame(gameId, gameType.CURRENT);
 
     $gameModalId.text(game._id);
     $gameModalHash.text(game.hash_code);
 
+    $gameModalLeftName.text(escapeHTML(game.creator_name));
+    $gameModalLeftImage.attr('src', game.creator_img);
+    $gameModalLeftAmount.text(Number(game.amount).toFixed(2));
+
+    if (game.joiner_name) {
+      $gameModalRightName.text(escapeHTML(game.joiner_name));
+      $gameModalRightImage.attr('src', game.joiner_img);
+      $gameModalRightAmount.text(Number(game.amount).toFixed(2));
+    } else {
+      $gameModalRightName.text('Waiting...');
+      $gameModalRightImage.attr('src', 'images/unknown.png');
+      $gameModalRightAmount.text('0.00');
+    }
+
+    $gameModalLeftCoin.removeClass('t-coin ct-coin');
+    $gameModalRightCoin.removeClass('t-coin ct-coin');
+    if (game.starting_face == 0) {
+      $gameModalLeftCoin.addClass('t-coin');
+      $gameModalRightCoin.addClass('ct-coin');
+    } else {
+      $gameModalLeftCoin.addClass('ct-coin');
+      $gameModalRightCoin.addClass('t-coin');
+    }
+
+    if (game.completed == true || game.in_progress == true) {
+      _this.watchGame(game, true);
+    }
+
     $gameModal.modal();
+    watching = game._id;
   }
 
-  CoinflipManager.prototype.watchGame = function(game) {
-
+  CoinflipManager.prototype.watchGame = function(game, inModal) {
+    console.log('WATCHING THE GAME RIGHT NO!');
   }
 
   new CoinflipManager();
 
+  $history.on('click', 'tr', function(event) {
+
+  });
+
+  $userHistory.on('click', 'tr', function(event) {
+
+  });
+
+  $leaderboards.on('click', 'tr', function(event) {
+
+  });
+
+  $gameModalJoin.on('click', function(event) {
+    if (watching && !$(this).hasClass('loading')) {
+      $(this).addClass('loading');
+      socket.emit(socket_outgoing.COINFLIP_JOIN_GAME, {
+        game_id: watching
+      }, function(err) {
+        if (err) {
+          $.modal.close();
+          swal('Game Error', err, 'error');
+        }
+        $gameModalJoin.removeClass('loading');
+      });
+    }
+  });
+
+  $gameModal.on($.modal.AFTER_CLOSE, function() {
+    watching = null;
+  });
+
   $tableWrapper.on('click', '#cf-td-status', function(event) {
-    _this.promptGameEntry($(this).parent().attr('game-id'));
+    _this.promptGameView($(this).parent().attr('game-id'));
   });
 
   $finalize_game.on('click', function(event) {
@@ -407,6 +563,16 @@ $(function() {
     }
   });
 
+  function removeCurrentGame(gameId) {
+    for (var index in _this.currentGames) {
+      var game = _this.currentGames[index];
+      if (game._id == gameId) {
+        _this.currentGames.splice(index, 1);
+        return;
+      }
+    }
+  }
+
   function findCoinflipGame(gameId, type) {
     var array = [];
     if (!type || type == gameType.CURRENT) {
@@ -419,13 +585,12 @@ $(function() {
       array = _this.leaderboards;
     }
     for (var index in array) {
-      var game = _this.currentGames[index];
+      var game = array[index];
       if (game._id == gameId) return game;
     }
   }
 
   function formatGame(obj) {
-    obj.creator_name = escapeHTML(obj.creator_name);
     if (obj.hasOwnProperty("joiner_name")) {
       obj.joiner_name = escapeHTML(obj.joiner_name);
       obj.in_progress = true;
@@ -436,7 +601,13 @@ $(function() {
       obj.user_name = escapeHTML(obj.user_name);
     }
     if (obj.hasOwnProperty("winner_name")) {
-      obj.winner_name = escapeHTML("winner_name");
+      obj.winner_name = escapeHTML(obj.winner_name);
+    }
+    if (obj.hasOwnProperty("creator_name")) {
+      obj.creator_name = escapeHTML(obj.creator_name);
+    }
+    if (obj.hasOwnProperty("amount")) {
+      obj.amount = Number(obj.amount).toFixed(2);
     }
   }
 
