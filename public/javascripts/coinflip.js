@@ -38,6 +38,7 @@ $(function() {
   var $gameModalLeftAmount = $('#cf-money-left');
   var $gameModalRightAmount = $('#cf-money-right');
   var $gameModalJoin = $('#cf-game-join-btn');
+  var $gameModalCountdown = $('#cf-game-countdown');
 
   var socket_incoming = {
     COINFLIP_INIT: 'COINFLIP_IN_INIT_COINFLIP',
@@ -336,12 +337,14 @@ $(function() {
     var $elem = $('.cf-tr[game-id="' + data.game._id + '"]');
     var gameObj = findCoinflipGame(data.game._id, gameType.CURRENT);
 
+    updateCoinflipGame(gameObj, data.game);
+
     if (data.type == updateType.IN_PROGRESS) {
       gameObj.in_progress = true;
       $elem.find('#cf-td-status').removeClass('join').addClass('in_progress').find('span').text('In Progress');
 
       if (watching == data.game._id) {
-        _this.watchGame(data.game, true);
+        _this.watchGame(data.game._id, true);
         return;
       }
     } else if (data.type == updateType.COMPLETED) {
@@ -362,6 +365,7 @@ $(function() {
   }
 
   CoinflipManager.prototype.finishGameCreation = function(error, game) {
+    console.log($.modal.getCurrent());
     $.modal.getCurrent().hideSpinner();
     $.modal.close();
 
@@ -374,15 +378,26 @@ $(function() {
     }
   }
 
-  CoinflipManager.prototype.promptGameView = function(gameId) {
-    var game = findCoinflipGame(gameId, gameType.CURRENT);
+  CoinflipManager.prototype.promptGameView = function(gameId, ignoreModal, gameType, callback) {
+    var game = findCoinflipGame(gameId, gameType);
+
+    if (!game) return;
+
+    $gameModalJoin.show();
+    $gameModalCountdown.hide();
+    $gameModalCoin.show();
 
     $gameModalId.text(game._id);
     $gameModalHash.text(game.hash_code);
+    $gameModalCountdown.text('...');
 
     $gameModalLeftName.text(escapeHTML(game.creator_name));
     $gameModalLeftImage.attr('src', game.creator_img);
-    $gameModalLeftAmount.text(Number(game.amount).toFixed(2));
+    $gameModalLeftAmount.countup({
+      startVal: 0,
+      endVal: game.amount,
+      decimals: 2
+    });
 
     if (game.joiner_name) {
       $gameModalRightName.text(escapeHTML(game.joiner_name));
@@ -404,30 +419,83 @@ $(function() {
       $gameModalRightCoin.addClass('t-coin');
     }
 
-    if (game.completed == true || game.in_progress == true) {
-      _this.watchGame(game, true);
+    if (!ignoreModal) {
+      $gameModal.modal();
+
+      if (game.in_progress == true || game.completed == true) {
+        _this.watchGameRaw(game);
+      }
     }
 
-    $gameModal.modal();
     watching = game._id;
+    if (callback) {
+      return callback(game);
+    }
   }
 
-  CoinflipManager.prototype.watchGame = function(game, inModal) {
-    console.log('WATCHING THE GAME RIGHT NO!');
+  CoinflipManager.prototype.watchGameRaw = function(game) {
+    $gameModalJoin.hide();
+    $gameModalCountdown.show();
+
+    $gameModalRightAmount.countup({
+      startVal: 0,
+      endVal: game.amount,
+      decimals: 2
+    });
+
+    var counter = 5;
+    var interval = setInterval(function() {
+      counter--;
+
+      if (counter < 4 && counter > 0) {
+        $gameModalCountdown.text(counter + '');
+      }
+      if (counter == 0) {
+        clearInterval(interval);
+        _this.animateCoinflip();
+      }
+    }, 1000);
+  }
+
+  CoinflipManager.prototype.animateCoinflip = function(side) {
+    console.log('animating coinflip right now.');
+    $gameModalCountdown.text('Flipping...');
+  }
+
+  CoinflipManager.prototype.watchGame = function(gameId, ignoreModal, gameType) {
+    _this.promptGameView(gameId, ignoreModal, gameType, function(game) {
+      $gameModalJoin.hide();
+      $gameModalCountdown.show();
+
+      $gameModalRightAmount.countup({
+        startVal: 0,
+        endVal: game.amount,
+        decimals: 2
+      });
+
+      var counter = 5;
+      var interval = setInterval(function() {
+        counter--;
+
+        if (counter < 4 && counter > 0) {
+          $gameModalCountdown.text(counter + '');
+        }
+        if (counter == 0) {
+          clearInterval(interval);
+          _this.animateCoinflip();
+        }
+      }, 1000);
+    });
   }
 
   new CoinflipManager();
 
   $history.on('click', 'tr', function(event) {
-
+    _this.watchGame($(this).attr('game-id'), false, gameType.HISTORY);
   });
 
   $userHistory.on('click', 'tr', function(event) {
-
-  });
-
-  $leaderboards.on('click', 'tr', function(event) {
-
+    _this.watchGame($(this).attr('game-id'), false, gameType.USER_HISTORY);
   });
 
   $gameModalJoin.on('click', function(event) {
@@ -562,6 +630,12 @@ $(function() {
       toastr.warning('Please enter a code before submitting.', 'Promo Code');
     }
   });
+
+  function updateCoinflipGame(to, from) {
+    for (var i in from) {
+      to[i] = from[i];
+    }
+  }
 
   function removeCurrentGame(gameId) {
     for (var index in _this.currentGames) {

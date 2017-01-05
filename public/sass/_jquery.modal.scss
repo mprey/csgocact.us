@@ -126,6 +126,11 @@
         text-align: center;
         line-height: 180px;
 
+        p {
+          display: none;
+          font-weight: bold;
+        }
+
         a {
           box-shadow: 0px 0px 2px black;
           padding: 15px 30px;
