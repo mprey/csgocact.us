@@ -102,6 +102,10 @@ CoinflipManager.prototype.joinGame = function(game, joiner, socketHelper, io, ca
     return callback('Game already completed');
   }
 
+  if (game.id_creator == joiner._id) {
+    return callback('Cannot join your own game');
+  }
+
   game.id_joiner = joiner._id;
   game.completed = true;
   game.date_completed = new Date();
