@@ -106,7 +106,8 @@ CoinflipManager.prototype.joinGame = function(game, joiner, socketHelper, io, ca
   game.completed = true;
   game.date_completed = new Date();
 
-  var heads = Math.random() < 0.5;
+  var heads = Math.random() < 0.5; //TODO incorporate provably fair
+
   if (heads && game.starting_face == 0) {
     game.winning_face = 0;
     game.id_winner = game.id_creator;
@@ -179,7 +180,7 @@ CoinflipManager.prototype.joinGame = function(game, joiner, socketHelper, io, ca
           game: gameObj,
           type: updateType.COMPLETED
         });
-      }, 6 * 1000); //wait 6 seconds to update the game so the client-side coinflip can take place
+      }, 10 * 1000); //wait 10 seconds to update the game so the client-side coinflip can take place
     });
   });
 }

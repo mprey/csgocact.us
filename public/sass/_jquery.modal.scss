@@ -186,6 +186,69 @@
         background-color: #f7f8fb;
         box-shadow: 3px 3px 10px 0 #000000;
       }
+
+      .flip-container {
+        perspective: 1000;
+        -webkit-perspective: 1000;
+        -moz-perspective: 1000;
+        position: absolute;
+        left: 0; right: 0;
+        transform: translateY(-50%);
+        top: 50%;
+        margin: auto;
+      }
+
+      .flip-ct .flipper {
+        transition: 4.5s;
+        -webkit-transition: 4.5s;
+        transform: rotateY(1620deg);
+        -moz-transform: rotateY(1620deg);  /* FF3.5/3.6 */
+        -webkit-transform: rotateY(1620deg);  /* Saf3.1+ */
+      }
+
+      .flip-t .flipper {
+        transform: rotateY(1440deg);
+        -moz-transform: rotateY(1440deg);  /* FF3.5/3.6 */
+        -webkit-transform: rotateY(1440deg);  /* Saf3.1+ */
+      }
+
+      .flip-container, .front, .back {
+        width: 170px;
+        height: 170px;
+      }
+
+      .flip-coin {
+        height: 170px;
+        width: 170px;
+      }
+
+      .flipper {
+        transition: 4s;
+        -webkit-transition: 4s;
+        transform-style: preserve-3d;
+        -webkit-transform-style: preserve-3d;
+        position: relative;
+      }
+
+      .front, .back {
+        backface-visibility: hidden;
+        -webkit-backface-visibility: hidden;
+        position: absolute;
+        top: 0;
+        left: 0;
+      }
+
+      .front {
+        z-index: 2;
+        -webkit-transform: rotateY(0deg);
+        transform: rotateY(0deg);
+      }
+
+      .back {
+        -webkit-transform: rotateY(180deg);
+        transform: rotateY(180deg);
+      }
+
     }
 
     .profile-img {

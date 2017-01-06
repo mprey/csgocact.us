@@ -39,6 +39,7 @@ $(function() {
   var $gameModalRightAmount = $('#cf-money-right');
   var $gameModalJoin = $('#cf-game-join-btn');
   var $gameModalCountdown = $('#cf-game-countdown');
+  var $gameModalFlipContainer = $('#flip-toggle');
 
   var socket_incoming = {
     COINFLIP_INIT: 'COINFLIP_IN_INIT_COINFLIP',
@@ -76,6 +77,7 @@ $(function() {
   var _this;
   var desc = true;
   var watching = null;
+  var modalTimeout, modalInterval;
 
   var MIN_BET = 0.50;
   var MAX_USER_HISTORY_AMOUNT = 20;
@@ -344,17 +346,17 @@ $(function() {
       $elem.find('#cf-td-status').removeClass('join').addClass('in_progress').find('span').text('In Progress');
 
       if (watching == data.game._id) {
-        _this.watchGame(data.game._id, true);
+        _this.promptGameView(data.game._id, true);
         return;
       }
     } else if (data.type == updateType.COMPLETED) {
       gameObj.in_progress = false;
       gameObj.completed = true;
       $elem.find('#cf-td-status').removeClass('join').addClass('completed').find('span').text('Completed');
+      _this.updateOpenGames(_this.currentGames.length - 1);
 
       setTimeout(function() {
         removeCurrentGame(gameObj._id);
-        _this.updateOpenGames(_this.currentGames.length);
         $elem.remove();
 
         if (_this.currentGames.length == 0) {
@@ -365,7 +367,6 @@ $(function() {
   }
 
   CoinflipManager.prototype.finishGameCreation = function(error, game) {
-    console.log($.modal.getCurrent());
     $.modal.getCurrent().hideSpinner();
     $.modal.close();
 
@@ -378,7 +379,7 @@ $(function() {
     }
   }
 
-  CoinflipManager.prototype.promptGameView = function(gameId, ignoreModal, gameType, callback) {
+  CoinflipManager.prototype.promptGameView = function(gameId, ignoreModal, gameType) {
     var game = findCoinflipGame(gameId, gameType);
 
     if (!game) return;
@@ -386,6 +387,7 @@ $(function() {
     $gameModalJoin.show();
     $gameModalCountdown.hide();
     $gameModalCoin.show();
+    $gameModalFlipContainer.removeClass('flip-t flip-ct').hide();
 
     $gameModalId.text(game._id);
     $gameModalHash.text(game.hash_code);
@@ -402,7 +404,11 @@ $(function() {
     if (game.joiner_name) {
       $gameModalRightName.text(escapeHTML(game.joiner_name));
       $gameModalRightImage.attr('src', game.joiner_img);
-      $gameModalRightAmount.text(Number(game.amount).toFixed(2));
+      $gameModalRightAmount.countup({
+        startVal: 0,
+        endVal: game.amount,
+        decimals: 2
+      });
     } else {
       $gameModalRightName.text('Waiting...');
       $gameModalRightImage.attr('src', 'images/unknown.png');
@@ -421,19 +427,16 @@ $(function() {
 
     if (!ignoreModal) {
       $gameModal.modal();
+    }
 
-      if (game.in_progress == true || game.completed == true) {
-        _this.watchGameRaw(game);
-      }
+    if (game.in_progress == true || game.completed == true) {
+      _this.watchGame(game);
     }
 
     watching = game._id;
-    if (callback) {
-      return callback(game);
-    }
   }
 
-  CoinflipManager.prototype.watchGameRaw = function(game) {
+  CoinflipManager.prototype.watchGame = function(game) {
     $gameModalJoin.hide();
     $gameModalCountdown.show();
 
@@ -444,58 +447,70 @@ $(function() {
     });
 
     var counter = 5;
-    var interval = setInterval(function() {
+    modalInterval = setInterval(function() {
       counter--;
 
       if (counter < 4 && counter > 0) {
+        $gameModalCountdown.addClass('grow');
         $gameModalCountdown.text(counter + '');
       }
       if (counter == 0) {
-        clearInterval(interval);
-        _this.animateCoinflip();
+        clearInterval(modalInterval);
+        $gameModalCountdown.removeClass('grow');
+        _this.animateCoinflip(game.winning_face, function() {
+          $gameModalCountdown.text('');
+
+          if (game.id_winner == game.id_creator) {
+            $gameModalLeftAmount.countup({
+              startVal: $gameModalLeftAmount.text().replace(/\,/g,''),
+              endVal: game.amount * 2,
+              decimals: 2
+            });
+            $gameModalRightAmount.countup({
+              startVal: $gameModalRightAmount.text().replace(/\,/g,''),
+              endVal: 0,
+              decimals: 2
+            });
+          } else {
+            $gameModalLeftAmount.countup({
+              startVal: $gameModalLeftAmount.text().replace(/\,/g,''),
+              endVal: 0,
+              decimals: 2
+            });
+            $gameModalRightAmount.countup({
+              startVal: $gameModalRightAmount.text().replace(/\,/g,''),
+              endVal: game.amount * 2,
+              decimals: 2
+            });
+          }
+
+         });
       }
     }, 1000);
   }
 
-  CoinflipManager.prototype.animateCoinflip = function(side) {
-    console.log('animating coinflip right now.');
+  CoinflipManager.prototype.animateCoinflip = function(side, done) {
     $gameModalCountdown.text('Flipping...');
-  }
+    $gameModalCoin.hide();
+    $gameModalFlipContainer.show();
 
-  CoinflipManager.prototype.watchGame = function(gameId, ignoreModal, gameType) {
-    _this.promptGameView(gameId, ignoreModal, gameType, function(game) {
-      $gameModalJoin.hide();
-      $gameModalCountdown.show();
+    if (side == 0) {
+      $('#flip-toggle').toggleClass('flip-t');
+    } else {
+      $('#flip-toggle').toggleClass('flip-ct');
+    }
 
-      $gameModalRightAmount.countup({
-        startVal: 0,
-        endVal: game.amount,
-        decimals: 2
-      });
-
-      var counter = 5;
-      var interval = setInterval(function() {
-        counter--;
-
-        if (counter < 4 && counter > 0) {
-          $gameModalCountdown.text(counter + '');
-        }
-        if (counter == 0) {
-          clearInterval(interval);
-          _this.animateCoinflip();
-        }
-      }, 1000);
-    });
+    modalTimeout = setTimeout(done, 4700);
   }
 
   new CoinflipManager();
 
   $history.on('click', 'tr', function(event) {
-    _this.watchGame($(this).attr('game-id'), false, gameType.HISTORY);
+    _this.promptGameView($(this).attr('game-id'), false, gameType.HISTORY);
   });
 
   $userHistory.on('click', 'tr', function(event) {
-    _this.watchGame($(this).attr('game-id'), false, gameType.USER_HISTORY);
+    _this.promptGameView($(this).attr('game-id'), false, gameType.USER_HISTORY);
   });
 
   $gameModalJoin.on('click', function(event) {
@@ -514,6 +529,8 @@ $(function() {
   });
 
   $gameModal.on($.modal.AFTER_CLOSE, function() {
+    clearTimeout(modalTimeout);
+    clearInterval(modalInterval);
     watching = null;
   });
 
