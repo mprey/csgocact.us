@@ -264,6 +264,8 @@ CoinflipManager.prototype.appendUserHistory = function(userId, game, socketHelpe
       userSocket.emit(socket_outgoing.COINFLIP_UPDATE_USER_HISTORY, {
         user_history: _this.userHistoryCache[userId]
       });
+    } else {
+      console.log('Unable to find usersocket to update user history.');
     }
   }
 }

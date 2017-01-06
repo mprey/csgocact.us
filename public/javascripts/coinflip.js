@@ -51,7 +51,9 @@ $(function() {
     COINFLIP_UPDATE_GLOBAL_HISTORY: 'COINFLIP_IN_UPDATE_GLOBAL_HISTORY',
     COINFLIP_UPDATE_USER_HISTORY: 'COINFLIP_IN_UPDATE_USER_HISTORY',
     COINFLIP_UPDATE_LEADERBOARDS: 'COINFLIP_IN_UPDATE_LEADERBOARDS',
-    COINFLIP_UPDATE_TOTAL_WAGERED: 'COINFLIP_IN_UPDATE_TOTAL_WAGERED'
+    COINFLIP_UPDATE_TOTAL_WAGERED: 'COINFLIP_IN_UPDATE_TOTAL_WAGERED',
+    INCREMENT_ONLINE: 'CHAT_IN_INCREMENET_ONLINE',
+    DECREMENT_ONLINE: 'CHAT_IN_DECREMENT_ONLINE'
   };
 
   var socket_outgoing = {
@@ -92,6 +94,8 @@ $(function() {
     _this = this;
 
     this.socket.on(socket_incoming.COINFLIP_INIT, this.initCoinflip);
+    this.socket.on(socket_incoming.INCREMENT_ONLINE, this.incrementOnline);
+    this.socket.on(socket_incoming.DECREMENT_ONLINE, this.decrementOnline);
     this.socket.on(socket_incoming.COINFLIP_USER_HISTORY_DATA, this.loadUserHistoryFromSocket);
     this.socket.on(socket_incoming.COINFLIP_CURRENT_GAMES_DATA, this.loadCurrentGamesFromSocket);
     this.socket.on(socket_incoming.COINFLIP_ADD_GAME, this.addGame);
@@ -139,6 +143,23 @@ $(function() {
     this.loadGlobalHistory();
     this.loadLeaderboards();
     this.loadUserHistory();
+  }
+
+  CoinflipManager.prototype.incrementOnline = function() {
+    var current = parseInt($online.text());
+    console.log('incrementing online');
+    if (!isNaN(current)) {
+      current++;
+      $online.text(current);
+    }
+  }
+
+  CoinflipManager.prototype.decrementOnline = function() {
+    var current = parseInt($online.text());
+    if (!isNaN(current)) {
+      current--;
+      $online.text(current);
+    }
   }
 
   CoinflipManager.prototype.updateTotalWagered = function(data) { //data.total_wagered
