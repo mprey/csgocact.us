@@ -80,6 +80,7 @@ $(function() {
   var modalTimeout, modalInterval;
 
   var MIN_BET = 0.50;
+  var MAX_BET = 400.00;
   var MAX_USER_HISTORY_AMOUNT = 20;
   var MAX_GLOBAL_HISTORY_AMOUNT = 40;
 
@@ -571,10 +572,11 @@ $(function() {
       var balance = $('#balance-label').text();
       var value = balance * 0.3;
       if (!(value > MIN_BET)) {
-        value = 0.00;
+        value = 0.50;
       }
       if (balance > MAX_BET) {
         balance = MAX_BET;
+        value = MAX_BET * 0.3;
       }
       $inputRange.attr({
         max: balance
