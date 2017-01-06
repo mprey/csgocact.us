@@ -147,7 +147,6 @@ $(function() {
 
   CoinflipManager.prototype.incrementOnline = function() {
     var current = parseInt($online.text());
-    console.log('incrementing online');
     if (!isNaN(current)) {
       current++;
       $online.text(current);
@@ -174,8 +173,14 @@ $(function() {
     }
   }
 
-  CoinflipManager.prototype.updateOpenGames = function(num) {
-    var end = Number(num);
+  CoinflipManager.prototype.updateOpenGames = function() {
+    var end = 0;
+    for (var index in _this.currentGames) {
+      var game = _this.currentGames[index];
+      if (!(game.in_progress == true || game.completed == true)) {
+        end++;
+      }
+    }
     var start = Number($openGames.text().replace(/\,/g,''));
     $openGames.countup({
       startVal: start,
@@ -193,7 +198,7 @@ $(function() {
   CoinflipManager.prototype.loadCurrentGames = function() {
     $gamesTable.empty();
     $tableWrapper.show();
-    _this.updateOpenGames(this.currentGames.length);
+    _this.updateOpenGames();
 
     sortCoinflipGames(this.currentGames, desc);
 
@@ -205,8 +210,8 @@ $(function() {
                               '<img id="cf-profile" src="' + game.creator_img + '"></img>' +
                               '<span>' + game.creator_name + '</span>' +
                             '</div>' +
-                            '<div id="cf-td-status" class="cf-td ' + (game.in_progress ? 'in-progress' : (game.completed ? 'completed' : 'join')) + '">' +
-                              '<span>' + (game.in_progress ? 'In Progress' : (game.completed ? 'Completed' : 'Join')) + '</span>' +
+                            '<div id="cf-td-status" class="cf-td ' + (game.local_completed ? 'completed' : (game.local_in_progress ? 'in_progress' : 'join')) + '">' +
+                              '<span>' + (game.local_completed ? 'Completed' : (game.local_in_progress ? 'In Progress' : 'Join')) + '</span>' +
                             '</div>' +
                             '<div class="cf-td" id="cf-td-side">' +
                               '<span>' + (Number(game.amount).toFixed(2)) + '</span>' +
@@ -358,28 +363,27 @@ $(function() {
       return;
     }
 
-    var $elem = $('.cf-tr[game-id="' + data.game._id + '"]');
     var gameObj = findCoinflipGame(data.game._id, gameType.CURRENT);
 
     updateCoinflipGame(gameObj, data.game);
 
     if (data.type == updateType.IN_PROGRESS) {
-      gameObj.in_progress = true;
-      $elem.find('#cf-td-status').removeClass('join').addClass('in_progress').find('span').text('In Progress');
+      gameObj.local_in_progress = true;
+      $('.cf-tr[game-id="' + data.game._id + '"]').find('#cf-td-status').removeClass('join completed').addClass('in_progress').find('span').text('In Progress');
 
       if (watching == data.game._id) {
         _this.promptGameView(data.game._id, true);
         return;
       }
     } else if (data.type == updateType.COMPLETED) {
-      gameObj.in_progress = false;
-      gameObj.completed = true;
-      $elem.find('#cf-td-status').removeClass('join').addClass('completed').find('span').text('Completed');
-      _this.updateOpenGames(_this.currentGames.length - 1);
+      gameObj.local_in_progress = false;
+      gameObj.local_completed = true;
+      $('.cf-tr[game-id="' + data.game._id + '"]').find('#cf-td-status').removeClass('join in_progress').addClass('completed').find('span').text('Completed');
+      _this.updateOpenGames();
 
       setTimeout(function() {
         removeCurrentGame(gameObj._id);
-        $elem.remove();
+        $('.cf-tr[game-id="' + data.game._id + '"]').remove();
 
         if (_this.currentGames.length == 0) {
           _this.loadCurrentGames();
