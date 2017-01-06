@@ -97,7 +97,6 @@ CoinflipManager.prototype.createGame = function(user, amount, side, callback) {
 }
 
 CoinflipManager.prototype.joinGame = function(game, joiner, socketHelper, io, callback) {
-  //TODO MAKE SURE YOU'RE NOT JOINING YOUR OWN GAME!!! AND UPDATE HISTORY
   if (game.completed == true || game.id_winner) {
     return callback('Game already completed');
   }
