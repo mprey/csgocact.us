@@ -158,7 +158,10 @@ CoinflipManager.prototype.joinGame = function(game, joiner, socketHelper, io, ca
 
       setTimeout(function() {
         if (game.id_creator == game.id_winner) {
-          creator.addCredits(creditsEarned, function() {
+          creator.addCredits(creditsEarned, function(err) {
+            if (err) {
+              console.log('Error adding credits to user: ', err.message);
+            }
             var creatorSocket = socketHelper.findSocket(creator._id);
             if (creatorSocket) {
               creatorSocket.emit(socket_outgoing.ADD_CREDITS, {
@@ -168,7 +171,10 @@ CoinflipManager.prototype.joinGame = function(game, joiner, socketHelper, io, ca
             }
           });
         } else {
-          joiner.addCredits(creditsEarned, function() {
+          joiner.addCredits(creditsEarned, function(err) {
+            if (err) {
+              console.log('Error adding credits to user: ', err.message);
+            }
             var joinerSocket = socketHelper.findSocket(joiner._id);
             if (joinerSocket) {
               joinerSocket.emit(socket_outgoing.ADD_CREDITS, {
