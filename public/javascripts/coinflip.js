@@ -514,8 +514,7 @@ $(function() {
   });
 
   $gameModalJoin.on('click', function(event) {
-    console.log(watching);
-    if (watching && !$(this).hasClass('loading')) {
+    if (!isNaN(watching) && !$(this).hasClass('loading')) {
       $(this).addClass('loading');
       socket.emit(socket_outgoing.COINFLIP_JOIN_GAME, {
         game_id: watching
