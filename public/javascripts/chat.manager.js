@@ -22,9 +22,7 @@ $(function() {
   };
 
   var socket_incoming = {
-    UPDATE_ONLINE: 'CHAT_IN_UPDATE_ONLINE',
-    INCREMENT_ONLINE: 'CHAT_IN_INCREMENET_ONLINE',
-    DECREMENT_ONLINE: 'CHAT_IN_DECREMENT_ONLINE',
+    UPDATE_ONLINE: 'UPDATE_ONLINE',
     MUTE_USER: 'CHAT_IN_MUTE_USER',
     UNMUTE_USER: 'CHAT_IN_UNMUTE_USER',
     BAN_USER: 'CHAT_IN_BAN_USER',
@@ -75,8 +73,7 @@ $(function() {
     this.socket = socket;
 
     this.socket.on(socket_incoming.INIT_CHAT, this.initChat);
-    this.socket.on(socket_incoming.INCREMENT_ONLINE, this.incrementOnline);
-    this.socket.on(socket_incoming.DECREMENT_ONLINE, this.decrementOnline);
+    this.socket.on(socket_incoming.UPDATE_ONLINE, this.updateOnline);
 
     this.socket.on(socket_incoming.BOT_MESSAGE, this.addBotMessage);
     this.socket.on(socket_incoming.RECEIVE_MESSAGE, this.addChatMessage);
@@ -93,7 +90,9 @@ $(function() {
   }
 
   ChatManager.prototype.initChat = function(data) { //data.current_users, data.previous_messages
-    chat_manager.updateOnline(data.current_users);
+    chat_manager.updateOnline({
+      users: data.current_users
+    });
     data.previous_messages.forEach(function(obj) {
       obj.no_sound = true;
       chat_manager.addChatMessage(obj);
@@ -146,8 +145,8 @@ $(function() {
     $chat_online.text(current);
   };
 
-  ChatManager.prototype.updateOnline = function(amount) {
-    $chat_online.text(amount);
+  ChatManager.prototype.updateOnline = function(data) {
+    $chat_online.text(data.users);
   };
 
   ChatManager.prototype.decrementOnline = function() {
