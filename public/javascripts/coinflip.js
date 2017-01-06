@@ -573,6 +573,9 @@ $(function() {
       if (!(value > MIN_BET)) {
         value = 0.00;
       }
+      if (balance > MAX_BET) {
+        balance = MAX_BET;
+      }
       $inputRange.attr({
         max: balance
       });
