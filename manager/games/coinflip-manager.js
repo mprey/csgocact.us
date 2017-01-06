@@ -49,6 +49,8 @@ function CoinflipManager() {
   this.leaderboards = [];
   this.userHistoryCache = {};
 
+  this.totalTax = 0.00;
+
   this.totalWagered = 0.00;
 }
 
@@ -139,7 +141,11 @@ CoinflipManager.prototype.joinGame = function(game, joiner, socketHelper, io, ca
       gameObj.creator_name = creator.name;
       gameObj.creator_img = creator.photo;
 
-      var creditsEarned = Number(game.amount + (game.amount - (game.amount * TAX))).toFixed(2);
+      var tax = game.amount * TAX;
+
+      var creditsEarned = Number(game.amount * 2 - tax).toFixed(2);
+
+      _this.totalTax += tax;
 
       if (game.id_creator == game.id_winner) {
         gameObj.winner_name = gameObj.creator_name;
@@ -185,6 +191,7 @@ CoinflipManager.prototype.joinGame = function(game, joiner, socketHelper, io, ca
           });
         }
         _this.updateHistory(gameObj, io, socketHelper);
+        console.log('Total coinflip tax: ', _this.totalTax);
         io.emit(socket_outgoing.COINFLIP_UPDATE_GAME, {
           game: gameObj,
           type: updateType.COMPLETED
