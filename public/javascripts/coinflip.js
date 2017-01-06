@@ -272,7 +272,7 @@ $(function() {
       formatGame(game);
       $userHistory.append('<tr game-id="' + game._id + '">' +
                             '<td id="history-side"><img class="' + (game.winning_face == 0 ? 't-coin' : 'ct-coin') + '"></img></td>' +
-                            '<td id="history-user"><img src="' + game.user_img + '"></img><span>' + game.user_name + '</span></td>' +
+                            '<td id="history-user"><img src="' + game.winner_img + '"></img><span>' + game.winner_name + '</span></td>' +
                             '<td id="history-amount"><span class="' + (game.won ? 'won' : 'lost') + '">' + game.amount + '</span></td>' +
                           '</tr>');
     }

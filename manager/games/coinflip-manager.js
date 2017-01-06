@@ -246,12 +246,8 @@ CoinflipManager.prototype.appendGlobalHistory = function(io, game) {
 
 CoinflipManager.prototype.appendUserHistory = function(userId, game, socketHelper) {
   if (game.id_creator == userId) {
-    game.user_name = game.creator_name;
-    game.user_img = game.creator_img;
     game.won = (game.id_creator == game.id_winner);
   } else {
-    game.user_name = game.joiner_name;
-    game.user_img = game.joiner_img;
     game.won = (game.id_joiner == game.id_winner);
   }
 
@@ -296,8 +292,6 @@ CoinflipManager.prototype.loadUserHistory = function(userId, done) {
               }
               if (userId == val.id_creator) {
                 val.won = (userId == val.id_winner);
-                val.user_name = user.name;
-                val.user_img = user.photo;
               }
               User.findOne({ _id: val.id_joiner }, function(err, user1) {
                 if (user) {
@@ -306,8 +300,13 @@ CoinflipManager.prototype.loadUserHistory = function(userId, done) {
                 }
                 if (userId == val.id_joiner) {
                   val.won = (userId == val.id_winner);
-                  val.user_name = user1.name;
-                  val.user_img = user1.photo;
+                }
+                if (val.id_winner == val.id_creator) {
+                  val.winner_name = user.name;
+                  val.winner_img = user.photo;
+                } else {
+                  val.winner_name = user1.name;
+                  val.winner_img = user1.photo;
                 }
                 callback();
               });
