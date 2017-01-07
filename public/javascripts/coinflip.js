@@ -399,6 +399,7 @@ $(function() {
     if (!game) return;
 
     $gameModalJoin.show();
+    $gameModalJoin.removeClass('loading');
     $gameModalCountdown.hide();
     $gameModalCoin.show();
     $gameModalFlipContainer.removeClass('flip-t flip-ct').hide();

@@ -23,44 +23,47 @@ var userSchema = new Schema({
 userSchema.methods.setRank = function(rank, callback) {
   this.rank = rank;
   this.save(callback);
-};
+}
 
 userSchema.methods.updateTradeURL = function(tradeURL, callback) {
   this.tade_url = tradeURL;
   return this.save(callback);
-};
+}
 
 userSchema.methods.updateCredits = function(amount, callback) {
-  this.credits += amount;
-  return this.save(callback);
-};
+  return this.update({ $inc: {credits: amount} }, callback);
+}
 
 userSchema.methods.removeCredits = function(amount, callback) {
   return this.updateCredits(-amount, callback);
-};
+}
 
 userSchema.methods.addCredits = function(amount, callback) {
   return this.updateCredits(+amount, callback);
-};
+}
 
 userSchema.methods.hasEnough = function(amount) {
   return (this.credits >= amount);
-};
+}
 
 userSchema.methods.hasEnteredPromoCode = function() {
   return this.promo_code == true;
-};
+}
 
 userSchema.methods.enterPromoCode = function(callback) {
   this.promo_code = true;
   return this.save(callback);
-};
+}
 
 userSchema.methods.updateProfile = function(data, callback) {
   this.name = data.name;
   this.photo = data.photo;
   return this.save(callback);
-};
+}
+
+userSchema.statics.updateUserBalance = function(userId, amount, callback) {
+  return this.findOneAndUpdate({ _id: userId }, { $inc: { credits: amount } }, { new: true } ,callback);
+}
 
 var User = mongoose.model('User', userSchema);
 

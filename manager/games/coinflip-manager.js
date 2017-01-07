@@ -164,34 +164,39 @@ CoinflipManager.prototype.joinGame = function(game, joiner, socketHelper, io, ca
 
       setTimeout(function() {
         if (game.id_creator == game.id_winner) {
-          creator.addCredits(creditsEarned, function(err) {
-            if (err) {
-              console.log('Error adding credits to user: ', err.message);
-            }
-            var creatorSocket = socketHelper.findSocket(creator._id);
-            if (creatorSocket) {
+          User.updateUserBalance(game.id_creator, creditsEarned, function(err, doc) {
+            var creatorSocket = socketHelper.findSocket(game.id_creator);
+            if (!err && creatorSocket && doc) {
               creatorSocket.emit(socket_outgoing.ADD_CREDITS, {
                 added: creditsEarned,
-                balance: creator.credits
+                balance: doc.credits
+              });
+            } else if (creatorSocket) {
+              creatorSocket.emit(socket_outgoing.ALERT, {
+                header: 'User Error',
+                type: 'error',
+                message: 'Unable to update user balance.'
               });
             }
           });
-        } else {
-          joiner.addCredits(creditsEarned, function(err) {
-            if (err) {
-              console.log('Error adding credits to user: ', err.message);
-            }
-            var joinerSocket = socketHelper.findSocket(joiner._id);
-            if (joinerSocket) {
+        } else if (game.id_joiner == game.id_winner) {
+          User.updateUserBalance(game.id_joiner, creditsEarned, function(err, doc) {
+            var joinerSocket = socketHelper.findSocket(game.id_joiner);
+            if (!err && joinerSocket && doc) {
               joinerSocket.emit(socket_outgoing.ADD_CREDITS, {
                 added: creditsEarned,
-                balance: joiner.credits
+                balance: doc.credits
+              });
+            } else if (joinerSocket) {
+              joinerSocket.emit(socket_outgoing.ALERT, {
+                header: 'User Error',
+                type: 'error',
+                message: 'Unable to update user balance.'
               });
             }
           });
         }
         _this.updateHistory(gameObj, io, socketHelper);
-        console.log('Total coinflip tax: ', _this.totalTax);
         io.emit(socket_outgoing.COINFLIP_UPDATE_GAME, {
           game: gameObj,
           type: updateType.COMPLETED
@@ -258,15 +263,13 @@ CoinflipManager.prototype.appendGlobalHistory = function(io, game) {
 }
 
 CoinflipManager.prototype.appendUserHistory = function(userId, game, socketHelper) {
-  if (game.id_creator == userId) {
-    game.won = (game.id_creator == game.id_winner);
-  } else {
-    game.won = (game.id_joiner == game.id_winner);
-  }
+  var gameClone = clone(game);
+
+  gameClone.won = (game.id_winner == userId);
 
   if (_this.userHistoryCache.hasOwnProperty(userId) && !_this.userHasCachedGame(userId, game._id)) {
     var array = _this.userHistoryCache[userId];
-    array.unshift(game);
+    array.unshift(gameClone);
     if (array.length > MAX_USER_HISTORY_AMOUNT) {
       array.length = MAX_USER_HISTORY_AMOUNT;
     }
@@ -277,8 +280,6 @@ CoinflipManager.prototype.appendUserHistory = function(userId, game, socketHelpe
       userSocket.emit(socket_outgoing.COINFLIP_UPDATE_USER_HISTORY, {
         user_history: _this.userHistoryCache[userId]
       });
-    } else {
-      console.log('Unable to find usersocket to update user history.');
     }
   }
 }
@@ -444,6 +445,40 @@ CoinflipManager.prototype.loadData = function() {
       console.log('Coinflip - error while loading total wagered: ' + err.message);
     }
   });
+}
+
+function clone(obj) {
+    var copy;
+
+    // Handle the 3 simple types, and null or undefined
+    if (null == obj || "object" != typeof obj) return obj;
+
+    // Handle Date
+    if (obj instanceof Date) {
+        copy = new Date();
+        copy.setTime(obj.getTime());
+        return copy;
+    }
+
+    // Handle Array
+    if (obj instanceof Array) {
+        copy = [];
+        for (var i = 0, len = obj.length; i < len; i++) {
+            copy[i] = clone(obj[i]);
+        }
+        return copy;
+    }
+
+    // Handle Object
+    if (obj instanceof Object) {
+        copy = {};
+        for (var attr in obj) {
+            if (obj.hasOwnProperty(attr)) copy[attr] = clone(obj[attr]);
+        }
+        return copy;
+    }
+
+    throw new Error("Unable to copy obj! Its type isn't supported.");
 }
 
 var coinflipManager = new CoinflipManager();

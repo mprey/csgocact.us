@@ -61,7 +61,7 @@ $(function() {
   });
 
   socket.on(socket_incoming.REMOVE_CREDITS, function(data) { //data.balance, data.removed
-    toastr.warning('Removed ' + data.removed + ' credits to your account.', 'User Balance');
+    toastr.warning('Removed ' + data.removed + ' credits from your account.', 'User Balance');
     countUpBalance(data.balance);
   });
 
