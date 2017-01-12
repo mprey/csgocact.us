@@ -21,7 +21,7 @@ $(function() {
 
   var $inputRange = $('#cf-input-range');
   var $inputAmount = $('#cf-amount-input');
-  var $finalize_game = $('#finalize-game');
+  var $finalizeGame = $('#finalize-game');
   var $tCoin = $('#t-coin');
   var $ctCoin = $('#ct-coin');
 
@@ -77,7 +77,7 @@ $(function() {
     COMPLETED: 2
   };
 
-  var _this;
+  var self;
   var desc = true;
   var watching = null;
   var modalTimeout, modalInterval;
@@ -92,7 +92,7 @@ $(function() {
   function CoinflipManager() {
     this.socket = socket;
 
-    _this = this;
+    self = this;
 
     this.socket.on(socket_incoming.COINFLIP_INIT, this.initCoinflip);
     this.socket.on(socket_incoming.UPDATE_ONLINE, this.updateOnline);
@@ -111,13 +111,13 @@ $(function() {
   CoinflipManager.prototype.initCoinflip = function(data) { //data.online, data.total_wagered, data.games, data.history, data.leaderboards
     $gamesLoader.hide();
     $online.text(data.online);
-    _this.updateTotalWagered(data);
+    self.updateTotalWagered(data);
 
-    _this.currentGames = data.games;
-    _this.globalHistory = data.history;
-    _this.leaderboards = data.leaderboards;
+    self.currentGames = data.games;
+    self.globalHistory = data.history;
+    self.leaderboards = data.leaderboards;
 
-    _this.initData();
+    self.initData();
   }
 
   /*
@@ -163,8 +163,8 @@ $(function() {
 
   CoinflipManager.prototype.updateOpenGames = function() {
     var end = 0;
-    for (var index in _this.currentGames) {
-      var game = _this.currentGames[index];
+    for (var index in self.currentGames) {
+      var game = self.currentGames[index];
       if (!(game.local_in_progress == true || game.local_completed == true)) {
         end++;
       }
@@ -186,7 +186,7 @@ $(function() {
   CoinflipManager.prototype.loadCurrentGames = function() {
     $gamesTable.empty();
     $tableWrapper.show();
-    _this.updateOpenGames();
+    self.updateOpenGames();
 
     sortCoinflipGames(this.currentGames, desc);
 
@@ -217,8 +217,8 @@ $(function() {
   }
 
   CoinflipManager.prototype.loadCurrentGamesFromSocket = function(data) {
-    _this.currentGames = data.games;
-    _this.loadCurrentGames();
+    self.currentGames = data.games;
+    self.loadCurrentGames();
   }
 
   CoinflipManager.prototype.refreshCurrentGames = function() {
@@ -226,7 +226,7 @@ $(function() {
     $tableWrapper.hide();
     socket.emit(socket_outgoing.COINFLIP_REQUEST_CURRENT_GAMES, function(data) {
       $tableWrapper.parent().find('.cf-games-loader').hide();
-      _this.loadCurrentGamesFromSocket(data);
+      self.loadCurrentGamesFromSocket(data);
     });
   }
 
@@ -260,8 +260,8 @@ $(function() {
   }
 
   CoinflipManager.prototype.loadGlobalHistoryFromSocket = function(data) {
-      _this.globalHistory = data.global_history;
-      _this.loadGlobalHistory();
+      self.globalHistory = data.global_history;
+      self.loadGlobalHistory();
   }
 
   /*
@@ -301,8 +301,8 @@ $(function() {
 
 
   CoinflipManager.prototype.loadUserHistoryFromSocket = function(data) {
-    _this.userHistory = data.user_history;
-    _this.loadUserHistory();
+    self.userHistory = data.user_history;
+    self.loadUserHistory();
   }
 
   /*
@@ -328,13 +328,13 @@ $(function() {
   }
 
   CoinflipManager.prototype.loadLeaderboardsFromSocket = function(data) {
-    _this.leaderboards = data.leaderboards;
-    _this.loadLeaderboards();
+    self.leaderboards = data.leaderboards;
+    self.loadLeaderboards();
   }
 
   CoinflipManager.prototype.addGame = function(data) {
-    _this.currentGames.push(data.game);
-    _this.loadCurrentGames();
+    self.currentGames.push(data.game);
+    self.loadCurrentGames();
   }
 
   CoinflipManager.prototype.createGame = function(side, amount) {
@@ -343,7 +343,7 @@ $(function() {
     socket.emit(socket_outgoing.COINFLIP_CREATE_GAME, {
       side: side,
       amount: amount
-    }, _this.finishGameCreation);
+    }, self.finishGameCreation);
   }
 
   CoinflipManager.prototype.updateGame = function(data) { //data.game, //data.type
@@ -360,21 +360,21 @@ $(function() {
       $('.cf-tr[game-id="' + data.game._id + '"]').find('#cf-td-status').removeClass('join completed').addClass('in_progress').find('span').text('In Progress');
 
       if (watching == data.game._id) {
-        _this.promptGameView(data.game._id, true);
+        self.promptGameView(data.game._id, true);
         return;
       }
     } else if (data.type == updateType.COMPLETED) {
       gameObj.local_in_progress = false;
       gameObj.local_completed = true;
       $('.cf-tr[game-id="' + data.game._id + '"]').find('#cf-td-status').removeClass('join in_progress').addClass('completed').find('span').text('Completed');
-      _this.updateOpenGames();
+      self.updateOpenGames();
 
       setTimeout(function() {
         removeCurrentGame(gameObj._id);
         $('.cf-tr[game-id="' + data.game._id + '"]').remove();
 
-        if (_this.currentGames.length == 0) {
-          _this.loadCurrentGames();
+        if (self.currentGames.length == 0) {
+          self.loadCurrentGames();
         }
       }, COMPLETED_TIMEOUT);
     }
@@ -385,7 +385,7 @@ $(function() {
     $.modal.close();
 
     if (game && !error) {
-      _this.addGame({
+      self.addGame({
         game: game
       });
     } else if (error) {
@@ -445,7 +445,7 @@ $(function() {
     }
 
     if (game.in_progress == true || game.completed == true) {
-      _this.watchGame(game);
+      self.watchGame(game);
     }
 
     watching = game._id;
@@ -472,7 +472,7 @@ $(function() {
       if (counter == 0) {
         clearInterval(modalInterval);
         $gameModalCountdown.removeClass('grow');
-        _this.animateCoinflip(game.winning_face, function() {
+        self.animateCoinflip(game.winning_face, function() {
           $gameModalCountdown.text('');
 
           if (game.id_winner == game.id_creator) {
@@ -521,11 +521,11 @@ $(function() {
   new CoinflipManager();
 
   $history.on('click', 'tr', function(event) {
-    _this.promptGameView($(this).attr('game-id'), false, gameType.HISTORY);
+    self.promptGameView($(this).attr('game-id'), false, gameType.HISTORY);
   });
 
   $userHistory.on('click', 'tr', function(event) {
-    _this.promptGameView($(this).attr('game-id'), false, gameType.USER_HISTORY);
+    self.promptGameView($(this).attr('game-id'), false, gameType.USER_HISTORY);
   });
 
   $gameModalJoin.on('click', function(event) {
@@ -550,10 +550,10 @@ $(function() {
   });
 
   $tableWrapper.on('click', '#cf-td-status', function(event) {
-    _this.promptGameView($(this).parent().attr('game-id'));
+    self.promptGameView($(this).parent().attr('game-id'));
   });
 
-  $finalize_game.on('click', function(event) {
+  $finalizeGame.on('click', function(event) {
     var side = 0;
     if ($ctCoin.hasClass('selected')) {
       side = 1;
@@ -564,7 +564,7 @@ $(function() {
       return;
     }
 
-    _this.createGame(side, amount);
+    self.createGame(side, amount);
   });
 
   $tCoin.on('click', function(event) {
@@ -612,7 +612,7 @@ $(function() {
 
   $refresh_games.on('click', function(event) {
     event.preventDefault();
-    _this.refreshCurrentGames();
+    self.refreshCurrentGames();
   });
 
   $pageContent.on('click', '#cf-dropdown-trigger', function(event) {
@@ -640,7 +640,7 @@ $(function() {
       desc = false;
       $(this).prev('#cf-sort-button').show();
     }
-    _this.loadCurrentGames();
+    self.loadCurrentGames();
   });
 
   socket.on(socket_incoming.PROMO_CODE_END, function() {
@@ -674,10 +674,10 @@ $(function() {
   }
 
   function removeCurrentGame(gameId) {
-    for (var index in _this.currentGames) {
-      var game = _this.currentGames[index];
+    for (var index in self.currentGames) {
+      var game = self.currentGames[index];
       if (game._id == gameId) {
-        _this.currentGames.splice(index, 1);
+        self.currentGames.splice(index, 1);
         return;
       }
     }
@@ -686,13 +686,13 @@ $(function() {
   function findCoinflipGame(gameId, type) {
     var array = [];
     if (!type || type == gameType.CURRENT) {
-      array = _this.currentGames;
+      array = self.currentGames;
     } else if (type == gameType.HISTORY) {
-      array = _this.globalHistory;
+      array = self.globalHistory;
     } else if (type == gameType.USER_HISTORY) {
-      array = _this.userHistory;
+      array = self.userHistory;
     } else if (type == gameType.LEADERBOARDS) {
-      array = _this.leaderboards;
+      array = self.leaderboards;
     }
     for (var index in array) {
       var game = array[index];
@@ -744,6 +744,6 @@ $(function() {
     $promoSubmit.hide();
   }
 
-  window.coinflipManager = _this;
+  window.coinflipManager = self;
 
 });

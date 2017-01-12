@@ -32,18 +32,14 @@
   -moz-border-radius: 8px;
   -ms-border-radius: 8px;
   border-radius: 8px;
-  -webkit-box-shadow: 0 0 7px #000;
-  -moz-box-shadow: 0 0 7px #000;
-  -ms-box-shadow: 0 0 7px #000;
-  box-shadow: 0 0 7px #000;
+  -webkit-box-shadow: 0 0 3px #000;
+  -moz-box-shadow: 0 0 3px #000;
+  -ms-box-shadow: 0 0 3px #000;
+  box-shadow: 0 0 3px #000;
   text-align: left;
 
   &#modal-emotes {
     width: 390px;
-  }
-
-  &#cf-game-modal {
-
   }
 
   .modal-content {
@@ -58,6 +54,148 @@
     border-radius: 8px 8px 0px 0px;
   	background: white;
   	border-bottom: .5px solid black;
+  }
+}
+
+.modal-header {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  margin: auto;
+  background: $dark_blue;
+  height: 40px;
+  color: #e7e8f0;
+  font-size: 15px;
+  text-align: left;
+  line-height: 40px;
+  border-top-right-radius: inherit; border-top-left-radius: inherit;
+
+  p {
+    margin-left: 1em;
+  }
+}
+
+.modal-footer {
+  position: absolute;
+  bottom: 0;
+  left: 0; right: 0;
+  margin: auto;
+  height: 30px;
+  text-align: right;
+  font-size: 11px;
+  line-height: 30px;
+  background: $gray_color;
+  border-top: 1px solid #e5e5eb;
+  border-bottom-left-radius: 3px; border-bottom-right-radius: 3px;
+
+  p {
+    margin-right: 1em;
+
+  }
+}
+
+#modal-deposit {
+  position: relative;
+  width: 60%;
+  max-width: 800px;
+
+  .modal-content {
+    height: 400px;
+    margin-top: 40px;
+    position: relative;
+    background-color: #fff;
+    overflow-x: hidden;
+    overflow-y: scroll;
+
+    &.loading {
+      .deposit-item {
+        display: none;
+      }
+    }
+
+    .modal-content-settings {
+      display: none;
+      position: absolute;
+      top: 0; left: 0; right: 0;
+      margin: auto;
+      height: 20px;
+      background-color: $gray_color;
+
+      p {
+        float: left;
+        font-size: 12px;
+        margin: 3px 0px 0px 5px;
+        cursor: pointer;
+      }
+
+      select {
+        float: right;
+        cursor: pointer;
+        margin: 1px 5px 0px 0px;
+        border: 1px solid #111;
+        background: transparent;
+        width: 100px;
+        padding-left: 4px;
+        font-size: 9px;
+        border: 1px solid #ccc;
+        height: 18px;
+        -webkit-appearance: none;
+        -moz-appearance: none;
+        appearance: none;
+        background: url('../images/drop-down.png') 96% / 15% no-repeat #eee;
+      }
+    }
+
+    &:hover .modal-content-settings {
+      display: block;
+      -webkit-animation: fade-in 0.5s;
+      -moz-animation: fade-in 0.5s;
+      animation: fade-in 0.5s;
+    }
+  }
+
+  .modal-footer {
+    height: 50px;
+
+    .price-counter {
+      float: left;
+      border-radius: 4px;
+      text-align: left;
+      background-color: rgb(66, 198, 111);
+      font-size: 14px;
+      margin-left: 1em;
+      margin-top: 8px;
+
+      p {
+        font-weight: bold;
+        padding: 0px 9px;
+        margin: 0;
+
+        &:before {
+          content: '$';
+        }
+      }
+    }
+
+    .deposit-submit {
+      float: right;
+      text-align: center;
+      background: $dark_blue;
+      padding: 3px 7px;
+      border-radius: 3px;
+      margin-right: 1em;
+      margin-top: 6px;
+      cursor: pointer;
+
+      p {
+        color: #e7e8f0;
+        margin: 0;
+        padding: 0;
+        text-transform: uppercase;
+        font-weight: bold;
+      }
+    }
   }
 }
 
@@ -293,45 +431,8 @@
       float: right;
     }
   }
-
-  .modal-header {
-    position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
-    margin: auto;
-    background: $dark_blue;
-    height: 40px;
-    color: #e7e8f0;
-    font-size: 15px;
-    text-align: left;
-    line-height: 40px;
-    border-top-right-radius: 3px; border-top-left-radius: 3px;
-
-    p {
-      margin-left: 1em;
-    }
-  }
-
-  .modal-footer {
-    position: absolute;
-    bottom: 0;
-    left: 0; right: 0;
-    margin: auto;
-    height: 30px;
-    text-align: right;
-    font-size: 11px;
-    line-height: 30px;
-    background: $gray_color;
-    border-top: 1px solid #e5e5eb;
-    border-bottom-left-radius: 3px; border-bottom-right-radius: 3px;
-
-    p {
-      margin-right: 1em;
-
-    }
-  }
 }
+
 
 #cf-modal-create-game {
   max-width: 700px;

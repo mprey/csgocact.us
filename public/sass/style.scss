@@ -554,14 +554,47 @@ main {
   top: 50%;
   transform: translateY(-50%);
   margin: auto;
-  height: 200px;
-  width: 500px;
-  line-height: 200px;
+  height: 150px;
+  width: 400px;
+  line-height: 150px;
   text-align: center;
 
   p {
-    font-size: 40px;
+    font-size: 30px;
+    font-weight: bold;
+    text-transform: uppercase;
   }
+}
+
+.content-div--header {
+  z-index: 1;
+  position: absolute;
+  border-bottom: 1px solid $dark_gray;
+  top: 100px; left: 0; right: 0;
+  margin: auto;
+  width: 170px;
+  text-align: center;
+  line-height: 60px;
+  height: 60px;
+  font-size: 20px;
+  font-weight: bold;
+  text-transform: uppercase;
+  border-bottom-left-radius: 0;
+  border-bottom-right-radius: 0;
+  box-shadow: 0 0 0 0 rgba(0,0,0,.3);
+}
+
+.content-div--deposit {
+  z-index: 0;
+  position: absolute;
+  top: 160px; left: 0; right: 0;
+  margin: auto;
+  width: 70%;
+  height: 400px;
+}
+
+.content-div--footer {
+
 }
 
 #cf-header {

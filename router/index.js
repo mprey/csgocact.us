@@ -11,17 +11,6 @@ module.exports = function(app) {
   });
 
   /**
-   *  Deposit route
-   */
-  app.get('/deposit', function (req, res) {
-    res.render('layout', {
-      user: req.user,
-      content: 'deposit.ejs',
-      title: 'Deposit'
-    });
-  });
-
-  /**
    *  Withdraw route
    */
   app.get('/withdraw', function (req, res) {
