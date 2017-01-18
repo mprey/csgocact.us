@@ -31,7 +31,11 @@ userSchema.methods.updateTradeURL = function(tradeURL, callback) {
 }
 
 userSchema.methods.updateCredits = function(amount, callback) {
-  return this.update({ $inc: {credits: amount} }, callback);
+  var self = this;
+  User.findByIdAndUpdate(this._id, { $inc: {credits: amount} }, { new: true }, function(err,  doc) {
+    self.credits = doc ? doc.credits : self.credits;
+    return callback(err, doc);
+  });
 }
 
 userSchema.methods.removeCredits = function(amount, callback) {

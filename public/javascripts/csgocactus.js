@@ -62,6 +62,7 @@ $(function() {
 
   socket.on(socket_incoming.REMOVE_CREDITS, function(data) { //data.balance, data.removed
     toastr.warning('Removed ' + data.removed + ' credits from your account.', 'User Balance');
+    console.log('incoming balance: ' + data.balance);
     countUpBalance(data.balance);
   });
 

@@ -13,6 +13,7 @@ $speed: "0.25s";
 $transition: all #{$speed} cubic-bezier(0.310, -0.105, 0.430, 1.400);
 
 @import 'reset';
+@import 'media-queries';
 @import 'sweetalert';
 @import 'toastr';
 @import 'jquery.modal';

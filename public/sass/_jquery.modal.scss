@@ -108,6 +108,13 @@
     overflow-x: hidden;
     overflow-y: scroll;
 
+    .deposit-item {
+      background: red;
+      @include min-screen(500px) {
+        background: blue;
+      }
+    }
+
     &.loading {
       .deposit-item {
         display: none;
@@ -162,7 +169,9 @@
       float: left;
       border-radius: 4px;
       text-align: left;
-      background-color: rgb(66, 198, 111);
+      font-weight: bold;
+      box-shadow: 0px 0px 2px black;
+      background: rgba(38, 207, 60, 0.87);
       font-size: 14px;
       margin-left: 1em;
       margin-top: 8px;
@@ -171,6 +180,7 @@
         font-weight: bold;
         padding: 0px 9px;
         margin: 0;
+        color: #fff;
 
         &:before {
           content: '$';
@@ -204,6 +214,18 @@
   max-width: 900px;
   width: 80%;
 
+  @include max-screen(800px) {
+    width: 100%;
+  }
+
+  @include max-screen(640px) {
+    height: 400px;
+  }
+
+  @include max-screen(430px) {
+    height: 350px;
+  }
+
   .modal-content {
     padding: 0;
     margin: 0;
@@ -212,12 +234,37 @@
     left: 0; right: 0; top: 40px;
     height: 250px;
 
+    @include max-screen(640px) {
+      height: 180px;
+    }
+
+    @include max-screen(430px) {
+      height: 150px;
+    }
+
     .modal-content-bottom {
       position: absolute;
       top: 250px;
       left: 0;
       right: 0;
-      height: 200px;
+
+      @include max-screen(640px) {
+        top: 180px;
+
+        #cf-user-left-amount,
+        #cf-user-right-amount {
+          line-height: 50px;
+        }
+      }
+
+      @include max-screen(430px) {
+        top: 150px;
+
+        #cf-user-left-amount,
+        #cf-user-right-amount {
+          line-height: 100px;
+        }
+      }
 
       #cf-user-left-amount,
       #cf-user-right-amount {
@@ -243,17 +290,35 @@
 
       #cf-user-left-amount {
         float: left;
+        text-align: left;
 
         p {
           margin-left: 100px;
+
+          @include max-screen(430px) {
+            margin-right: 50px;
+          }
+
+          @include max-screen(640px) {
+            margin-left: 60px;
+          }
         }
       }
 
       #cf-user-right-amount {
         float: right;
+        text-align: right;
 
         p {
           margin-right: 100px;
+
+          @include max-screen(430px) {
+            margin-right: 5px;
+          }
+
+          @include max-screen(640px) {
+            margin-right: 60px;
+          }
         }
       }
 
@@ -270,12 +335,12 @@
         }
 
         a {
-          box-shadow: 0px 0px 2px black;
           padding: 15px 30px;
           font-size: 13px;
           border-radius: 5px;
           cursor: pointer;
           font-weight: bold;
+          box-shadow: 0px 0px 2px black;
           color: #fff;
           background: rgba(38, 207, 60, 0.87);
 
@@ -316,6 +381,16 @@
       margin: auto;
       text-align: center;
 
+      @include max-screen(640px) {
+        height: 180px;
+        line-height: 180px;
+      }
+
+      @include max-screen(430px) {
+        height: 130px;
+        line-height: 130px;
+      }
+
       #ct-and-t {
         width: 170px;
         height: 170px;
@@ -323,6 +398,16 @@
         border-radius: 50%;
         background-color: #f7f8fb;
         box-shadow: 3px 3px 10px 0 #000000;
+
+        @include max-screen(640px) {
+          width: 100px;
+          height: 100px;
+        }
+
+        @include max-screen(430px) {
+          height: 70px;
+          width: 70px;
+        }
       }
 
       .flip-container {
@@ -353,11 +438,21 @@
       .flip-container, .front, .back {
         width: 170px;
         height: 170px;
+
+        @include max-screen(640px) {
+          width: 100px;
+          height: 100px;
+        }
       }
 
       .flip-coin {
         height: 170px;
         width: 170px;
+
+        @include max-screen(640px) {
+          width: 100px;
+          height: 100px;
+        }
       }
 
       .flipper {
@@ -393,22 +488,43 @@
       height: 150px;
       width: 150px;
       border-radius: 5px;
+
+      @include max-screen(640px) {
+        width: 80px;
+        height: 80px;
+      }
+
+      @include max-screen(430px) {
+        height: 50px;
+        width: 50px
+      }
     }
 
     .t-coin,
     .ct-coin {
       height: 30px;
       width: 30px;
+
+      @include max-screen(640px) {
+        height: 20px;
+        width: 20px;
+      }
+
     }
 
     .cf-coin-tag {
       position: absolute;
       top: 175px;
       right: 40px;
-    }
 
-    #cf-user-left {
-      float: left;
+      @include max-screen(640px) {
+        top: 105px;
+        right: 45px;
+      }
+
+      @include max-screen(430px) {
+        top: 80px;
+      }
     }
 
     #cf-user-left,
@@ -425,6 +541,22 @@
         margin: auto;
         text-align: center;
       }
+
+      @include max-screen(640px) {
+        span {
+          top: 125px;
+        }
+      }
+
+      @include max-screen(430px) {
+        span {
+          top: 105px;
+        }
+      }
+    }
+
+    #cf-user-left {
+      float: left;
     }
 
     #cf-user-right {
@@ -437,6 +569,10 @@
 #cf-modal-create-game {
   max-width: 700px;
   width: 80%;
+
+  @include max-screen(830px) {
+    width: 100%;
+  }
 
   h2 {
     font-size: 19px;
@@ -451,13 +587,34 @@
     .coin-div {
       cursor: pointer;
       text-align: center;
-      margin: 30px 80px 30px 80px;
+      margin: 30px 0px;
       transition: all 0.1s ease-in;
+
+      &#t-coin {
+        margin-left: 80px;
+
+        @include max-screen(450px) {
+          margin-left: 30px;
+        }
+      }
+
+      &#ct-coin {
+        margin-right: 80px;
+
+        @include max-screen(450px) {
+          margin-right: 30px;
+        }
+      }
 
       img {
         height: 150px;
         width: 150px;
         border-radius: 50%;
+
+        @include max-screen(660px) {
+          height: 100px;
+          width: 100px;
+        }
       }
 
       p {
@@ -534,6 +691,10 @@
       left: calc(5% + 60px);
       bottom: 35px;
       width: 50%;
+
+      @include max-screen(450px) {
+        width: 30px;
+      }
 
       &::-webkit-slider-runnable-track {
         height: 5px;

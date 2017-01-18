@@ -3,7 +3,7 @@ $(function() {
   var $pageContent = $('.page-content');
   var $promoInput = $('#cf-promo-input');
   var $promoSubmit = $('#cf-promo-submit');
-  var $refresh_games = $('#cf-games-reload');
+  var $refreshGame = $('#cf-games-reload');
 
   var $online = $('#cf-online');
   var $totalWagered = $('#cf-wagered');
@@ -610,7 +610,7 @@ $(function() {
     }
   });
 
-  $refresh_games.on('click', function(event) {
+  $refreshGame.on('click', function(event) {
     event.preventDefault();
     self.refreshCurrentGames();
   });
@@ -723,15 +723,7 @@ $(function() {
 
   function sortCoinflipGames(array, desc) {
     array.sort(function(a, b) {
-      var amountA = a.amount;
-      var amountB = b.amount;
-      if (amountA < amountB) {
-        return desc ? 1 : -1;
-      } else if (amountA > amountB) {
-        return desc ? -1 : 1;
-      } else {
-        return 0;
-      }
+      return desc ? b.amount - a.amount : a.amount - b.amount;
     });
   }
 
