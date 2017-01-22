@@ -29,7 +29,7 @@ module.exports = {
       }
     ], function(err) {
       if (!err) {
-        console.log('Loaded ' + recentMessages.length + ' chat messages from the database.');
+        console.log('Chat - loaded ' + recentMessages.length + ' chat messages from the database.');
       } else {
         console.log('Unable to load messages from the databse: ' + err.message);
       }

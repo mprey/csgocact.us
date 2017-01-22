@@ -4,6 +4,7 @@ var express = require('express');
 var app = express();
 var http = require('http');
 var port = process.env.PORT || 3000;
+var botPort = process.env.BOT_PORT || 3001;
 var mongoose = require('mongoose');
 var passport = require('passport');
 var path = require('path');
@@ -14,12 +15,15 @@ var sassMiddleware = require('node-sass-middleware');
 var MongoStore = require('connect-mongo')(session);
 var autoIncrement = require('mongoose-auto-increment');
 var banMiddleware = require('./lib/ban-middleware');
+var priceUpdater = require('./manager/prices');
 
 var server = require('http').createServer(app);
 var io = require('socket.io').listen(server);
+var botIo = io.of('/csgo-bot');
 
 require('./lib/passport')(passport);
 require('./lib/db')(mongoose);
+require('./lib/cache');
 
 autoIncrement.initialize(mongoose.connection);
 
@@ -66,3 +70,5 @@ io.use(function(socket, next) {
 });
 
 require('./lib/socket')(io);
+priceUpdater(12 * 60 * 1000); //update prices every 12 minutes
+require('./lib/socket/bot')(botIo);

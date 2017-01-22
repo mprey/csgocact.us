@@ -97,8 +97,19 @@
 
 #modal-deposit {
   position: relative;
-  width: 60%;
-  max-width: 800px;
+  width: 780px;
+
+  @include max-screen(900px) {
+    width: 660px;
+  }
+
+  @include max-screen(700px) {
+    width: 420px;
+  }
+
+  @include max-screen(480px) {
+    width: 100%;
+  }
 
   .modal-content {
     height: 400px;
@@ -108,16 +119,106 @@
     overflow-x: hidden;
     overflow-y: scroll;
 
-    .deposit-item {
-      background: red;
-      @include min-screen(500px) {
-        background: blue;
+    .spinner {
+      display: none;
+      position: absolute;
+      top: 50%;
+      transform: translateY(-50%);
+      left: 0; right: 0;
+      margin: 0 auto;
+      font-size: 14px;
+
+      i {
+        color: $dark_blue;
       }
     }
 
-    &.loading {
-      .deposit-item {
-        display: none;
+    .deposit-item {
+      height: 100px;
+      width: 100px;
+      position: relative;
+      border: 1px solid black;
+      background: $gray_color;
+      float: left;
+      margin: 10px;
+      cursor: pointer;
+      border-radius: 4px;
+
+      &.selected {
+        opacity: 0.5;
+      }
+
+      &.consumer p {
+        background: rgb(161, 161, 161);
+      }
+
+      &.industrial p {
+        background: rgba(52, 154, 247, 0.51);
+      }
+
+      &.mil-spec p {
+        background: rgb(89, 124, 191);
+      }
+
+      &.restricted p {
+        background: rgb(179, 69, 218);
+      }
+
+      &.classified p {
+        background: rgb(222, 72, 193);
+      }
+
+      &.covert p {
+        background: rgb(213, 63, 67);
+      }
+
+      &.gold p {
+         background: rgb(255,215,0);
+      }
+
+      @include max-screen(480px) {
+        height: 70px;
+        width: 70px;
+      }
+
+      span {
+        position: absolute;
+        top: 0; right: 0;
+        padding: 2px;
+        border-bottom-left-radius: 2px;
+        background: $dark_blue;
+        font-size: 9px;
+        color: #fff;
+
+        @include max-screen(480px) {
+          font-size: 8px;
+        }
+      }
+
+      p {
+        position: absolute;
+        bottom: 0; right: 0; left: 0;
+        margin: 0 auto;
+        padding: 1px 0;
+        font-size: 12px;
+        background: $dark_blue;
+        text-align: center;
+        color: #fff;
+
+        @include max-screen(480px) {
+          font-size: 9px;
+        }
+      }
+
+      img {
+        position: absolute;
+        top: 5px; right: 0; left: 0;
+        margin: 0 auto;
+        height: 60px;
+
+        @include max-screen(480px) {
+          height: 40px;
+        }
       }
     }
 
