@@ -118,6 +118,7 @@
     background-color: #fff;
     overflow-x: hidden;
     overflow-y: scroll;
+    margin-bottom: 50px;
 
     .spinner {
       display: none;
@@ -133,6 +134,23 @@
       }
     }
 
+    .empty {
+      display: none;
+      position: absolute;
+      top: 50%;
+      transform: translateY(-50%);
+      left: 0; right: 0;
+      margin: 0 auto;
+      text-align: center;
+
+      span {
+        font-size: 16px;
+        color: #fff;
+        background-color: $dark_blue;
+        padding: 10px;
+      }
+    }
+
     .deposit-item {
       height: 100px;
       width: 100px;
@@ -143,6 +161,11 @@
       margin: 10px;
       cursor: pointer;
       border-radius: 4px;
+
+      &.disabled {
+        cursor: default;
+        opacity: 0.5;
+      }
 
       &.selected {
         opacity: 0.5;

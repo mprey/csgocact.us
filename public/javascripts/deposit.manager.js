@@ -1,7 +1,9 @@
 $(function() {
 
   var socket_outgoing = {
-    REQUEST_INVENTORY: 'DEPOSIT_OUT_REQUEST_INVENTORY'
+    REQUEST_INVENTORY: 'DEPOSIT_OUT_REQUEST_INVENTORY',
+    FORCE_REQUEST_INVENTORY: 'DEPOSIT_OUT_FORCE_REQUEST_INVENTORY',
+    SUBMIT_DEPOSIT: 'DEPOSIT_OUT_SUBMIT_DEPOSIT'
   };
 
   var socket_incoming = {
@@ -15,7 +17,26 @@ $(function() {
     ZA: 4
   };
 
+  var itemGrades = {
+    CONSUMER: 'consumer',
+    INDUSTRIAL: 'indsutrial',
+    MIL_SPEC: 'mil-spec',
+    RESTRICTED: 'restricted',
+    CLASSIFIED: 'classified',
+    COVERT: 'covert',
+    GOLD: 'gold'
+  };
+
+  var MIN_PRICE = 0.05;
+
   var $depositModal = $('#modal-deposit');
+  var $emptyNotify = $('#modal-deposit .empty');
+  var $spinner = $('#modal-deposit .spinner');
+  var $itemsContainer = $('#modal-deposit .modal-content');
+  var $sortSelect = $('#modal-deposit .modal-dropdown');
+  var $forceRefresh = $('#modal-deposit .modal-content-settings p');
+  var $priceCounter = $('#modal-deposit .price-counter p');
+  var $submit = $('#modal-deposit .deposit-submit p');
 
   var self;
 
@@ -25,11 +46,27 @@ $(function() {
     this.items = [];
     this.sortType = sortType.DESC;
     this.loading = false;
+
+    this.selectedItems = [];
+    this.totalPrice = 0.00;
+  }
+
+  DepositManager.prototype.submitDeposit = function() {
+    socket.emit(socket_outgoing.SUBMIT_DEPOSIT, {
+      items: this.selectedItems
+    }, (err, data) => {
+      //TODO
+    });
+  }
+
+  DepositManager.prototype.forceRefresh = function() {
+    socket.emit(socket_outgoing.FORCE_INVENTORY_RELOAD, (err, data) => {
+      //TODO
+    });
   }
 
   DepositManager.prototype.requestInventory = function() {
-    $depositModal.find('.deposit-item').remove();
-    $depositModal.find('.spinner').show();
+    $spinner.show();
     self.loading = true;
 
     socket.emit(socket_outgoing.REQUEST_INVENTORY, (err, inv) => {
@@ -37,12 +74,49 @@ $(function() {
       self.loading = false;
 
       if (err) {
-        swal('Inventory Error', err);
+        swal('Inventory Error', err, "error");
+        $.modal.getCurrent().close();
         return;
       }
 
-      console.log('called back request inventory', err, inv);
+      var inventory = JSON.parse(inv);
+      self.parseInventory(inventory);
     });
+  }
+
+  DepositManager.prototype.parseInventory = function(json) {
+    self.items = [];
+    json.forEach((obj) => {
+      self.items.push({
+        name: obj.market_hash_name,
+        price: obj.price,
+        icon_url: obj.icon_url,
+        grade: getItemGrade(obj.type)
+      });
+    });
+    self.loadInventory();
+  }
+
+  DepositManager.prototype.loadInventory = function() {
+    $depositModal.find('.deposit-item').remove();
+    $priceCounter.text('0.00');
+
+    self.totalPrice = 0.00;
+    self.selectedItems = [];
+
+    if (self.items.length == 0) {
+      $emptyNotify.show();
+      return;
+    }
+
+    $emptyNotify.hide();
+    $spinner.hide();
+
+    sortInventoryArray(self.items, self.sortType);
+    for (var index in self.items) {
+      var item = self.items[index];
+      self.addInventoryItem(item);
+    }
   }
 
  /*
@@ -53,11 +127,53 @@ $(function() {
  </div>
   */
   DepositManager.prototype.addInventoryItem = function(item) {
+    var isDisabled = item.price <= MIN_PRICE;
+    var url = '//steamcommunity-a.akamaihd.net/economy/image/' + item.icon_url;
 
+    var html = '<div class="deposit-item ' + item.grade + ' ' + (isDisabled ? 'disabled' : '') + '">' +
+                '<img src="' + url + '"></img>' +
+                '<span>' + item.price + '</span>' +
+                '<p>' + item.name + '</p>' +
+               '</div>';
+    $itemsContainer.append(html);
   }
 
-  DepositManager.prototype.loadInventory = function() {
+  DepositManager.prototype.addSelectedItem = function(target) {
+    var index = findIndex(self.items, target.find('p').text());
 
+    if (!~index) {
+      return swal('Inventory Error', 'Unable to find selected item. Please contact a developer.', 'error');
+    }
+
+    var item = self.items[index];
+    self.selectedItems.push(item);
+    target.addClass('selected');
+    self.totalPrice += item.price;
+
+    $priceCounter.countup({
+      startVal: self.totalPrice - item.price,
+      endVal: self.totalPrice,
+      decimals: 2
+    });
+  }
+
+  DepositManager.prototype.removeSelectedItem = function(target) {
+    var index = findIndex(self.selectedItems, target.find('p').text());
+
+    if (!~index) {
+      return swal('Inventory Error', 'Unable to find selected item. Please contact a developer.', 'error');
+    }
+
+    var item = self.selectedItems[index];
+    self.selectedItems.splice(index, 1);
+    target.removeClass('selected');
+    self.totalPrice -= item.price;
+
+    $priceCounter.countup({
+      startVal: self.totalPrice + item.price,
+      endVal: self.totalPrice,
+      decimals: 2
+    });
   }
 
   new DepositManager();
@@ -65,5 +181,86 @@ $(function() {
   $depositModal.on($.modal.OPEN, (event) => {
     self.requestInventory();
   });
+
+  $depositModal.on('click', '.deposit-item', (event) => {
+    var target = $(event.currentTarget);
+    if (target.hasClass('disabled')) {
+      return false;
+    }
+
+    if (target.hasClass('selected')) {
+      return self.removeSelectedItem(target);
+    }
+
+    self.addSelectedItem(target);
+  });
+
+  $submit.on('click', (event) => {
+    if (self.selectedItems.length == 0) {
+      return swal('Deposit', 'You need to select some items first!', 'info');
+    }
+
+    self.submitDeposit();
+  });
+
+  $sortSelect.on('change', function(event) {
+    self.sortType = getSortType(this.value);
+    self.loadInventory();
+  });
+
+  $forceRefresh.on('click', (event) => {
+    self.forceRefresh();
+  });
+
+  function findIndex(items, name) {
+    for (var index in items) {
+      if (items[index].name == name) {
+        return index;
+      }
+    }
+    return -1;
+  }
+
+  function sortInventoryArray(array, type) {
+    array.sort((a, b) => {
+      if (type == sortType.ZA) {
+        return (b.name < a.name ? -1 : (b.name > a.name ? 1 : 0));
+      } else if (type == sortType.ASC) {
+        return a.price - b.price;
+      } else if (type == sortType.AZ) {
+        return (a.name < b.name ? -1 : (a.name > b.name ? 1 : 0));
+      }
+      return b.price - a.price;
+    });
+  }
+
+  function getSortType(value) {
+    switch (value) {
+      case 'price-desc': return sortType.DESC
+      case 'price-asc': return sortType.ASC
+      case 'a-z': return sortType.AZ
+      case 'z-a': return sortType.ZA
+      default: return sortType.DESC
+    }
+  }
+
+  function getItemGrade(name) {
+    if (~name.indexOf('Knife')) {
+      return itemGrades.GOLD;
+    } else if (~name.indexOf('Consumer')) {
+      return itemGrades.CONSUMER;
+    } else if (~name.indexOf('Industrial')) {
+      return itemGrades.INDUSTRIAL
+    } else if (~name.indexOf('Mil-Spec')) {
+      return itemGrades.MIL_SPEC;
+    } else if (~name.indexOf('Restricted')) {
+      return itemGrades.RESTRICTED;
+    } else if (~name.indexOf('Classified')) {
+      return itemGrades.CLASSIFIED;
+    } else if (~name.indexOf('Covert')) {
+      return itemGrades.COVERT;
+    }
+    return '';
+  }
 
 });
