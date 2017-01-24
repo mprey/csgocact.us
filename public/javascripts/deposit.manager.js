@@ -45,7 +45,7 @@ $(function() {
 
     this.items = [];
     this.sortType = sortType.DESC;
-    this.loading = false;
+    this.loading = true;
 
     this.selectedItems = [];
     this.totalPrice = 0.00;
@@ -55,13 +55,31 @@ $(function() {
     socket.emit(socket_outgoing.SUBMIT_DEPOSIT, {
       items: this.selectedItems
     }, (err, data) => {
+      if (err) {
+        return swal('Deposit Error', 'Error while depositing: ' + err, 'error');
+      }
+      //data.trade_url
       //TODO
     });
   }
 
   DepositManager.prototype.forceRefresh = function() {
-    socket.emit(socket_outgoing.FORCE_INVENTORY_RELOAD, (err, data) => {
-      //TODO
+    $depositModal.find('.deposit-item').remove();
+    $priceCounter.text('0.00');
+    $spinner.show();
+    self.loading = true;
+
+    socket.emit(socket_outgoing.FORCE_INVENTORY_RELOAD, (err, inv) => {
+      self.loading = false;
+      $spinner.hide();
+
+      if (err) {
+        self.loadInventory();
+        return swal('Inventory Error', 'Error while refreshing: ' + err, 'error');
+      }
+
+      var inventory = JSON.parse(inv);
+      self.parseInventory(inventory);
     });
   }
 
@@ -74,7 +92,7 @@ $(function() {
       self.loading = false;
 
       if (err) {
-        swal('Inventory Error', err, "error");
+        swal('Inventory Error', 'Error while loading your inventory: ' + err, "error");
         $.modal.getCurrent().close();
         return;
       }
@@ -94,6 +112,7 @@ $(function() {
         grade: getItemGrade(obj.type)
       });
     });
+    self.loading = false;
     self.loadInventory();
   }
 
@@ -200,15 +219,25 @@ $(function() {
       return swal('Deposit', 'You need to select some items first!', 'info');
     }
 
+    if (loading == true) {
+      return swal('Deposit Error', 'You cannot submit while loading.', 'error');
+    }
+
     self.submitDeposit();
   });
 
   $sortSelect.on('change', function(event) {
+    if (loading == true) {
+      return swal('Inventory Error', 'You cannot reload while loading your inventory.', 'error');
+    }
     self.sortType = getSortType(this.value);
     self.loadInventory();
   });
 
   $forceRefresh.on('click', (event) => {
+    if (loading == true) {
+      return swal('Inventory Error', 'You cannot reload while loading your inventory.', 'error');
+    }
     self.forceRefresh();
   });
 
