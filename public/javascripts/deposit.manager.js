@@ -39,13 +39,13 @@ $(function() {
   var $submit = $('#modal-deposit .deposit-submit p');
 
   var self;
+  var loading = true;
 
   function DepositManager() {
     self = this;
 
     this.items = [];
     this.sortType = sortType.DESC;
-    this.loading = true;
 
     this.selectedItems = [];
     this.totalPrice = 0.00;
@@ -67,10 +67,10 @@ $(function() {
     $depositModal.find('.deposit-item').remove();
     $priceCounter.text('0.00');
     $spinner.show();
-    self.loading = true;
+    loading = true;
 
-    socket.emit(socket_outgoing.FORCE_INVENTORY_RELOAD, (err, inv) => {
-      self.loading = false;
+    socket.emit(socket_outgoing.FORCE_REQUEST_INVENTORY, (err, inv) => {
+      loading = false;
       $spinner.hide();
 
       if (err) {
@@ -85,11 +85,11 @@ $(function() {
 
   DepositManager.prototype.requestInventory = function() {
     $spinner.show();
-    self.loading = true;
+    loading = true;
 
     socket.emit(socket_outgoing.REQUEST_INVENTORY, (err, inv) => {
       $depositModal.find('.spinner').hide();
-      self.loading = false;
+      loading = false;
 
       if (err) {
         swal('Inventory Error', 'Error while loading your inventory: ' + err, "error");
@@ -112,7 +112,7 @@ $(function() {
         grade: getItemGrade(obj.type)
       });
     });
-    self.loading = false;
+    loading = false;
     self.loadInventory();
   }
 

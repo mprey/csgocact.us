@@ -1,9 +1,22 @@
+var socket_outgoing = {
+  SEND_SUBMIT_REQUEST: 'BOT_OUT_SEND_SUBMIT_REQUEST'
+};
+
+var socket_incoming = {
+
+};
+
 var self;
 
-function BotManager(io) {
+function BotManager() {
   self = this;
-  this.io = io;
+  this.io = null;
   this.bots = [];
+  this.currentIndex = 0;
+}
+
+BotManager.prototype.setIo = function(io) {
+  self.io = io;
 }
 
 BotManager.prototype.addBot = (socketId) => {
@@ -27,5 +40,41 @@ BotManager.prototype.isBotConnected = function(socketId) {
   }
   return false;
 }
+
+BotManager.prototype.getNextBot = function() {
+  if (this.bots.length == 0) {
+    return null;
+  }
+
+  if (this.currentIndex >= this.bots.length) {
+    this.currentIndex = 0;
+  }
+
+  var bot = this.bots[this.currentIndex];
+  this.currentIndex++;
+
+  if (bot.connected) {
+    return bot;
+  } else {
+    return getNextBot();
+  }
+}
+
+BotManager.prototype.sendSubmitRequest = function(user, items, callback) {
+  var bot = self.getNextBot();
+
+  if (!bot) {
+    return callback('Unable to find any available bots to trade.');
+  }
+
+  bot.emit(socket_outgoing.SEND_SUBMIT_REQUEST, {
+    user: user,
+    items: items
+  }, function(err, data) { //data.trade_url, data.ttl
+    return callback(err, data);
+  });
+}
+
+new BotManager();
 
 module.exports = BotManager;

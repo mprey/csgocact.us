@@ -16,8 +16,8 @@ function DepositManager() {
   this.community = new SteamCommunity();
 }
 
-DepositManager.prototype.submitDeposit = function(userId, items, callback) {
-  //TODO go damn
+DepositManager.prototype.submitDeposit = function(user, items, callback) {
+  console.log(items);
 }
 
 DepositManager.prototype.requestUserInventory = function(userId, callback) {
@@ -67,14 +67,14 @@ DepositManager.prototype.forceInventoryReload = function(userId, callback) {
       cache.ttl(userId + '' + COOLDOWN_ENDPOINT, (err, ttl) => {
         return callback(new Error('You must wait ' + formatSeconds(ttl) + ' before force refreshing again.'));
       });
+    } else {
+      self.queryInventory(userId, (error, data) => {
+        return callback(error, data);
+      });
+
+      cache.set(userId + '' + COOLDOWN_ENDPOINT, 'yoooo');
+      cache.expire(userId + '' + COOLDOWN_ENDPOINT, REFRESH_COOLDOWN);
     }
-
-    self.queryInventory(userId, (error, data) => {
-      return callback(error, data);
-    });
-
-    cache.set(userId + '' + COOLDOWN_ENDPOINT, 'yoooo');
-    cache.expire(userId + '' + COOLDOWN_ENDPOINT, REFRESH_COOLDOWN);
   });
 }
 
