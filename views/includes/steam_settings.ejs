@@ -17,9 +17,15 @@
       </li>
       <li class="clearfix">
         <p id="menu-trade-url"><i class="fa fa-info" aria-hidden="true"></i> Trade URL:</p>
-        <label class="noselect">
-          <p id="steam-url">EDIT</p>
-        </label>
+        <% if (typeof user.trade_url == 'object' && user.trade_url) { %>
+          <label class="noselect">
+            <p id="steam-url-edit" class="steam-url" data-url="<% user.trade_url %>">EDIT</p>
+          </label>
+        <% } else { %>
+          <label class="noselect">
+            <p id="steam-url-set" class="steam-url">SET</p>
+          </label>
+        <% } %>
       </li>
     </ul>
     <button id="steam-settings-refresh" type="submit">Refresh</button>

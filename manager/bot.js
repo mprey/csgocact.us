@@ -77,4 +77,4 @@ BotManager.prototype.sendSubmitRequest = function(user, items, callback) {
 
 new BotManager();
 
-module.exports = BotManager;
+module.exports = self;

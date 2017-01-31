@@ -9,13 +9,16 @@ $(function() {
   var $steam_profile_img = $('#profile-img');
   var $steam_profile_name = $('#steam-name');
 
+  var $steamTradeURL = $('.steam-url');
+
   var canRequestSteam = true;
   var requestSteamTimeout = 0;
 
   var settings = new Settings();
 
   var socket_outgoing = {
-    UPDATE_STEAM_SETTINGS: 'SETTINGS_OUT_UPDATE_STEAM'
+    UPDATE_STEAM_SETTINGS: 'SETTINGS_OUT_UPDATE_STEAM',
+    UPDATE_TRADE_URL: 'SETTINGS_OUT_UPDATE_TRADE_URL'
   };
 
   var socket_incoming = {
@@ -106,12 +109,49 @@ $(function() {
     return values["volume_value"];
   };
 
+  Settings.prototype.promptTradeURLEnter = (placeholder = 'https://steamcommunity.com/tradeoffer/new/?partner=example4324232') => {
+    var text = 'Click <a href="https://steamcommunity.com/id/me/tradeoffers/privacy">here</a> to find your trade URL.';
+    swal({
+      text: text,
+      title: 'Enter Trade URL',
+      type: 'input',
+      showCancelButton: true,
+      closeOnConfirm: false,
+      animation: 'slide-from-top',
+      inputPlaceholder: placeholder
+    }, (input) => {
+      if (input === false) return false;
+
+      if (input === '') {
+        swal.showInputError('You need to enter a URL!');
+        return false;
+      }
+
+      if (!isValidURL(input)) {
+        swal.showInputError('You have inputted an incorrect URL.');
+        return false;
+      }
+
+      swal('doe', 'you wrote' + input, 'success');
+    });
+  }
+
   socket.on(socket_incoming.UPDATE_STEAM_SETTINGS, function(data) { //data.photo, data.name
     $steam_profile_img.attr('src', data.photo);
     $steam_profile_name.text(data.name);
 
     clearTimeout(requestSteamTimeout);
     swal('Steam Settings', 'Updated steam settings successfully.', 'success');
+  });
+
+  $steamTradeURL.on('click', function(event) {
+    var self = this;
+    var id = $(this).attr('id');
+    if (id === 'steam-url-set') {
+      settings.promptTradeURLEnter();
+    } else if (id === 'steam-url-edit') {
+      settings.promptTradeURLEnter(self.attr('data-url'));
+    }
   });
 
   $client_settings_save.on('click', function(event) {
@@ -123,6 +163,10 @@ $(function() {
     event.preventDefault();
     settings.save(settings.type.STEAM);
   });
+
+  function isValidURL(input) {
+    return false;
+  }
 
   settings.init();
   window.settings = settings;

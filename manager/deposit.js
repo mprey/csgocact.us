@@ -1,5 +1,6 @@
 var cache = require('../lib/cache');
 var SteamCommunity = require('steamcommunity');
+var botManager = require('./bot');
 var Price = require('./../models/price').Price;
 var async = require('async');
 
@@ -17,7 +18,16 @@ function DepositManager() {
 }
 
 DepositManager.prototype.submitDeposit = function(user, items, callback) {
-  console.log(items);
+  if (user.trade_url == null) {
+    return callback('Please set your trade URL in Steam Settings in the upper right-hand corner of the window.');
+  }
+
+  botManager.sendSubmitRequest(user, items, (err, data) => {
+    if (err) {
+      return callback(err.message, data);
+    }
+    return callback(err, data);
+  });
 }
 
 DepositManager.prototype.requestUserInventory = function(userId, callback) {

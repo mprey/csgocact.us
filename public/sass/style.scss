@@ -376,8 +376,9 @@ header {
       }
     }
 
-    #steam-url {
-
+    .steam-url {
+      text-decoration: underline;
+      cursor: pointer;
     }
 
     input,
