@@ -105,12 +105,8 @@ $(function() {
   DepositManager.prototype.parseInventory = function(json) {
     self.items = [];
     json.forEach((obj) => {
-      self.items.push({
-        name: obj.market_hash_name,
-        price: obj.price,
-        icon_url: obj.icon_url,
-        grade: getItemGrade(obj.type)
-      });
+      obj.grade = getItemGrade(obj.type);
+      self.items.push(obj);
     });
     loading = false;
     self.loadInventory();
@@ -139,7 +135,7 @@ $(function() {
   }
 
  /*
- <div class="deposit-item consumer">
+ <div class="deposit-item consumer" asset-id="423ncjj130xkd">
    <img src="http://steamcommunity-a.akamaihd.net/economy/image/-9a81dlWLwJ2UUGcVs_nsVtzdOEdtWwKGZZLQHTxDZ7I56KU0Zwwo4NUX4oFJZEHLbXX7gNTPcUlrBpNQ0LvROW-0vDYVkQ6fABW77mhKlYxhKacImwT74znwtDSzvOkZriCkm8Cu5UojO_Foo_x3hqkpRTgYuAtow/330x192"></img>
    <span>54.32</span>
    <p>CS:GO Case Key (Field-Tested)</p>
@@ -149,16 +145,16 @@ $(function() {
     var isDisabled = item.price <= MIN_PRICE;
     var url = '//steamcommunity-a.akamaihd.net/economy/image/' + item.icon_url;
 
-    var html = '<div class="deposit-item ' + item.grade + ' ' + (isDisabled ? 'disabled' : '') + '">' +
+    var html = '<div class="deposit-item ' + item.grade + ' ' + (isDisabled ? 'disabled' : '') + '" asset-id="' + item.assetid + '">' +
                 '<img src="' + url + '"></img>' +
                 '<span>' + item.price + '</span>' +
-                '<p>' + item.name + '</p>' +
+                '<p>' + item.market_hash_name + '</p>' +
                '</div>';
     $itemsContainer.append(html);
   }
 
   DepositManager.prototype.addSelectedItem = function(target) {
-    var index = findIndex(self.items, target.find('p').text());
+    var index = findIndex(self.items, target.attr('asset-id'));
 
     if (!~index) {
       return swal('Inventory Error', 'Unable to find selected item. Please contact a developer.', 'error');
@@ -177,7 +173,7 @@ $(function() {
   }
 
   DepositManager.prototype.removeSelectedItem = function(target) {
-    var index = findIndex(self.selectedItems, target.find('p').text());
+    var index = findIndex(self.selectedItems, target.attr('asset-id'));
 
     if (!~index) {
       return swal('Inventory Error', 'Unable to find selected item. Please contact a developer.', 'error');
@@ -241,9 +237,9 @@ $(function() {
     self.forceRefresh();
   });
 
-  function findIndex(items, name) {
+  function findIndex(items, assetid) {
     for (var index in items) {
-      if (items[index].name == name) {
+      if (items[index].assetid == assetid) {
         return index;
       }
     }

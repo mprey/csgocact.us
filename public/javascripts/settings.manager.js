@@ -110,7 +110,7 @@ $(function() {
   };
 
   Settings.prototype.promptTradeURLEnter = (placeholder = 'https://steamcommunity.com/tradeoffer/new/?partner=example4324232') => {
-    var text = 'Click <a href="https://steamcommunity.com/id/me/tradeoffers/privacy">here</a> to find your trade URL.';
+    var text = 'Click <a href="https://steamcommunity.com/id/me/tradeoffers/privacy">here</a> to find your trade URL';
     swal({
       text: text,
       title: 'Enter Trade URL',
@@ -118,7 +118,8 @@ $(function() {
       showCancelButton: true,
       closeOnConfirm: false,
       animation: 'slide-from-top',
-      inputPlaceholder: placeholder
+      inputPlaceholder: placeholder,
+      html: true
     }, (input) => {
       if (input === false) return false;
 
@@ -132,7 +133,18 @@ $(function() {
         return false;
       }
 
-      swal('doe', 'you wrote' + input, 'success');
+      socket.emit(socket_outgoing.UPDATE_TRADE_URL, {
+        url: input
+      }, function(err) {
+        if (err) {
+          swal.showInputError(err);
+          return false;
+        }
+        swal('Trade URL', 'Successfully saved your trade URL to the database. Reloading the page.', 'success');
+        setTimeout(() => {
+          window.location.reload();
+        }, 2000);
+      });
     });
   }
 
@@ -145,11 +157,12 @@ $(function() {
   });
 
   $steamTradeURL.on('click', function(event) {
-    var self = this;
+    var self = $(this);
     var id = $(this).attr('id');
     if (id === 'steam-url-set') {
       settings.promptTradeURLEnter();
     } else if (id === 'steam-url-edit') {
+      console.log(self.attr('data-url'));
       settings.promptTradeURLEnter(self.attr('data-url'));
     }
   });
@@ -164,8 +177,9 @@ $(function() {
     settings.save(settings.type.STEAM);
   });
 
-  function isValidURL(input) {
-    return false;
+  function isValidURL(s) {
+    var regexp = /(ftp|http|https):\/\/(\w+:{0,1}\w*@)?(\S+)(:[0-9]+)?(\/|\/([\w#!:.?+=&%@!\-\/]))?/
+    return regexp.test(s);
   }
 
   settings.init();

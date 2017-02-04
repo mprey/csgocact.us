@@ -25,11 +25,6 @@ userSchema.methods.setRank = function(rank, callback) {
   this.save(callback);
 }
 
-userSchema.methods.updateTradeURL = function(tradeURL, callback) {
-  this.tade_url = tradeURL;
-  return this.save(callback);
-}
-
 userSchema.methods.updateCredits = function(amount, callback) {
   var self = this;
   User.findByIdAndUpdate(this._id, { $inc: {credits: amount} }, { new: true }, function(err,  doc) {

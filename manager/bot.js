@@ -19,29 +19,31 @@ BotManager.prototype.setIo = function(io) {
   self.io = io;
 }
 
-BotManager.prototype.addBot = (socketId) => {
-  if (!self.isBotConnected(socketId)) {
-    self.bots.push(socketId);
+BotManager.prototype.addBot = (socket) => {
+  if (!~self.indexOf(socket)) {
+    self.bots.push(socket);
   }
 }
 
-BotManager.prototype.removeBot = (socketId) => {
-  if (self.isBotConnected(socketId)) {
-    self.bots.slice(self.bots.indexOf(socketId), 1);
+BotManager.prototype.removeBot = (socket) => {
+  var index = self.indexOf(socket);
+  if (~index) {
+    self.bots.splice(index, 1);
   }
 }
 
-BotManager.prototype.isBotConnected = function(socketId) {
+BotManager.prototype.indexOf = function(socket) {
   for (var index in self.bots) {
     var bot = self.bots[index];
-    if (socketId == bot) {
-      return true;
+    if (socket.id == bot.id) {
+      return index;
     }
   }
-  return false;
+  return -1;
 }
 
 BotManager.prototype.getNextBot = function() {
+  console.log('bot length: ', this.bots.length);
   if (this.bots.length == 0) {
     return null;
   }
@@ -53,23 +55,24 @@ BotManager.prototype.getNextBot = function() {
   var bot = this.bots[this.currentIndex];
   this.currentIndex++;
 
-  if (bot.connected) {
+  if (bot) {
     return bot;
   } else {
-    return getNextBot();
+    return self.getNextBot();
   }
 }
 
-BotManager.prototype.sendSubmitRequest = function(user, items, callback) {
+BotManager.prototype.sendSubmitRequest = function(user, items, depositId, callback) {
   var bot = self.getNextBot();
 
-  if (!bot) {
-    return callback('Unable to find any available bots to trade.');
+  if (typeof bot == 'undefined' || !bot) {
+    return callback('Unable to find any available bots to trade');
   }
 
   bot.emit(socket_outgoing.SEND_SUBMIT_REQUEST, {
     user: user,
-    items: items
+    items: items,
+    depositId: depositId
   }, function(err, data) { //data.trade_url, data.ttl
     return callback(err, data);
   });

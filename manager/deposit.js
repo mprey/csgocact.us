@@ -23,7 +23,7 @@ DepositManager.prototype.submitDeposit = function(user, items, callback) {
   }
 
   botManager.sendSubmitRequest(user, items, (err, data) => {
-    if (err) {
+    if (err && err instanceof Error) {
       return callback(err.message, data);
     }
     return callback(err, data);
