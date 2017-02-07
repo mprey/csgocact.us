@@ -2,6 +2,7 @@ var cache = require('../lib/cache');
 var SteamCommunity = require('steamcommunity');
 var botManager = require('./bot');
 var Price = require('./../models/price').Price;
+var Deposit = require('../models/deposit').Deposit;
 var async = require('async');
 
 var self;
@@ -22,11 +23,22 @@ DepositManager.prototype.submitDeposit = function(user, items, callback) {
     return callback('Please set your trade URL in Steam Settings in the upper right-hand corner of the window.');
   }
 
-  botManager.sendSubmitRequest(user, items, (err, data) => {
-    if (err && err instanceof Error) {
-      return callback(err.message, data);
+  var deposit = new Deposit({
+    userId: user._id,
+    items: items
+  });
+
+  deposit.save((err) => {
+    if (err) {
+      return callback(err.message);
     }
-    return callback(err, data);
+    
+    botManager.sendSubmitRequest(user, items, deposit._id, (err, data) => {
+      if (err && err instanceof Error) {
+        return callback(err.message, data);
+      }
+      return callback(err, data);
+    });
   });
 }
 
