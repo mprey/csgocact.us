@@ -9,7 +9,9 @@ var depositSchema = new Schema({
     icon_url: String,
     market_hash_name: String
   }],
+  trade_url: { type: String },
   completed: { type: Boolean, required: true, default: false },
+  accepted:  { type: Boolean, required: true, default: false },
   date: { type: Date, required: true, default: Date.now }
 });
 

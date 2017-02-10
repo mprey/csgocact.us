@@ -43,7 +43,6 @@ BotManager.prototype.indexOf = function(socket) {
 }
 
 BotManager.prototype.getNextBot = function() {
-  console.log('bot length: ', this.bots.length);
   if (this.bots.length == 0) {
     return null;
   }

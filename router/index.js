@@ -77,6 +77,13 @@ module.exports = function(app) {
     res.redirect('/');
   });
 
+  /**
+   * Verification route
+   */
+   app.get('/zohoverify/verifyforzoho.html', (req, res) => {
+     res.end('1486734653587');
+   });
+
   app.get('/error', function(req, res) {
     res.send(req.params.error);
   });
