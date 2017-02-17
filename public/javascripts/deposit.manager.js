@@ -1,13 +1,14 @@
 $(function() {
 
-  var socket_outgoing = {
+  var socketOutgoing = {
     REQUEST_INVENTORY: 'DEPOSIT_OUT_REQUEST_INVENTORY',
     FORCE_REQUEST_INVENTORY: 'DEPOSIT_OUT_FORCE_REQUEST_INVENTORY',
     SUBMIT_DEPOSIT: 'DEPOSIT_OUT_SUBMIT_DEPOSIT'
   };
 
-  var socket_incoming = {
-
+  var socketIncoming = {
+    DEPOSIT_FAILED: 'DEPOSIT_IN_DEPOSIT_FAILED',
+    DEPOSIT_SUCCESS:'DEPOSIT_IN_DEPOSIT_SUCCESS'
   };
 
   var sortType = {
@@ -17,17 +18,7 @@ $(function() {
     ZA: 4
   };
 
-  var itemGrades = {
-    CONSUMER: 'consumer',
-    INDUSTRIAL: 'indsutrial',
-    MIL_SPEC: 'mil-spec',
-    RESTRICTED: 'restricted',
-    CLASSIFIED: 'classified',
-    COVERT: 'covert',
-    GOLD: 'gold'
-  };
-
-  var MIN_PRICE = 0.05;
+  var MIN_PRICE = 0.20;
 
   var $depositModal = $('#modal-deposit');
   var $emptyNotify = $('#modal-deposit .empty');
@@ -55,7 +46,7 @@ $(function() {
     loading = true;
     $spinner.show();
     $depositModal.find('.deposit-item').remove();
-    socket.emit(socket_outgoing.SUBMIT_DEPOSIT, {
+    socket.emit(socketOutgoing.SUBMIT_DEPOSIT, {
       items: this.selectedItems
     }, (err, data) => {
       self.loadInventory();
@@ -75,7 +66,7 @@ $(function() {
     $spinner.show();
     loading = true;
 
-    socket.emit(socket_outgoing.FORCE_REQUEST_INVENTORY, (err, inv) => {
+    socket.emit(socketOutgoing.FORCE_REQUEST_INVENTORY, (err, inv) => {
       loading = false;
       $spinner.hide();
 
@@ -93,7 +84,7 @@ $(function() {
     $spinner.show();
     loading = true;
 
-    socket.emit(socket_outgoing.REQUEST_INVENTORY, (err, inv) => {
+    socket.emit(socketOutgoing.REQUEST_INVENTORY, (err, inv) => {
       $depositModal.find('.spinner').hide();
       loading = false;
 
@@ -111,7 +102,6 @@ $(function() {
   DepositManager.prototype.parseInventory = function(json) {
     self.items = [];
     json.forEach((obj) => {
-      obj.grade = getItemGrade(obj.type);
       self.items.push(obj);
     });
     loading = false;
@@ -273,25 +263,6 @@ $(function() {
       case 'z-a': return sortType.ZA
       default: return sortType.DESC
     }
-  }
-
-  function getItemGrade(name) {
-    if (~name.indexOf('Knife')) {
-      return itemGrades.GOLD;
-    } else if (~name.indexOf('Consumer')) {
-      return itemGrades.CONSUMER;
-    } else if (~name.indexOf('Industrial')) {
-      return itemGrades.INDUSTRIAL
-    } else if (~name.indexOf('Mil-Spec')) {
-      return itemGrades.MIL_SPEC;
-    } else if (~name.indexOf('Restricted')) {
-      return itemGrades.RESTRICTED;
-    } else if (~name.indexOf('Classified')) {
-      return itemGrades.CLASSIFIED;
-    } else if (~name.indexOf('Covert')) {
-      return itemGrades.COVERT;
-    }
-    return '';
   }
 
 });

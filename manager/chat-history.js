@@ -1,16 +1,15 @@
 var Chat = require('./../models/chat').Chat;
 var async = require('async');
+var config = require('../config').chat;
 
 var recentMessages = [];
-
-var RECENT_MESSAGE_CAP = 50;
 
 module.exports = {
   init: function() {
     var data = [];
     async.series([
       function(callback) {
-        Chat.getRecentMessages(RECENT_MESSAGE_CAP, function(err, result) {
+        Chat.getRecentMessages(config.recentMessageCap, function(err, result) {
           async.each(result, function(val, callback) {
             data.push(val);
             callback();
@@ -37,8 +36,8 @@ module.exports = {
   },
   appendHistory: function(chatObj) {
     recentMessages.unshift(chatObj);
-    if (recentMessages.length > RECENT_MESSAGE_CAP) {
-      recentMessages.length = RECENT_MESSAGE_CAP;
+    if (recentMessages.length > config.recentMessageCap) {
+      recentMessages.length = config.recentMessageCap;
     }
   },
   clearChat: function() {

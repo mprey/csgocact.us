@@ -4,14 +4,17 @@ var botManager = require('./bot');
 var Price = require('./../models/price').Price;
 var Deposit = require('../models/deposit').Deposit;
 var async = require('async');
+var config = require('../config').deposit;
 
 var self;
 
-var CACHE_TIMEOUT = 20 * 60; //20 minutes
-
-var REFRESH_COOLDOWN = 5 * 60; //5 minutes
-
-var COOLDOWN_ENDPOINT = '-REFRESH_COOLDOWN';
+var itemGrade = {
+  MISC: 'misc',
+  WEAPON: 'weapon',
+  RARE: 'rare',
+  KNIFE: 'knife',
+  KEY: 'key'
+};
 
 function DepositManager() {
   self = this;
@@ -64,7 +67,7 @@ DepositManager.prototype.requestUserInventory = function(userId, callback) {
     self.queryInventory(userId, (error, data) => {
       if (data) {
         cache.set(userId, data);
-        cache.expire(userId, CACHE_TIMEOUT);
+        cache.expire(userId, config.cacheTimeout);
       }
       return callback(error, data);
     });
@@ -83,6 +86,7 @@ DepositManager.prototype.queryInventory = function(userId, callback) {
           return callback(err);
         }
         val.price = item ? item.price : '?';
+        val.grade = getItemGrade(val.market_hash_name, val.type);
         return callback();
       });
     }, (error) => {
@@ -97,9 +101,9 @@ DepositManager.prototype.queryInventory = function(userId, callback) {
 }
 
 DepositManager.prototype.forceInventoryReload = function(userId, callback) {
-  cache.get(userId + '' + COOLDOWN_ENDPOINT, (err, data) => {
+  cache.get(userId + '' + config.cooldownEndpoint, (err, data) => {
     if (data !== null) {
-      cache.ttl(userId + '' + COOLDOWN_ENDPOINT, (err, ttl) => {
+      cache.ttl(userId + '' + config.cooldownEndpoint, (err, ttl) => {
         return callback(new Error('You must wait ' + formatSeconds(ttl) + ' before force refreshing again.'));
       });
     } else {
@@ -107,13 +111,26 @@ DepositManager.prototype.forceInventoryReload = function(userId, callback) {
         return callback(error, data);
       });
 
-      cache.set(userId + '' + COOLDOWN_ENDPOINT, 'yoooo');
-      cache.expire(userId + '' + COOLDOWN_ENDPOINT, REFRESH_COOLDOWN);
+      cache.set(userId + '' + config.cooldownEndpoint, 'yoooo');
+      cache.expire(userId + '' + config.cooldownEndpoint, config.refreshCooldown);
     }
   });
 }
 
 self = new DepositManager();
+
+function getItemGrade(name, type) {
+  if (~name.indexOf('Key')) {
+    return itemGrade.KEY;
+  } else if (~name.indexOf('★')) {
+    return itemGrade.KNIFE;
+  } else if (~type.indexOf('Classified') || ~type.indexOf('Covert')) {
+    return itemGrade.RARE;
+  } else if (~type.indexOf('Restricted')) {
+    return itemGrade.WEAPON;
+  }
+  return itemGrade.MISC;
+}
 
 function formatSeconds(time) {
   var minutes = Math.floor(time / 60);

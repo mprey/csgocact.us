@@ -61,7 +61,7 @@ userSchema.methods.updateProfile = function(data, callback) {
 }
 
 userSchema.statics.updateUserBalance = function(userId, amount, callback) {
-  return this.findOneAndUpdate({ _id: userId }, { $inc: { credits: amount } }, { new: true } ,callback);
+  return this.findOneAndUpdate({ _id: userId }, { $inc: { credits: amount } }, { new: true }, callback);
 }
 
 var User = mongoose.model('User', userSchema);

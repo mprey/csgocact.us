@@ -171,31 +171,23 @@
         opacity: 0.5;
       }
 
-      &.consumer p {
+      &.misc p {
         background: rgb(161, 161, 161);
       }
 
-      &.industrial p {
+      &.key p {
         background: rgba(52, 154, 247, 0.51);
       }
 
-      &.mil-spec p {
-        background: rgb(89, 124, 191);
-      }
-
-      &.restricted p {
+      &.weapon p {
         background: rgb(179, 69, 218);
       }
 
-      &.classified p {
-        background: rgb(222, 72, 193);
-      }
-
-      &.covert p {
+      &.rare p {
         background: rgb(213, 63, 67);
       }
 
-      &.gold p {
+      &.knife p {
          background: rgb(255,215,0);
       }
 

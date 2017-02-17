@@ -1,5 +1,6 @@
 var Coinflip = require('./../../models/coin-flip').Coinflip;
 var User = require('./../../models/user').User;
+var config = require('../../config').coinflip;
 var md5 = require('blueimp-md5');
 var async = require('async');
 
@@ -24,11 +25,6 @@ var socket_incoming = {
   COINFLIP_CREATE_GAME: 'COINFLIP_OUT_CREATE_GAME',
   COINFLIP_JOIN_GAME: 'COINFLIP_OUT_JOIN_GAME',
 };
-
-var MAX_USER_HISTORY_AMOUNT = 20;
-var MAX_GLOBAL_HISTORY_AMOUNT = 40;
-var LEADERBOARDS_LENGTH = 5;
-var TAX = 0.05;
 
 var updateType = {
   IN_PROGRESS: 1,
@@ -141,7 +137,7 @@ CoinflipManager.prototype.joinGame = function(game, joiner, socketHelper, io, ca
       gameObj.creator_name = creator.name;
       gameObj.creator_img = creator.photo;
 
-      var tax = game.amount * TAX;
+      var tax = game.amount * config.gameTax;
 
       var creditsEarned = Number(game.amount * 2 - tax).toFixed(2);
 
@@ -236,8 +232,8 @@ CoinflipManager.prototype.updateLeaderboards = function(io, testGame) {
     var game = _this.leaderboards[index];
     if (testGame.amount >= game.amount) {
       _this.leaderboards.splice(index, 0, testGame);
-      if (_this.leaderboards.length > LEADERBOARDS_LENGTH) {
-        _this.leaderboards.length = LEADERBOARDS_LENGTH;
+      if (_this.leaderboards.length > config.leaderboardLength) {
+        _this.leaderboards.length = config.leaderboardLength;
       }
       io.emit(socket_outgoing.COINFLIP_UPDATE_LEADERBOARDS, {
         leaderboards: _this.leaderboards
@@ -249,8 +245,8 @@ CoinflipManager.prototype.updateLeaderboards = function(io, testGame) {
 
 CoinflipManager.prototype.appendGlobalHistory = function(io, game) {
   _this.historyGames.unshift(game);
-  if (_this.historyGames.length > MAX_GLOBAL_HISTORY_AMOUNT) {
-    _this.historyGames.length = MAX_GLOBAL_HISTORY_AMOUNT;
+  if (_this.historyGames.length > config.maxGlobalHistory) {
+    _this.historyGames.length = config.maxGlobalHistory;
   }
   io.emit(socket_outgoing.COINFLIP_UPDATE_GLOBAL_HISTORY, {
     global_history: _this.historyGames
@@ -270,8 +266,8 @@ CoinflipManager.prototype.appendUserHistory = function(userId, game, socketHelpe
   if (_this.userHistoryCache.hasOwnProperty(userId) && !_this.userHasCachedGame(userId, game._id)) {
     var array = _this.userHistoryCache[userId];
     array.unshift(gameClone);
-    if (array.length > MAX_USER_HISTORY_AMOUNT) {
-      array.length = MAX_USER_HISTORY_AMOUNT;
+    if (array.length > config.maxUserHistory) {
+      array.length = config.maxUserHistory;
     }
     _this.userHistoryCache[userId] = array;
 
@@ -288,7 +284,7 @@ CoinflipManager.prototype.loadUserHistory = function(userId, done) {
   if (_this.userHistoryCache.hasOwnProperty(userId)) {
     return done(_this.userHistoryCache[userId]);
   } else {
-    Coinflip.getUserHistory(userId, MAX_USER_HISTORY_AMOUNT, function(err, obj) {
+    Coinflip.getUserHistory(userId, config.maxUserHistory, function(err, obj) {
       var games = [];
       async.series([
         //Load in each game into the array
@@ -342,7 +338,7 @@ CoinflipManager.prototype.loadUserHistory = function(userId, done) {
 }
 
 CoinflipManager.prototype.loadData = function() {
-  Coinflip.getRecentGames(MAX_GLOBAL_HISTORY_AMOUNT, function(err, obj) {
+  Coinflip.getRecentGames(config.maxGlobalHistory, function(err, obj) {
     var games = [];
     async.series([
       //Load in each game into the array
