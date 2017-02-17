@@ -1,5 +1,5 @@
 var socket_outgoing = {
-  SEND_SUBMIT_REQUEST: 'BOT_OUT_SEND_SUBMIT_REQUEST'
+  SEND_DEPOSIT_REQUEST: 'BOT_OUT_SEND_DEPOSIT_REQUEST'
 };
 
 var socket_incoming = {
@@ -68,11 +68,14 @@ BotManager.prototype.sendSubmitRequest = function(user, items, depositId, callba
     return callback('Unable to find any available bots to trade');
   }
 
-  bot.emit(socket_outgoing.SEND_SUBMIT_REQUEST, {
+  bot.emit(socket_outgoing.SEND_DEPOSIT_REQUEST, {
     user: user,
     items: items,
     depositId: depositId
-  }, function(err, data) { //data.trade_url, data.ttl
+  }, function(err, data) { //data.offer, data.ttl
+    if (err && err instanceof Error) {
+      return callback(err.message);
+    }
     return callback(err, data);
   });
 }

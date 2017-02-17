@@ -52,12 +52,18 @@ $(function() {
   }
 
   DepositManager.prototype.submitDeposit = function() {
+    loading = true;
+    $spinner.show();
+    $depositModal.find('.deposit-item').remove();
     socket.emit(socket_outgoing.SUBMIT_DEPOSIT, {
       items: this.selectedItems
     }, (err, data) => {
+      self.loadInventory();
+      loading = false;
       if (err) {
         return swal('Deposit Error', 'Error while depositing: ' + err, 'error');
       }
+      swal('Success', 'Click here to accept the trade offer');
       //data.trade_url
       //TODO
     });

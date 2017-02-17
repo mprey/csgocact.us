@@ -82,7 +82,6 @@ $(function() {
           showLoaderOnConfirm: true,
         }, function() {
           canRequestSteam = false;
-          console.log(socket_outgoing.UPDATE_STEAM_SETTINGS);
           socket.emit(socket_outgoing.UPDATE_STEAM_SETTINGS);
           requestSteamTimeout = setTimeout(function() {
             swal('Steam Settings', 'Error while updating your steam settings.', 'error');
@@ -162,7 +161,6 @@ $(function() {
     if (id === 'steam-url-set') {
       settings.promptTradeURLEnter();
     } else if (id === 'steam-url-edit') {
-      console.log(self.attr('data-url'));
       settings.promptTradeURLEnter(self.attr('data-url'));
     }
   });

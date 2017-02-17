@@ -71,4 +71,4 @@ io.use(function(socket, next) {
 
 require('./lib/socket')(io);
 priceUpdater(20 * 60 * 1000); //update prices every 20 minutes
-require('./lib/socket/bot')(botIo);
+require('./lib/socket/bot')(botIo, io);

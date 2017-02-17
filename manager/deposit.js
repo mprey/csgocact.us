@@ -23,21 +23,34 @@ DepositManager.prototype.submitDeposit = function(user, items, callback) {
     return callback('Please set your trade URL in Steam Settings in the upper right-hand corner of the window.');
   }
 
-  var deposit = new Deposit({
-    userId: user._id,
-    items: items
-  });
-
-  deposit.save((err) => {
-    if (err) {
-      return callback(err.message);
+  Deposit.hasOpenDeposit(user._id, (bool) => {
+    if (bool == true) {
+      return callback('You already have an open deposit. If you believe this is an error, please contact support.');
     }
-    
-    botManager.sendSubmitRequest(user, items, deposit._id, (err, data) => {
-      if (err && err instanceof Error) {
-        return callback(err.message, data);
+
+    var amount = 0.00;
+    for (var index in items) {
+      amount += items[index].price;
+    }
+
+    var deposit = new Deposit({
+      userId: user._id,
+      items: items,
+      amount: amount,
+      trade_url: user.trade_url
+    });
+
+    deposit.save((err) => {
+      if (err) {
+        return callback(err.message);
       }
-      return callback(err, data);
+
+      botManager.sendSubmitRequest(user, items, deposit._id, (err, data) => {
+        if (err && err instanceof Error) {
+          return callback(err.message, data);
+        }
+        return callback(err, data);
+      });
     });
   });
 }
