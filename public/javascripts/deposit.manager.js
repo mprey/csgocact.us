@@ -40,6 +40,17 @@ $(function() {
 
     this.selectedItems = [];
     this.totalPrice = 0.00;
+
+    socket.on(socketIncoming.DEPOSIT_FAILED, this.depositFailed);
+    socket.on(socketIncoming.DEPOSIT_SUCCESS, this.depositSuccess);
+  }
+
+  DepositManager.prototype.depositFailed = function(data) {
+    toastr.error('Your deposit has failed', 'Deposit');
+  }
+
+  DepositManager.prototype.depositSuccess = function(data) {
+    toastr.success('Your deposit has completed', 'Deposit');
   }
 
   DepositManager.prototype.submitDeposit = function() {
@@ -54,9 +65,14 @@ $(function() {
       if (err) {
         return swal('Deposit Error', 'Error while depositing: ' + err, 'error');
       }
-      swal('Success', 'Click here to accept the trade offer');
-      //data.trade_url
-      //TODO
+      $.modal.getCurrent().close();
+      var text = `Click <a href="https://steamcommunity.com/tradeoffer/${data.offer.id}/">here</a> to accept the trade offer.`;
+      swal({
+        title: 'Success',
+        text: text,
+        html: true,
+        type: 'success'
+      });
     });
   }
 

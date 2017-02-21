@@ -4,7 +4,7 @@ var botManager = require('./bot');
 var Price = require('./../models/price').Price;
 var Deposit = require('../models/deposit').Deposit;
 var async = require('async');
-var config = require('../config').deposit;
+var config = require('../config');
 
 var self;
 
@@ -67,7 +67,7 @@ DepositManager.prototype.requestUserInventory = function(userId, callback) {
     self.queryInventory(userId, (error, data) => {
       if (data) {
         cache.set(userId, data);
-        cache.expire(userId, config.cacheTimeout);
+        cache.expire(userId, config.deposit.cacheTimeout);
       }
       return callback(error, data);
     });
@@ -85,8 +85,12 @@ DepositManager.prototype.queryInventory = function(userId, callback) {
         if (err) {
           return callback(err);
         }
-        val.price = item ? item.price : '?';
+        val.price = item ? item.price : 0.00;
         val.grade = getItemGrade(val.market_hash_name, val.type);
+
+        if (!isNaN(val.price) && config.exchangeRates.deposit[val.grade]) {
+          val.price = Number(val.price * config.exchangeRates.deposit[val.grade]).toFixed(2);
+        }
         return callback();
       });
     }, (error) => {
@@ -101,9 +105,9 @@ DepositManager.prototype.queryInventory = function(userId, callback) {
 }
 
 DepositManager.prototype.forceInventoryReload = function(userId, callback) {
-  cache.get(userId + '' + config.cooldownEndpoint, (err, data) => {
+  cache.get(userId + '' + config.deposit.cooldownEndpoint, (err, data) => {
     if (data !== null) {
-      cache.ttl(userId + '' + config.cooldownEndpoint, (err, ttl) => {
+      cache.ttl(userId + '' + config.deposit.cooldownEndpoint, (err, ttl) => {
         return callback(new Error('You must wait ' + formatSeconds(ttl) + ' before force refreshing again.'));
       });
     } else {
@@ -111,8 +115,8 @@ DepositManager.prototype.forceInventoryReload = function(userId, callback) {
         return callback(error, data);
       });
 
-      cache.set(userId + '' + config.cooldownEndpoint, 'yoooo');
-      cache.expire(userId + '' + config.cooldownEndpoint, config.refreshCooldown);
+      cache.set(userId + '' + config.deposit.cooldownEndpoint, 'yoooo');
+      cache.expire(userId + '' + config.deposit.cooldownEndpoint, config.deposit.refreshCooldown);
     }
   });
 }
