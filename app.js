@@ -4,7 +4,6 @@ var express = require('express');
 var app = express();
 var http = require('http');
 var port = process.env.PORT || 3000;
-var botPort = process.env.BOT_PORT || 3001;
 var mongoose = require('mongoose');
 var passport = require('passport');
 var path = require('path');
@@ -63,7 +62,9 @@ app.use(express.static(path.join(__dirname, 'public')));
 
 require('./router')(app);
 
-server.listen(port || 3000);
+server.listen(port, () => {
+  console.log('Server listening on port => ' + port);
+});
 
 io.use(function(socket, next) {
   sessionMiddleware(socket.request, {}, next);
