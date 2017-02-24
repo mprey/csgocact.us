@@ -66,7 +66,7 @@ $(function() {
         return swal('Deposit Error', 'Error while depositing: ' + err, 'error');
       }
       $.modal.getCurrent().close();
-      var text = `Click <a href="https://steamcommunity.com/tradeoffer/${data.offer.id}/">here</a> to accept the trade offer.`;
+      var text = `Click <a onclick="this.target=&quot;_blank&quot;swal.closeModal();" href="https://steamcommunity.com/tradeoffer/${data.offer.id}/">here</a> to accept the trade offer.`;
       swal({
         title: 'Success',
         text: text,

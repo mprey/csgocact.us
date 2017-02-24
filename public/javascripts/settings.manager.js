@@ -109,7 +109,7 @@ $(function() {
   };
 
   Settings.prototype.promptTradeURLEnter = (placeholder = 'https://steamcommunity.com/tradeoffer/new/?partner=example4324232') => {
-    var text = 'Click <a href="https://steamcommunity.com/id/me/tradeoffers/privacy">here</a> to find your trade URL';
+    var text = 'Click <a onclick="this.target=&quot;_blank&quot;" href="http://steamcommunity.com/id/me/tradeoffers/privacy#trade_offer_access_url">here</a> to find your trade URL';
     swal({
       text: text,
       title: 'Enter Trade URL',
@@ -176,8 +176,7 @@ $(function() {
   });
 
   function isValidURL(s) {
-    var regexp = /(ftp|http|https):\/\/(\w+:{0,1}\w*@)?(\S+)(:[0-9]+)?(\/|\/([\w#!:.?+=&%@!\-\/]))?/
-    return regexp.test(s);
+    return s.match(/steamcommunity\.com\/tradeoffer\/new\/\?partner=[0-9]*&token=[a-zA-Z0-9_-]*/i);
   }
 
   settings.init();

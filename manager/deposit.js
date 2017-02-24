@@ -43,17 +43,12 @@ DepositManager.prototype.submitDeposit = function(user, items, callback) {
       trade_url: user.trade_url
     });
 
-    deposit.save((err) => {
+    botManager.sendSubmitRequest(user, items, deposit._id, (err, data) => {
       if (err) {
-        return callback(err.message);
+        return callback(err instanceof Error ? err.message : err, data);
       }
-
-      botManager.sendSubmitRequest(user, items, deposit._id, (err, data) => {
-        if (err && err instanceof Error) {
-          return callback(err.message, data);
-        }
-        return callback(err, data);
-      });
+      deposit.save();
+      return callback(err, data);
     });
   });
 }
