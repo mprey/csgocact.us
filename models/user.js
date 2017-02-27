@@ -16,6 +16,7 @@ var userSchema = new Schema({
   trade_url: {type: String, required: false},
   rank: {type: Number, required: true, default: 0},
   credits: {type: Number, required: true, default: 0.00},
+  wagered: {type: Number, required: true, default: 0.00},
   date_joined: {type: Date, default: Date.now, required: true},
   promo_code: {type: Boolean, default: false, required: true}
 });
@@ -62,6 +63,10 @@ userSchema.methods.updateProfile = function(data, callback) {
 
 userSchema.statics.updateUserBalance = function(userId, amount, callback) {
   return this.findOneAndUpdate({ _id: userId }, { $inc: { credits: amount } }, { new: true }, callback);
+}
+
+userSchema.statics.addAmountWagered = function(userId, amount) {
+  return this.findOneAndUpdate({ _id: userId }, { $inc: { wagered: amount } });
 }
 
 var User = mongoose.model('User', userSchema);

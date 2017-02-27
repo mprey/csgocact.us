@@ -158,6 +158,9 @@ CoinflipManager.prototype.joinGame = function(game, joiner, socketHelper, io, ca
 
       callback();
 
+      User.addAmountWagered(game.id_creator, game.amount);
+      User.addAmountWagered(game.id_joiner, game.amount);
+
       setTimeout(function() {
         if (game.id_creator == game.id_winner) {
           User.updateUserBalance(game.id_creator, creditsEarned, function(err, doc) {
