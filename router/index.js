@@ -10,6 +10,10 @@ module.exports = function(app) {
     res.redirect('/coinflip');
   });
 
+  app.get('/proof.txt', (req, res) => {
+    res.end('m_prey');
+  });
+
   /**
    *  Withdraw route
    */
